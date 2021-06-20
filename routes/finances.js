@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../auth');
 
-router.get('/payments', function (req, res, next) {
+router.get('/payments', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
 	if (req.query.user) {
 		req.knex.from('payments').select('*').where('from_id', '=', req.query.user).then(rows => {
 			res.status(200).json({
@@ -15,7 +19,7 @@ router.get('/payments', function (req, res, next) {
 			});
 			console.log(error);
 		});
-	}else{
+	} else {
 		req.knex.from('payments').select('*').then(rows => {
 			res.status(200).json({
 				error: false,
@@ -31,7 +35,10 @@ router.get('/payments', function (req, res, next) {
 	}
 });
 
-router.get('/receipts', function (req, res, next) {
+router.get('/receipts', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
 	if (req.query.user) {
 		req.knex.from('receipts').select('*').where('user_id', '=', req.query.user).then(rows => {
 			res.status(200).json({
@@ -45,7 +52,7 @@ router.get('/receipts', function (req, res, next) {
 			});
 			console.log(error);
 		});
-	}else{
+	} else {
 		req.knex.from('receipts').select('*').then(rows => {
 			res.status(200).json({
 				error: false,
