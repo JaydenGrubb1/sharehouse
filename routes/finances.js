@@ -2,20 +2,20 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../auth');
 
-router.get('/debt', auth, function (req, res, next) {
+router.get('/debt/:email', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
 	let dict = {};
 	let total = 0;
 
-	req.knex.from('payments', 'users').select('from_id').sum({ debt: 'amount' })
-		.where({status: 'approved'}).groupBy('from_id').orderBy('debt', 'desc').then(rows => {
+	req.knex.from('payments').select('from').sum({ debt: 'amount' })
+		.where({status: 'approved'}).groupBy('from').orderBy('debt', 'desc').then(rows => {
 			let count = rows.length;
 			for (let i = 0; i < count; i++) {
 				total += rows[i].debt;
 				dict[i] = new Object();
-				dict[i].id = rows[i].from_id;
+				dict[i].id = rows[i].from;
 				dict[i].paid = rows[i].debt;
 			}
 			for (let i = 0; i < count; i++) {
@@ -41,7 +41,7 @@ router.get('/debt', auth, function (req, res, next) {
 				}
 			}
 			for(let i = 0; i < count; i++){
-				if(dict[i].id === 6){
+				if(dict[i].id == req.params.email){
 					res.status(200).json({
 						error: false,
 						data: dict[i].paying
@@ -51,7 +51,7 @@ router.get('/debt', auth, function (req, res, next) {
 			}
 			res.status(200).json({
 				error: false,
-				data: {}
+				data: dict
 			})
 		}).catch(error => {
 			res.status(500).json({
@@ -67,7 +67,7 @@ router.get('/payments', auth, function (req, res, next) {
 		return;
 
 	if (req.query.user) {
-		req.knex.from('payments').select('*').where('from_id', '=', req.query.user).then(rows => {
+		req.knex.from('payments').select('*').where('from', '=', req.query.user).then(rows => {
 			res.status(200).json({
 				error: false,
 				data: rows
@@ -100,7 +100,7 @@ router.get('/receipts', auth, function (req, res, next) {
 		return;
 
 	if (req.query.user) {
-		req.knex.from('receipts').select('*').where('user_id', '=', req.query.user).then(rows => {
+		req.knex.from('receipts').select('*').where('user', '=', req.query.user).then(rows => {
 			res.status(200).json({
 				error: false,
 				data: rows

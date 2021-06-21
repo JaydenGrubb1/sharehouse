@@ -127,7 +127,7 @@ router.get('/:email', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('users').select('id', 'name', 'email', 'bsb', 'acc', 'admin')
+	req.knex.from('users').select('name', 'email', 'bsb', 'acc', 'admin')
 		.where('email', '=', req.params.email).then(rows => {
 			res.status(200).json({
 				error: false,
