@@ -9,8 +9,8 @@ router.get('/debt', auth, function (req, res, next) {
 	let dict = {};
 	let total = 0;
 
-	req.knex.from('payments').select('from_id').sum({ debt: 'amount' })
-		.groupBy('from_id').orderBy('debt', 'desc').then(rows => {
+	req.knex.from('payments', 'users').select('from_id').sum({ debt: 'amount' })
+		.where({status: 'approved'}).groupBy('from_id').orderBy('debt', 'desc').then(rows => {
 			let count = rows.length;
 			for (let i = 0; i < count; i++) {
 				total += rows[i].debt;
@@ -40,7 +40,25 @@ router.get('/debt', auth, function (req, res, next) {
 					dict[y].paying[dict[x].id] = trans;
 				}
 			}
-			res.status(200).json({ message: "OK", data: dict, total: total });
+			for(let i = 0; i < count; i++){
+				if(dict[i].id === 6){
+					res.status(200).json({
+						error: false,
+						data: dict[i].paying
+					});
+					return;
+				}
+			}
+			res.status(200).json({
+				error: false,
+				data: {}
+			})
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
 		});
 });
 
