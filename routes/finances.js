@@ -2,6 +2,48 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../auth');
 
+router.get('/debt', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	let dict = {};
+	let total = 0;
+
+	req.knex.from('payments').select('from_id').sum({ debt: 'amount' })
+		.groupBy('from_id').orderBy('debt', 'desc').then(rows => {
+			let count = rows.length;
+			for (let i = 0; i < count; i++) {
+				total += rows[i].debt;
+				dict[i] = new Object();
+				dict[i].id = rows[i].from_id;
+				dict[i].paid = rows[i].debt;
+			}
+			for (let i = 0; i < count; i++) {
+				dict[i].debt = (total / count) - dict[i].paid;
+				dict[i].remaining = Math.min(dict[i].debt, 0);
+				dict[i].paying = new Object();
+			}
+			for (let x = 0; x < count; x++) {
+				if (dict[x].debt > 0)
+					continue;
+				for (let y = 0; y < count; y++) {
+					if (x === y)
+						continue;
+					if (dict[y].debt <= 0)
+						continue;
+					if (dict[x].remaining >= 0)
+						break;
+
+					let trans = Math.min(Math.abs(dict[x].remaining), Math.abs(dict[y].debt));
+					dict[x].remaining += trans;
+					dict[y].debt -= trans;
+					dict[y].paying[dict[x].id] = trans;
+				}
+			}
+			res.status(200).json({ message: "OK", data: dict, total: total });
+		});
+});
+
 router.get('/payments', auth, function (req, res, next) {
 	if (!req.email)
 		return;

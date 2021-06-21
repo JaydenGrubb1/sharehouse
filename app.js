@@ -14,7 +14,7 @@ const userRouter = require('./routes/users');
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(logger('combined'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
