@@ -10,11 +10,13 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const financeRouter = require('./routes/finances');
+const receiptsRouter = require('./routes/receipts');
+const paymentsRouter = require('./routes/payments');
 const userRouter = require('./routes/users');
 
 const app = express();
 
-app.use(logger('combined'));
+app.use(logger('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
@@ -27,6 +29,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/finances', financeRouter);
+app.use('/receipts', receiptsRouter);
+app.use('/payments', paymentsRouter);
 app.use('/users', userRouter);
 
 app.use('/test', function (req, res, next) {

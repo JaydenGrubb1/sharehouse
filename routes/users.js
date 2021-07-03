@@ -14,58 +14,6 @@ const ALLOWED_USER_FIELDS = {
 }
 
 /**
- * Create a user
- */
-router.post('/add', auth, function (req, res, next) {
-	if (!req.email)
-		return;
-
-	if (!req.admin) {
-		res.status(403).json({
-			error: true,
-			message: "Forbidded, must be an admin user"
-		});
-		return;
-	}
-
-	const email = req.body.email;
-
-	if (!email) {
-		res.status(400).json({
-			error: true,
-			message: "Request body incomplete, email is required"
-		});
-		return;
-	}
-
-	req.knex.from('users').select('email').where('email', '=', email).then(rows => {
-		if (rows.length > 0) {
-			res.status(409).json({
-				error: true,
-				message: "User already exists"
-			});
-			return;
-		}
-
-		const password = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-		const hash = bcrypt.hashSync(password, 10);
-		req.knex.from('users').insert({ email, hash }).then(() => {
-			res.status(201).json({
-				error: false,
-				message: "User created",
-				password: password
-			});
-		});
-	}).catch(error => {
-		res.status(500).json({
-			error: true,
-			message: "Internal server error"
-		});
-		console.log(error);
-	});
-});
-
-/**
  * Log a user in
  */
 router.get('/login', function (req, res, next) {
@@ -143,7 +91,59 @@ router.get('/:email', auth, function (req, res, next) {
 });
 
 /**
- * Update a user's details
+ * Creates a user
+ */
+router.post('/', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	if (!req.admin) {
+		res.status(403).json({
+			error: true,
+			message: "Forbidded, must be an admin user"
+		});
+		return;
+	}
+
+	const email = req.body.email;
+
+	if (!email) {
+		res.status(400).json({
+			error: true,
+			message: "Request body incomplete, email is required"
+		});
+		return;
+	}
+
+	req.knex.from('users').select('email').where('email', '=', email).then(rows => {
+		if (rows.length > 0) {
+			res.status(409).json({
+				error: true,
+				message: "User already exists"
+			});
+			return;
+		}
+
+		const password = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+		const hash = bcrypt.hashSync(password, 10);
+		req.knex.from('users').insert({ email, hash }).then(() => {
+			res.status(201).json({
+				error: false,
+				message: "User created",
+				password: password
+			});
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
+/**
+ * Updates a user's details
  */
 router.put('/:email', auth, function (req, res, next) {
 	if (!req.email)
