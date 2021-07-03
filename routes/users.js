@@ -217,4 +217,25 @@ router.put('/:email', auth, function (req, res, next) {
 	});
 });
 
+/**
+ * Deletes a user
+ */
+router.delete('/:email', auth, function (req, res, next) {
+	if (!req.admin)
+		return;
+
+	req.knex.from('users').del().where('email', '=', req.params.email).then(() => {
+		res.status(200).json({
+			error: false,
+			message: "User deleted"
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
 module.exports = router;

@@ -155,4 +155,25 @@ router.put('/', auth, function (req, res, next) {
 	});
 });
 
+/**
+ * Deletes a receipt
+ */
+router.delete('/:id', auth, function (req, res, next) {
+	if (!req.admin)
+		return;
+
+	req.knex.from('receipts').del().where('id', '=', req.params.id).then(() => {
+		res.status(200).json({
+			error: false,
+			message: "Receipt deleted"
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
 module.exports = router;

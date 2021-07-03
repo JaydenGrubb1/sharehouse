@@ -197,4 +197,25 @@ router.put('/:id', auth, function (req, res, next) {
 	});
 });
 
+/**
+ * Deletes a payment record
+ */
+router.delete('/:id', auth, function (req, res, next) {
+	if (!req.admin)
+		return;
+
+	req.knex.from('payment').del().where('id', '=', req.params.id).then(() => {
+		res.status(200).json({
+			error: false,
+			message: "Payment record deleted"
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
 module.exports = router;
