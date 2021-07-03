@@ -10,7 +10,7 @@ router.get('/debt/:email', auth, function (req, res, next) {
 	let total = 0;
 
 	req.knex.from('payments').select('from').sum({ debt: 'amount' })
-		.where({status: 'approved'}).groupBy('from').orderBy('debt', 'desc').then(rows => {
+		.where({ status: 'approved' }).groupBy('from').orderBy('debt', 'desc').then(rows => {
 			let count = rows.length;
 			for (let i = 0; i < count; i++) {
 				total += rows[i].debt;
@@ -40,8 +40,8 @@ router.get('/debt/:email', auth, function (req, res, next) {
 					dict[y].paying[dict[x].id] = trans;
 				}
 			}
-			for(let i = 0; i < count; i++){
-				if(dict[i].id == req.params.email){
+			for (let i = 0; i < count; i++) {
+				if (dict[i].id == req.params.email) {
 					res.status(200).json({
 						error: false,
 						data: dict[i].paying
@@ -60,6 +60,17 @@ router.get('/debt/:email', auth, function (req, res, next) {
 			});
 			console.log(error);
 		});
+});
+
+/**
+ * Method not allowed handlers
+ */
+router.all('/debt/:email', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
+	});
 });
 
 module.exports = router;

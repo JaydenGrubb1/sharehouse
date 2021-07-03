@@ -69,6 +69,27 @@ router.get('/login', function (req, res, next) {
 });
 
 /**
+ * Get all users
+ */
+router.get('/', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('users').select('name', 'email', 'bsb', 'acc', 'admin').then(rows => {
+		res.status(200).json({
+			error: false,
+			data: rows
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
+/**
  * Get a user's details
  */
 router.get('/:email', auth, function (req, res, next) {
@@ -235,6 +256,31 @@ router.delete('/:email', auth, function (req, res, next) {
 			message: "Internal server error"
 		});
 		console.log(error);
+	});
+});
+
+/**
+ * Method not allowed handlers
+ */
+router.all('/', function (req, res, next) {
+	res.set('Allow', 'GET, POST');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET and POST"
+	});
+});
+router.all('/:email', function (req, res, next) {
+	res.set('Allow', 'GET, PUT, DELETE');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET, PUT and DELETE"
+	});
+});
+router.all('/login', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
 	});
 });
 

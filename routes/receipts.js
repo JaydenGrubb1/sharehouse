@@ -127,7 +127,7 @@ router.post('/', auth, function (req, res, next) {
 /**
  * Updates a receipt's details
  */
-router.put('/', auth, function (req, res, next) {
+router.put('/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
@@ -173,6 +173,24 @@ router.delete('/:id', auth, function (req, res, next) {
 			message: "Internal server error"
 		});
 		console.log(error);
+	});
+});
+
+/**
+ * Method not allowed handlers
+ */
+router.all('/', function (req, res, next) {
+	res.set('Allow', 'GET, POST');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET and POST"
+	});
+});
+router.all('/:id', function (req, res, next) {
+	res.set('Allow', 'GET, PUT, DELETE');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET, PUT and DELETE"
 	});
 });
 

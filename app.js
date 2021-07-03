@@ -9,9 +9,9 @@ const knex = require('knex')(options);
 const helmet = require('helmet');
 const cors = require('cors');
 
-const financeRouter = require('./routes/finances');
-const receiptsRouter = require('./routes/receipts');
 const paymentsRouter = require('./routes/payments');
+const receiptsRouter = require('./routes/receipts');
+const statisticsRouter = require('./routes/statistics');
 const userRouter = require('./routes/users');
 
 const app = express();
@@ -28,9 +28,9 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use('/finances', financeRouter);
-app.use('/receipts', receiptsRouter);
 app.use('/payments', paymentsRouter);
+app.use('/receipts', receiptsRouter);
+app.use('/statistics', statisticsRouter);
 app.use('/users', userRouter);
 
 app.use('/test', function (req, res, next) {

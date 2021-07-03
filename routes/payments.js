@@ -1,4 +1,5 @@
 const express = require('express');
+const { MethodNotAllowed } = require('http-errors');
 const router = express.Router();
 const auth = require('../auth');
 
@@ -215,6 +216,31 @@ router.delete('/:id', auth, function (req, res, next) {
 			message: "Internal server error"
 		});
 		console.log(error);
+	});
+});
+
+/**
+ * Method not allowed handlers
+ */
+router.all('/', function (req, res, next) {
+	res.set('Allow', 'GET, POST');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET and POST"
+	});
+});
+router.all('/:id', function (req, res, next) {
+	res.set('Allow', 'GET, PUT, DELETE');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET, PUT and DELETE"
+	});
+});
+router.all('/:id/approve', function (req, res, next) {
+	res.set('Allow', 'PUT');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: PUT"
 	});
 });
 
