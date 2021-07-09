@@ -1,37 +1,32 @@
 import React from "react";
-
-import "../styles/header.css";
+import { useState } from "react";
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from "reactstrap";
 
 export default function Header() {
+
+	const [isOpen, setIsOpen] = useState(false);
+	const toggle = () => setIsOpen(!isOpen);
+
 	return (
-		<nav className="navbar">
-			<ul className="navbar-nav">
-				<li className="nav-item">
-					<a href="/" className="nav-link">
-						<span className="link-text">Home</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a href="/payments" className="nav-link">
-						<span className="link-text">Payments</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a href="/statistics" className="nav-link">
-						<span className="link-text">Statistics</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a href="/account" className="nav-link">
-						<span className="link-text">Account</span>
-					</a>
-				</li>
-				<li className="nav-item">
-					<a href="/logout" className="nav-link">
-						<span className="link-text">Logout</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
+		<Navbar color="dark" dark expand="md">
+			<NavbarBrand href="/">sharehouse</NavbarBrand>
+			<NavbarToggler onClick={toggle} />
+			<Collapse isOpen={isOpen} navbar>
+				<Nav className="mr-auto" navbar>
+					<NavItem>
+						<NavLink href="/payments">Payments</NavLink>
+					</NavItem>
+					<NavItem>
+						<NavLink href="/statistics">Stats</NavLink>
+					</NavItem>
+					<NavItem>
+						<NavLink href="/account">Account</NavLink>
+					</NavItem>
+					<NavItem>
+						<NavLink href="/">Logout</NavLink>
+					</NavItem>
+				</Nav>
+			</Collapse>
+		</Navbar>
 	);
-}
+};
