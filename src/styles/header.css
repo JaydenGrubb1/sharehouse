@@ -1,0 +1,27 @@
+.navbar {
+	width: 100%;
+	background: #000;
+	color: #fff;
+}
+
+.navbar-nav {
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	height: 100%;
+}
+
+.nav-item {
+	padding: 1em;
+	width: 6em;
+	text-align: center;
+	transition: 200ms ease;
+}
+
+.nav-item:last-child {
+	margin-left: auto;
+}
+
+.nav-item:hover {
+	background: #222;
+}
