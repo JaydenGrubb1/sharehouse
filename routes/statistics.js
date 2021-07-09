@@ -62,7 +62,7 @@ router.get('/debt/:email', auth, function (req, res, next) {
 		});
 });
 
-/**
+/**```
  * Method not allowed handlers
  */
 router.all('/debt/:email', function (req, res, next) {
