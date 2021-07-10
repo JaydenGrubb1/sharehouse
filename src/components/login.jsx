@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
+import { doLogin } from "../api";
 
 export default function Login() {
 
@@ -12,7 +13,13 @@ export default function Login() {
 
 	async function onSubmit() {
 		setLoading(true);
-		console.log(email, " - ", password);
+		let result = await doLogin(email, password);
+		if (result.error) {
+			setError(result.message);
+		} else {
+			setError("");
+			window.location.reload();
+		}
 		setLoading(false);
 	}
 

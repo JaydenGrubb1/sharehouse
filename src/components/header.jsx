@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from "reactstrap";
+import { doLogout } from "../api";
 
 export default function Header() {
 
@@ -23,7 +24,7 @@ export default function Header() {
 						<NavLink href="/account">Account</NavLink>
 					</NavItem>
 					<NavItem>
-						<NavLink href="/">Logout</NavLink>
+						<NavLink href="/" onClick={doLogout}>Logout</NavLink>
 					</NavItem>
 				</Nav>
 			</Collapse>

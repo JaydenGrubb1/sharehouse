@@ -14,7 +14,6 @@ export default function App() {
 	if (isLoggedIn()) {
 		return (
 			<div>
-
 				<Helmet>
 					<title>Sharehouse</title>
 				</Helmet>
@@ -32,7 +31,12 @@ export default function App() {
 		);
 	} else {
 		return (
-			<Login />
+			<div>
+				<Helmet>
+					<title>Login</title>
+				</Helmet>
+				<Login />
+			</div>
 		);
 	}
 }
