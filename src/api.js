@@ -31,6 +31,17 @@ function setToken(token, expiry) {
 }
 
 /**
+ * Gets the current user's email
+ * @returns The current user's email
+ */
+function getEmail() {
+	const token = getToken();
+	const payload = token.split(".")[1];
+	const data = JSON.parse(atob(payload));
+	return data.email;
+}
+
+/**
  * Checks if the user is currently logged in
  * @returns True if the user is logged in
  */
@@ -74,4 +85,45 @@ export function doLogin(email, password) {
 export function doLogout() {
 	setToken("", -86400);
 	window.location.reload();
+}
+
+/**
+ * Gets the current user's details
+ * @returns The user's details
+ */
+export function getUser() {
+	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+		method: "GET",
+		cache: "no-store",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getToken()
+		}
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+export function setPassword(password) {
+	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+		method: "PUT",
+		cache: "no-store",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getToken()
+		},
+		body: JSON.stringify({
+			password
+		})
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
 }
