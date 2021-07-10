@@ -1,7 +1,7 @@
 /**
  * Server address
  */
-const SERVER = 'http://127.0.0.1:3001';
+const SERVER = 'http://192.168.86.42:3001';
 
 /**
  * Gets the users authentication token from cookie storage

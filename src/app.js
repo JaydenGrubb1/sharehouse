@@ -5,8 +5,12 @@ import "./app.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Header from "./components/header";
-import Home from "./pages/home";
 import Login from "./components/login";
+
+import Home from "./pages/home";
+import Payments from "./pages/payments";
+import Statistics from "./pages/statistics";
+import Account from "./pages/account";
 
 import { isLoggedIn } from "./api";
 
@@ -14,13 +18,19 @@ export default function App() {
 	if (isLoggedIn()) {
 		return (
 			<div>
-				<Helmet>
-					<title>Sharehouse</title>
-				</Helmet>
 				<Router>
 					<Header />
 					<main>
 						<Switch>
+							<Route path="/payments">
+								<Payments />
+							</Route>
+							<Route path="/statistics">
+								<Statistics />
+							</Route>
+							<Route path="/account">
+								<Account />
+							</Route>
 							<Route path="/">
 								<Home />
 							</Route>

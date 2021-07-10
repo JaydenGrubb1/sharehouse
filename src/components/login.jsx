@@ -31,11 +31,11 @@ export default function Login() {
 					<Form onSubmit={onSubmit}>
 						<FormGroup>
 							<Label for="emailfield">Email</Label>
-							<Input type="email" name="email" id="emailfield" value={email} onChange={x => setEmail(x.target.value)} />
+							<Input type="email" name="email" id="emailfield" autoComplete="email" value={email} onChange={x => setEmail(x.target.value)} />
 						</FormGroup>
 						<FormGroup>
 							<Label for="passwordfield">Password</Label>
-							<Input type="password" name="password" id="passwordfield" value={password} onChange={x => setPassword(x.target.value)} />
+							<Input type="password" name="password" id="passwordfield" autoComplete="current-password" value={password} onChange={x => setPassword(x.target.value)} />
 						</FormGroup>
 					</Form>
 					<p className="text-danger text-center">{error}</p>
