@@ -16,7 +16,7 @@ const ALLOWED_USER_FIELDS = {
 /**
  * Log a user in
  */
-router.get('/login', function (req, res, next) {
+router.post('/login', function (req, res, next) {
 	const email = req.body.email;
 	const password = req.body.password;
 
@@ -96,7 +96,7 @@ router.get('/:email', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('users').select('name', 'email', 'bsb', 'acc', 'admin')
+	req.knex.from('users').select('name', 'email', 'updated', 'bsb', 'acc', 'admin')
 		.where('email', '=', req.params.email).then(rows => {
 			res.status(200).json({
 				error: false,
@@ -189,25 +189,6 @@ router.put('/:email', auth, function (req, res, next) {
 		return;
 	}
 
-	if (old_email !== new_email) {
-		req.knex.from('users').select('id').where('email', '=', new_email).then(rows => {
-			if (rows.length > 0) {
-				res.status(409).json({
-					error: true,
-					message: "User already exists with that email"
-				});
-				return;
-			}
-		}).catch(error => {
-			res.status(500).json({
-				error: true,
-				message: "Internal server error"
-			});
-			console.log(error);
-			return;
-		});
-	}
-
 	for (var prop in req.body) {
 		if (!ALLOWED_USER_FIELDS.hasOwnProperty(prop)) {
 			res.status(400).json({
@@ -221,21 +202,47 @@ router.put('/:email', auth, function (req, res, next) {
 	if (req.body.password) {
 		const hash = bcrypt.hashSync(req.body.password, 10);
 		req.body.hash = hash;
+		req.body.updated = new Date();
 		delete req.body.password;
 	}
 
-	req.knex.from('users').where('email', '=', old_email).update(req.body).then(() => {
-		res.status(200).json({
-			error: false,
-			message: "User update successful"
+	const after = (req, res) => {
+		req.knex.from('users').where('email', '=', old_email).update(req.body).then(() => {
+			res.status(200).json({
+				error: false,
+				message: "User update successful"
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
 		});
-	}).catch(error => {
-		res.status(500).json({
-			error: true,
-			message: "Internal server error"
+	}
+
+	if (old_email !== new_email && new_email) {
+		req.knex.from('users').select('email').where('email', '=', new_email).then(rows => {
+			if (rows.length > 0) {
+				res.status(409).json({
+					error: true,
+					message: "User already exists with that email"
+				});
+				return;
+			}
+
+			after(req, res);
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+			return;
 		});
-		console.log(error);
-	});
+	} else {
+		after(req, res);
+	}
 });
 
 /**
@@ -277,10 +284,10 @@ router.all('/:email', function (req, res, next) {
 	});
 });
 router.all('/login', function (req, res, next) {
-	res.set('Allow', 'GET');
+	res.set('Allow', 'POST');
 	res.status(405).json({
 		error: true,
-		message: "Method not allowed, allowed methods are: GET"
+		message: "Method not allowed, allowed methods are: POST"
 	});
 });
 

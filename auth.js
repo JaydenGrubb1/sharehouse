@@ -42,6 +42,14 @@ const authorize = (req, res, next) => {
 		req.email = decoded.email;
 
 		req.knex.from('users').select('admin').where('email', '=', req.email).then(rows => {
+			if(rows.length < 1){
+				res.status(401).json({
+					error: true,
+					message: "JWT user's email has changed"
+				});
+				return;
+			}
+
 			req.admin = rows[0].admin === 1;
 
 			if (next)
