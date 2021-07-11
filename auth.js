@@ -40,6 +40,7 @@ const authorize = (req, res, next) => {
 			return;
 		}
 		req.email = decoded.email;
+		console.log(req.email);
 
 		req.knex.from('users').select('admin').where('email', '=', req.email).then(rows => {
 			if(rows.length < 1){
