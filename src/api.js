@@ -94,7 +94,7 @@ export function doLogout() {
 export function getUser() {
 	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
 		method: "GET",
-		cache: "no-store",
+		cache: "default",
 		headers: {
 			"Content-Type": "application/json",
 			"Authorization": "Bearer " + getToken()
@@ -108,6 +108,11 @@ export function getUser() {
 	})
 }
 
+/**
+ * Sets the current user's password
+ * @param {string} password The user's new password
+ * @returns The error status of the operation
+ */
 export function setPassword(password) {
 	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
 		method: "PUT",
@@ -120,6 +125,33 @@ export function setPassword(password) {
 			password
 		})
 	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+/**
+ * Sets the current user's details
+ * @param {object} details The user's new details
+ * @returns The error status of the operation
+ */
+export function setDetails(details) {
+	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+		method: "PUT",
+		cache: "no-store",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getToken()
+		},
+		body: JSON.stringify(details)
+	}).then(res => res.json()).then(data => {
+		if (!data.error && data.new_token)
+			setToken(data.new_token.token, data.new_token.expires_in);
+		return data;
+	}).catch(e => {
 		console.log(e);
 		return JSON.stringify({
 			error: true,

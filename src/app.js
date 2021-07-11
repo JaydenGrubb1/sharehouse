@@ -2,9 +2,6 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
-import "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/free-solid-svg-icons";
-import "@fortawesome/react-fontawesome";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Header from "./components/header";

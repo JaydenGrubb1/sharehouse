@@ -31,7 +31,7 @@ export default function Login() {
 					<Form onSubmit={onSubmit}>
 						<FormGroup>
 							<Label for="emailfield">Email</Label>
-							<Input type="email" name="email" id="emailfield" autoComplete="email" value={email} onChange={x => setEmail(x.target.value)} />
+							<Input type="email" name="email" id="emailfield" autoComplete="username" value={email} onChange={x => setEmail(x.target.value)} />
 						</FormGroup>
 						<FormGroup>
 							<Label for="passwordfield">Password</Label>
