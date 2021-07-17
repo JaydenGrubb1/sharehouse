@@ -9,6 +9,7 @@
 		"@fortawesome/free-solid-svg-icons": "^5.15.3",
 		"@fortawesome/react-fontawesome": "^0.1.14",
 		"bootstrap": "^4.6.0",
+		"css-loader": "^1.0.0",
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
 		"react-helmet": "^6.1.0",
@@ -18,7 +19,8 @@
 		"reactstrap": "^8.9.0"
 	},
 	"devDependencies": {
-		"typescript": "3.3.3"
+		"typescript": "3.3.3",
+		"css-loader": "^1.0.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -28,7 +30,6 @@
 	},
 	"browserslist": [
 		">0.2%",
-		"not dead",
 		"not ie <= 11",
 		"not op_mini all"
 	]

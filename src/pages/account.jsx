@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Alert, Button, Card, CardHeader, Col, Collapse, Form, FormFeedback, FormGroup, FormText, Input, Label, List, Row, Spinner } from "reactstrap";
+import { Alert, Button, Card, CardHeader, Col, Collapse, Form, FormFeedback, FormGroup, FormText, Input, Label, List, Row, Spinner, UncontrolledAlert } from "reactstrap";
 import { getUser, setDetails, setPassword } from "../api";
 import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -104,10 +104,10 @@ export default function Account() {
 				<title>Sharehouse - Account</title>
 			</Helmet>
 			<Collapse isOpen={!update}>
-				<Alert color="warning">Default password still in use, it is strongly recommended that you change your password.</Alert>
+				<UncontrolledAlert color="warning">Default password still in use, it is strongly recommended that you change your password.</UncontrolledAlert>
 			</Collapse>
 			<Collapse isOpen={error}>
-				<Alert color="danger">{error}</Alert>
+				<UncontrolledAlert color="danger">{error}</UncontrolledAlert>
 			</Collapse>
 			<h4 className="text-left">Account</h4>
 			<Card className="mt-3">
