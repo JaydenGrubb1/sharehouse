@@ -1,5 +1,6 @@
 {
 	"name": "sharehouse-gui",
+	"homepage": ".",
 	"version": "0.1.0",
 	"description": "sharehouse management front-end",
 	"keywords": [],

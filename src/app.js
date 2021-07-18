@@ -11,6 +11,7 @@ import Home from "./pages/home";
 import Payments from "./pages/payments";
 import Statistics from "./pages/statistics";
 import Account from "./pages/account";
+import Admin from "./pages/admin";
 
 import { isLoggedIn } from "./api";
 
@@ -30,6 +31,9 @@ export default function App() {
 							</Route>
 							<Route path="/account">
 								<Account />
+							</Route>
+							<Route path="/admin">
+								<Admin />
 							</Route>
 							<Route path="/">
 								<Home />

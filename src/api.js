@@ -4,30 +4,32 @@
 const SERVER = 'http://192.168.86.42:3001';
 
 /**
- * Gets the users authentication token from cookie storage
- * @returns The users authentication token
+ * Gets the value of a specified cookie
+ * @param {string} name The name of the cookie to retrieve
+ * @returns The value of the cookie
  */
-function getToken() {
-	const cookie = document.cookie;
+function getCookie(name) {
+	const cookies = document.cookie;
+	if (!cookies) {
+		return null;
+	}
+	const cookie = cookies.split("; ").find(x => x.startsWith(name + "="));
 	if (!cookie) {
 		return null;
 	}
-	const token = cookie.split("; ").find(x => x.startsWith("token="));
-	if (!token) {
-		return null;
-	}
-	return token.split("=")[1];
+	return cookie.split("=")[1];
 }
 
 /**
- * Stores the users authentication token into cookie storage
- * @param {string} token The user authentication token
- * @param {integer} expiry The expiry time in seconds from now
+ * Stores a cookie
+ * @param {string} name The name of the cookie
+ * @param {object} value The value of the cookie
+ * @param {integer} expiry The expiry time of the cookie in seconds from now
  */
-function setToken(token, expiry) {
+function setCookie(name, value, expiry) {
 	let date = new Date();
 	date.setSeconds(date.getSeconds() + expiry);
-	document.cookie = "token=" + token + "; expires=" + date.toUTCString() + "; path=/;";
+	document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/; samesite=lax;";
 }
 
 /**
@@ -35,10 +37,21 @@ function setToken(token, expiry) {
  * @returns The current user's email
  */
 function getEmail() {
-	const token = getToken();
+	const token = getCookie("token");
 	const payload = token.split(".")[1];
 	const data = JSON.parse(atob(payload));
 	return data.email;
+}
+
+/**
+ * Gets the current user's admin state
+ * @returns True if the current user is an admin
+ */
+export function getAdmin() {
+	const token = getCookie("token");
+	const payload = token.split(".")[1];
+	const data = JSON.parse(atob(payload));
+	return data.admin === 1;
 }
 
 /**
@@ -46,7 +59,7 @@ function getEmail() {
  * @returns True if the user is logged in
  */
 export function isLoggedIn() {
-	return getToken() !== null;
+	return getCookie("token") !== null;
 }
 
 /**
@@ -68,7 +81,7 @@ export function doLogin(email, password) {
 		})
 	}).then(res => res.json()).then(data => {
 		if (!data.error)
-			setToken(data.token, data.expires_in);
+			setCookie("token", data.token, data.expires_in);
 		return data;
 	}).catch(e => {
 		console.log(e);
@@ -83,7 +96,7 @@ export function doLogin(email, password) {
  * Logs a user out by deleting the JWT
  */
 export function doLogout() {
-	setToken("", -86400);
+	setCookie("token", "", -86400);
 	window.location.reload();
 }
 
@@ -97,7 +110,7 @@ export function getUser() {
 		cache: "default",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getToken()
+			"Authorization": "Bearer " + getCookie("token")
 		}
 	}).then(res => res.json()).catch(e => {
 		console.log(e);
@@ -119,7 +132,7 @@ export function setPassword(password) {
 		cache: "no-store",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getToken()
+			"Authorization": "Bearer " + getCookie("token")
 		},
 		body: JSON.stringify({
 			password
@@ -144,12 +157,12 @@ export function setDetails(details) {
 		cache: "no-store",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getToken()
+			"Authorization": "Bearer " + getCookie("token")
 		},
 		body: JSON.stringify(details)
 	}).then(res => res.json()).then(data => {
 		if (!data.error && data.new_token)
-			setToken(data.new_token.token, data.new_token.expires_in);
+			setCookie("token", data.new_token.token, data.new_token.expires_in);
 		return data;
 	}).catch(e => {
 		console.log(e);
