@@ -26,7 +26,7 @@ export default function Header() {
 							<NavLink href="/payments">Payments</NavLink>
 						</NavItem>
 						<NavItem>
-							<NavLink href="/statistics">Stats</NavLink>
+							<NavLink href="/statistics">Statistics</NavLink>
 						</NavItem>
 						{getAdmin() &&
 							<NavItem>

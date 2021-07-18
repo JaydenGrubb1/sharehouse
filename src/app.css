@@ -8,3 +8,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.remove-border > tbody:nth-child(1) > tr:nth-child(1) > td {
+	border-top: 0px;
+}
+
+/* .remove-border > thead > th {
+	border-top: 0px;
+	border-bottom: 0px;
+} */
