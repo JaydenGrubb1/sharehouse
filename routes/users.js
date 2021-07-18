@@ -28,7 +28,7 @@ router.post('/login', function (req, res, next) {
 		return;
 	}
 
-	req.knex.from('users').select('hash').where('email', '=', email).then(rows => {
+	req.knex.from('users').select('hash', 'admin').where('email', '=', email).then(rows => {
 		if (rows.length !== 1) {
 			res.status(401).json({
 				error: true,
@@ -38,6 +38,7 @@ router.post('/login', function (req, res, next) {
 		}
 
 		const hash = rows[0].hash;
+		const admin = rows[0].admin;
 
 		bcrypt.compare(password, hash).then(match => {
 			if (!match) {
@@ -50,7 +51,7 @@ router.post('/login', function (req, res, next) {
 
 			const expiry = 60 * 60 * 24;
 			const exp = Date.now() + expiry * 1000;
-			const token = jwt.sign({ email, exp }, process.env.JWT_SECRET);
+			const token = jwt.sign({ email, admin, exp }, process.env.JWT_SECRET);
 
 			res.status(200).json({
 				error: false,
@@ -245,10 +246,25 @@ router.put('/:email', auth, function (req, res, next) {
 			const expiry = 60 * 60 * 24;
 			const exp = Date.now() + expiry * 1000;
 			const email = new_email;
-			const token = jwt.sign({ email, exp }, process.env.JWT_SECRET);
-			req.token = token;
-			req.exp = expiry;
-			after(req, res);
+			const admin = req.admin;
+			const token = jwt.sign({ email, admin, exp }, process.env.JWT_SECRET);
+
+			req.knex.from('users').where('email', '=', old_email).update(req.body).then(() => {
+				res.status(200).json({
+					error: false,
+					message: "User update successful",
+					new_token: {
+						token: token,
+						expires_in: expiry
+					}
+				});
+			}).catch(error => {
+				res.status(500).json({
+					error: true,
+					message: "Internal server error"
+				});
+				console.log(error);
+			});
 		}).catch(error => {
 			res.status(500).json({
 				error: true,
@@ -258,7 +274,18 @@ router.put('/:email', auth, function (req, res, next) {
 			return;
 		});
 	} else {
-		after(req, res);
+		req.knex.from('users').where('email', '=', old_email).update(req.body).then(() => {
+			res.status(200).json({
+				error: false,
+				message: "User update successful"
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
 	}
 });
 
