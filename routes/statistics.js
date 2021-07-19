@@ -2,69 +2,76 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../auth');
 
+router.get('/total', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('debt').sum({ total: 'debt' }).where('debt', '>', 0).then(rows => {
+		res.status(200).json({
+			error: false,
+			total: rows[0].total
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
 router.get('/debt/:email', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	let dict = {};
-	let total = 0;
-
-	req.knex.from('payments').select('from').sum({ debt: 'amount' })
-		.where({ status: 'approved' }).groupBy('from').orderBy('debt', 'desc').then(rows => {
-			let count = rows.length;
-			for (let i = 0; i < count; i++) {
-				total += rows[i].debt;
-				dict[i] = new Object();
-				dict[i].id = rows[i].from;
-				dict[i].paid = rows[i].debt;
-			}
-			for (let i = 0; i < count; i++) {
-				dict[i].debt = (total / count) - dict[i].paid;
-				dict[i].remaining = Math.min(dict[i].debt, 0);
-				dict[i].paying = new Object();
-			}
-			for (let x = 0; x < count; x++) {
-				if (dict[x].debt > 0)
+	req.knex.from('debt').select('*').then(rows => {
+		let count = rows.length;
+		for (let x = 0; x < count; x++) {
+			if (rows[x].debt < 0)
+				continue;
+			for (let y = 0; y < x; y++) {
+				let transfer = Math.min(Math.abs(rows[y].debt), rows[x].debt);
+				if (transfer === 0)
 					continue;
-				for (let y = 0; y < count; y++) {
-					if (x === y)
-						continue;
-					if (dict[y].debt <= 0)
-						continue;
-					if (dict[x].remaining >= 0)
-						break;
 
-					let trans = Math.min(Math.abs(dict[x].remaining), Math.abs(dict[y].debt));
-					dict[x].remaining += trans;
-					dict[y].debt -= trans;
-					dict[y].paying[dict[x].id] = trans;
-				}
+				rows[y].debt += transfer;
+				rows[x].debt -= transfer;
+				if (!rows[x].paying)
+					rows[x].paying = {};
+				rows[x].paying[rows[y].user] = transfer;
 			}
-			for (let i = 0; i < count; i++) {
-				if (dict[i].id == req.params.email) {
-					res.status(200).json({
-						error: false,
-						data: dict[i].paying
-					});
-					return;
-				}
+		}
+
+		for (let i = 0; i < count; i++) {
+			if (rows[i].user == req.params.email) {
+				res.status(200).json({
+					error: false,
+					data: rows[i].paying
+				});
+				return;
 			}
-			res.status(200).json({
-				error: false,
-				data: dict
-			})
-		}).catch(error => {
-			res.status(500).json({
-				error: true,
-				message: "Internal server error"
-			});
-			console.log(error);
+		}
+
+		res.status(200).json(rows);
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
 		});
+		console.log(error);
+	});
 });
 
 /**```
  * Method not allowed handlers
  */
+router.all('/total', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
+	});
+});
 router.all('/debt/:email', function (req, res, next) {
 	res.set('Allow', 'GET');
 	res.status(405).json({
