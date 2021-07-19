@@ -40,11 +40,14 @@ export default function Account() {
 
 	const [detailsLoading, setDetailsLoading] = useState(false);
 
-	async function getResults() {
+	async function getDetails() {
 		let results = await getUser();
 
 		if (results.error || !results.data) {
-
+			if (results.error)
+				setError(results.error);
+			else
+				setError("An unknown error occured");
 		} else {
 			setOriginal(results.data);
 			setName(results.data.name);
@@ -66,7 +69,7 @@ export default function Account() {
 			setPwdLoading(false);
 		} else {
 			setChange(false);
-			await getResults();
+			await getDetails();
 			setTimeout(() => {
 				setError("");
 				setPwd("xxxxxxxx");
@@ -89,13 +92,13 @@ export default function Account() {
 			setError(result.message);
 		} else {
 			setError("");
-			await getResults();
+			await getDetails();
 		}
 		setDetailsLoading(false);
 	}
 
 	useEffect(() => {
-		getResults();
+		getDetails();
 	}, []);
 
 	return (
@@ -225,7 +228,7 @@ export default function Account() {
 							setEmailValid("");
 							setBsbValid("");
 							setAccValid("");
-							getResults();
+							getDetails();
 						}}>Cancel</Button>
 						<Button color="primary" disabled={!altered() || detailsInvalid()} className="ml-2" onClick={() => {
 							updateDetails();

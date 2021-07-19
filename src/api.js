@@ -172,3 +172,66 @@ export function setDetails(details) {
 		});
 	})
 }
+
+/**
+ * Gets the current user's debt
+ * @returns The user's debt
+ */
+export function getDebt() {
+	return fetch(SERVER + "/statistics/debt/" + encodeURIComponent(getEmail()), {
+		method: "GET",
+		cache: "default",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		}
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+/**
+ * Gets the total unpaid debt
+ * @returns The total unpaid debt
+ */
+export function getTotalDebt() {
+	return fetch(SERVER + "/statistics/total", {
+		method: "GET",
+		cache: "default",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		}
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+/**
+ * Gets a list of the users payments
+ * @returns A list of the users payments
+ */
+export function getPayments() {
+	return fetch(SERVER + "/payments?user=" + encodeURIComponent(getEmail()), {
+		method: "GET",
+		cache: "default",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		}
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
