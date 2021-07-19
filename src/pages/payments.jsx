@@ -1,15 +1,9 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Button, Card, CardBody, CardDeck, CardHeader, CardSubtitle, CardText, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, Pagination, PaginationItem, PaginationLink, Table, UncontrolledDropdown } from "reactstrap";
+import { Button, Card, CardBody, CardDeck, CardHeader, CardSubtitle, CardText, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledDropdown } from "reactstrap";
 import Entry from "../components/entry";
 
 export default function Payments() {
-
-	const tableStyle = {
-		verticalAlign: "middle",
-		whiteSpace: "nowrap"
-	};
-
 	return (
 		<div className="container p-3">
 			<Helmet>
@@ -34,6 +28,7 @@ export default function Payments() {
 					<CardBody>
 						<CardSubtitle>Total amount of unpaid debt between all users</CardSubtitle>
 						<CardText tag="h2">$543.21</CardText>
+						<Button color="primary">Add Receipt</Button>
 					</CardBody>
 				</Card>
 			</CardDeck>
@@ -57,52 +52,25 @@ export default function Payments() {
 					</div>
 					<Table className="my-0" responsive>
 						<tbody>
-							<tr className="my-auto">
-								<td style={tableStyle}>7 Jul 21</td>
-								<td style={tableStyle}>8:30 am</td>
-								<td style={tableStyle}>test1@testmail.com</td>
-								<td style={tableStyle}>$32.50</td>
-								<td style={tableStyle} className="text-right"><Button color="primary" outline>Cancel</Button></td>
-							</tr>
-							<tr className="my-auto">
-								<td style={tableStyle}>21 Jul 21</td>
-								<td style={tableStyle}>11:47 pm</td>
-								<td style={tableStyle}>test2@testmail.com</td>
-								<td style={tableStyle}>$127.34</td>
-								<td style={tableStyle} className="text-right"><Button color="primary" outline>Cancel</Button></td>
-							</tr>
+							<Entry pending data={{ cost: 32.50, name: "test1@testmail.com", timestamp: Date.parse("2021/07/07 08:30:00") }} />
+							<Entry pending data={{ cost: 127.34, name: "test2@testmail.com", timestamp: Date.parse("21 Jul 21 - 11:47 pm") }} />
+							<Entry pending data={{ cost: 34, name: "test3@testmail.com", timestamp: new Date() }} />
 						</tbody>
 					</Table>
 				</CardBody>
 			</Card>
-			<Entry>
-				<p>INNER HTML</p>
-			</Entry>
 			<Card className="mt-3">
 				<CardHeader>
 					<h5>Past Transactions</h5>
 				</CardHeader>
 				<CardBody className="p-0">
-					<ListGroup flush>
-						<ListGroupItem>
-							<div style={{ display: "flex", justifyContent: "space-between" }}>
-								<p className="my-auto">17 Jul 21</p>
-								<p className="my-auto">8:30 am</p>
-								<p className="my-auto">test1@testmail.com</p>
-								<p className="my-auto">$32.50</p>
-								<Button color="primary" outline>Cancel</Button>
-							</div>
-						</ListGroupItem>
-						<ListGroupItem>
-							<div style={{ display: "flex", justifyContent: "space-between" }}>
-								<p className="my-auto">19 Jul 21</p>
-								<p className="my-auto">11:49 pm</p>
-								<p className="my-auto">jaydengrubb1@gmail.com</p>
-								<p className="my-auto">$170.37</p>
-								<Button color="primary" outline>Cancel</Button>
-							</div>
-						</ListGroupItem>
-					</ListGroup>
+					<Table className="my-0" responsive>
+						<tbody>
+							<Entry data={{ cost: 32.50, name: "test1@testmail.com", timestamp: Date.parse("2021/07/07 08:30:00"), status: "approved" }} />
+							<Entry data={{ cost: 127.34, name: "test2@testmail.com", timestamp: Date.parse("21 Jul 21 - 11:47 pm"), status: "pending" }} />
+							<Entry data={{ cost: 34, name: "test3@testmail.com", timestamp: new Date(), status: "denied" }} />
+						</tbody>
+					</Table>
 				</CardBody>
 			</Card>
 		</div>

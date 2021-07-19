@@ -17,3 +17,21 @@ input[type=number] {
 	border-top: 0px;
 	border-bottom: 0px;
 } */
+
+.sm-table-col {
+	display: none;
+}
+
+.lg-table-col {
+	display:table-cell;
+}
+
+@media screen and (max-width: 768px) {
+	.sm-table-col {
+		display: inline;
+	}
+	
+	.lg-table-col {
+		display:none;
+	}
+}
