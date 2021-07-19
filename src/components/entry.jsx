@@ -15,7 +15,7 @@ export default function Entry(props) {
 				return "text-warning";
 			case "approved":
 				return "text-success";
-			case "denied":
+			case "rejected":
 				return "text-danger";
 			default:
 				return "";

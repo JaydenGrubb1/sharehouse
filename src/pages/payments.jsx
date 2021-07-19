@@ -1,6 +1,8 @@
+import { faCaretDown, faCaretUp, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Button, Card, CardBody, CardDeck, CardHeader, CardSubtitle, CardText, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledAlert, UncontrolledDropdown } from "reactstrap";
+import { Button, Card, CardBody, CardDeck, CardHeader, CardSubtitle, CardText, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledAlert, UncontrolledDropdown, UncontrolledTooltip } from "reactstrap";
 import { getDebt, getPayments, getTotalDebt } from "../api";
 import Entry from "../components/entry";
 
@@ -14,8 +16,12 @@ export default function Payments() {
 	const [payments, setPayments] = useState();
 	const [receipts, setReceipts] = useState();
 
-	const [pendingNum, setPendingNum] = useState(10);
-	const [transNum, setTransNum] = useState(10);
+	const [limit, setLimit] = useState(10);
+	const [pFilterOpen, setPFilterOpen] = useState(false);
+	const [tFilterOpen, setTFilterOpen] = useState(false);
+
+	const togglePFilter = () => setPFilterOpen(!pFilterOpen);
+	const toggleTFilter = () => setTFilterOpen(!tFilterOpen);
 
 	async function getDebts() {
 		let results = await getDebt();
@@ -77,7 +83,12 @@ export default function Payments() {
 						<h5>Your Debt</h5>
 					</CardHeader>
 					<CardBody>
-						<CardSubtitle>Total amount of unpaid debt to all users</CardSubtitle>
+						<CardSubtitle>
+							Total amount of unpaid debt to all users <FontAwesomeIcon icon={faQuestionCircle} id="debtTooltip" />
+							<UncontrolledTooltip target="debtTooltip" placement="bottom">
+								"Your Debt" does not account for any pending payments. If you have already made a payment, please wait until it has been approved by the reciever.
+							</UncontrolledTooltip>
+						</CardSubtitle>
 						<CardText tag="h2">${debt.toFixed(2)}</CardText>
 						<Button color="primary">Pay Debt</Button>
 					</CardBody>
@@ -93,30 +104,23 @@ export default function Payments() {
 					</CardBody>
 				</Card>
 			</CardDeck>
-			{pending &&
+			{!pending &&
 				<Card className="mt-3">
 					<CardHeader>
 						<h5>Pending Payments</h5>
 					</CardHeader>
 					<CardBody className="p-0">
 						<div className="p-3">
-							<UncontrolledDropdown>
-								<DropdownToggle color="primary" caret>
-									Limit {pendingNum}
-								</DropdownToggle>
-								<DropdownMenu>
-									<DropdownItem onClick={() => setPendingNum(10)}>10</DropdownItem>
-									<DropdownItem onClick={() => setPendingNum(20)}>20</DropdownItem>
-									<DropdownItem onClick={() => setPendingNum(40)}>40</DropdownItem>
-									<DropdownItem onClick={() => setPendingNum(60)}>60</DropdownItem>
-									<DropdownItem onClick={() => setPendingNum(80)}>80</DropdownItem>
-									<DropdownItem onClick={() => setPendingNum(100)}>100</DropdownItem>
-								</DropdownMenu>
-							</UncontrolledDropdown>
+							<Button color="primary" onClick={togglePFilter}>
+								Filter <FontAwesomeIcon icon={pFilterOpen ? faCaretUp : faCaretDown} />
+							</Button>
+							<Collapse isOpen={pFilterOpen}>
+
+							</Collapse>
 						</div>
 						<Table className="my-0" responsive>
 							<tbody>
-								{
+								{pending &&
 									pending.map(x => {
 										return <Entry data={x} />
 									})
@@ -132,19 +136,26 @@ export default function Payments() {
 				</CardHeader>
 				<CardBody className="p-0">
 					<div className="p-3">
-						<UncontrolledDropdown>
-							<DropdownToggle color="primary" caret>
-								Limit {transNum}
-							</DropdownToggle>
-							<DropdownMenu>
-								<DropdownItem onClick={() => setTransNum(10)}>10</DropdownItem>
-								<DropdownItem onClick={() => setTransNum(20)}>20</DropdownItem>
-								<DropdownItem onClick={() => setTransNum(40)}>40</DropdownItem>
-								<DropdownItem onClick={() => setTransNum(60)}>60</DropdownItem>
-								<DropdownItem onClick={() => setTransNum(80)}>80</DropdownItem>
-								<DropdownItem onClick={() => setTransNum(100)}>100</DropdownItem>
-							</DropdownMenu>
-						</UncontrolledDropdown>
+						<Button color="primary" onClick={toggleTFilter}>
+							Filter <FontAwesomeIcon icon={tFilterOpen ? faCaretUp : faCaretDown} />
+						</Button>
+						<Collapse isOpen={tFilterOpen}>
+							<div className="mt-3">
+								<UncontrolledDropdown>
+									<DropdownToggle color="primary">
+										Limit {limit} <FontAwesomeIcon icon={faCaretDown} />
+									</DropdownToggle>
+									<DropdownMenu>
+										<DropdownItem onClick={() => setLimit(10)}>10</DropdownItem>
+										<DropdownItem onClick={() => setLimit(20)}>20</DropdownItem>
+										<DropdownItem onClick={() => setLimit(40)}>40</DropdownItem>
+										<DropdownItem onClick={() => setLimit(60)}>60</DropdownItem>
+										<DropdownItem onClick={() => setLimit(80)}>80</DropdownItem>
+										<DropdownItem onClick={() => setLimit(100)}>100</DropdownItem>
+									</DropdownMenu>
+								</UncontrolledDropdown>
+							</div>
+						</Collapse>
 					</div>
 					<Table className="my-0" responsive>
 						<tbody>
