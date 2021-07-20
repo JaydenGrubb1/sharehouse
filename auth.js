@@ -40,7 +40,6 @@ const authorize = (req, res, next) => {
 			return;
 		}
 		req.email = decoded.email;
-		console.log(req.email);
 
 		req.knex.from('users').select('admin').where('email', '=', req.email).then(rows => {
 			if(rows.length < 1){
@@ -56,12 +55,12 @@ const authorize = (req, res, next) => {
 			if (next)
 				next();
 		})
-	} catch (err) {
+	} catch (error) {
 		res.status(401).json({
 			error: true,
 			message: "Invalid JWT token"
 		});
-		console.log(err)
+		console.log(error)
 		req.error = true;
 	}
 };

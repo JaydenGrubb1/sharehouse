@@ -36,13 +36,13 @@ app.use('/users', userRouter);
 app.use('/test', function (req, res, next) {
 	res.status(200).json({
 		error: false,
-		message: "Test successful!"
+		message: "Test successful"
 	});
 });
 app.use(function (req, res, next) {
 	res.status(404).json({
 		error: true,
-		message: "Page not found!"
+		message: "Page not found"
 	});
 });
 

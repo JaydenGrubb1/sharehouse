@@ -1,5 +1,4 @@
 const express = require('express');
-const { MethodNotAllowed } = require('http-errors');
 const router = express.Router();
 const auth = require('../auth');
 
@@ -7,6 +6,13 @@ const ALLOWED_PAYMENT_FIELDS = {
 	from: "",
 	to: "",
 	amount: 0.0
+}
+
+const ALLOWD_GETALL_FIELDS = {
+	from: "",
+	to: "",
+	status: "",
+	self: 0
 }
 
 /**
@@ -69,33 +75,55 @@ router.get('/', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	if (req.query.user) {
-		req.knex.from('payments').select('*').where('from', '=', req.query.user).then(rows => {
-			res.status(200).json({
-				error: false,
-				data: rows
-			});
-		}).catch(error => {
-			res.status(500).json({
+	const limit = req.query.limit;
+	const offset = req.query.page * limit;
+	const order = req.query.order;
+	const reverse = req.query.reverse === true;
+
+	delete req.query.limit;
+	delete req.query.page;
+	delete req.query.order;
+	delete req.query.reverse;
+
+	for (var prop in req.query) {
+		if (!ALLOWD_GETALL_FIELDS.hasOwnProperty(prop)) {
+			res.status(400).json({
 				error: true,
-				message: "Internal server error"
+				message: "Invalid query parameter"
 			});
-			console.log(error);
-		});
-	} else {
-		req.knex.from('payments').select('*').then(rows => {
-			res.status(200).json({
-				error: false,
-				data: rows
-			});
-		}).catch(error => {
-			res.status(500).json({
-				error: true,
-				message: "Internal server error"
-			});
-			console.log(error);
-		});
+			return;
+		}
 	}
+
+	let query = req.knex.from(function () {
+		this.select(req.knex.raw('*, (`from` = `to`) as `self`')).from(`payments`).as(`all`)
+	}).select('*');
+
+	if (Object.keys(req.query).length > 0)
+		query.where(req.query);
+
+	if (limit && limit > 0) {
+		query.limit(limit);
+
+		if (offset && offset >= 0)
+			query.offset(offset);
+	}
+
+	if (order)
+		query.orderBy(order, reverse ? 'asc' : 'dec');
+
+	query.then(rows => {
+		res.status(200).json({
+			error: false,
+			data: rows
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
 });
 
 /**
