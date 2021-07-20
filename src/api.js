@@ -36,7 +36,7 @@ function setCookie(name, value, expiry) {
  * Gets the current user's email
  * @returns The current user's email
  */
-function getEmail() {
+export function getEmail() {
 	const token = getCookie("token");
 	const payload = token.split(".")[1];
 	const data = JSON.parse(atob(payload));
@@ -231,9 +231,21 @@ export function getTotalDebt() {
  * Gets a list of the users payments
  * @returns A list of the users payments
  */
-export function getPayments() {
+export function getPayments(from, to, status, limit = 5, page = 0, order = 'timestamp', reverse = false, self = false) {
 	const url = new URL(SERVER + "/payments");
-	url.searchParams.append("user", getEmail());
+
+	if (from)
+		url.searchParams.append("from", from);
+	if (to)
+		url.searchParams.append("to", to);
+	if (status)
+		url.searchParams.append("status", status);
+	
+	url.searchParams.append("limit", limit);
+	url.searchParams.append("page", page);
+	url.searchParams.append("order", order);
+	url.searchParams.append("reverse", reverse);
+	url.searchParams.append("self", self);
 
 	return fetch(url.href, {
 		method: "GET",

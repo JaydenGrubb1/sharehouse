@@ -1,10 +1,11 @@
-import { faCaretDown, faCaretUp, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faQuestionCircle, faSync } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Button, Card, CardBody, CardDeck, CardHeader, CardSubtitle, CardText, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledAlert, UncontrolledDropdown, UncontrolledTooltip } from "reactstrap";
 import { getDebt, getPayments, getTotalDebt } from "../api";
-import Entry from "../components/entry";
+import Entry from "../components/payments/entry";
+import Pending from "../components/payments/pending";
 
 export default function Payments() {
 
@@ -12,15 +13,12 @@ export default function Payments() {
 
 	const [debt, setDebt] = useState(0);
 	const [totalDebt, setTotalDebt] = useState(0);
-	const [pending, setPending] = useState();
-	const [payments, setPayments] = useState();
+	const [payments, setPayments] = useState(undefined);
 	const [receipts, setReceipts] = useState();
 
 	const [limit, setLimit] = useState(10);
-	const [pFilterOpen, setPFilterOpen] = useState(false);
 	const [tFilterOpen, setTFilterOpen] = useState(false);
 
-	const togglePFilter = () => setPFilterOpen(!pFilterOpen);
 	const toggleTFilter = () => setTFilterOpen(!tFilterOpen);
 
 	async function getDebts() {
@@ -28,7 +26,7 @@ export default function Payments() {
 		let sum = 0;
 		let total = 0;
 		if (results.error) {
-			setError(results.error);
+			setError(results.message);
 		} else {
 			if (results.data) {
 				let debts = Object.values(results.data);
@@ -37,7 +35,7 @@ export default function Payments() {
 		}
 		results = await getTotalDebt();
 		if (results.error) {
-			setError(results.error);
+			setError(results.message);
 		} else {
 			total = results.total;
 		}
@@ -46,16 +44,12 @@ export default function Payments() {
 		setTotalDebt(total);
 	}
 
-	async function getPending() {
-		setPending();
-	}
-
 	async function getTransactions() {
-		let results = await getPayments();
+		let results = await getPayments(undefined, undefined, undefined, limit, 0);
 		if (results.error) {
-			setError(results.error);
+			setError(results.message);
 		} else {
-			if (results.data) {
+			if (results.data && results.data.length > 0) {
 				setPayments(results.data);
 			}
 		}
@@ -64,7 +58,6 @@ export default function Payments() {
 
 	useEffect(() => {
 		getDebts();
-		getPending();
 		getTransactions();
 	}, []);
 
@@ -79,8 +72,8 @@ export default function Payments() {
 			<h4 className="text-left">Payments</h4>
 			<CardDeck className="mt-3">
 				<Card>
-					<CardHeader>
-						<h5>Your Debt</h5>
+					<CardHeader className="d-flex">
+						<h5 className="my-auto">Your Debt</h5>
 					</CardHeader>
 					<CardBody>
 						<CardSubtitle>
@@ -94,8 +87,8 @@ export default function Payments() {
 					</CardBody>
 				</Card>
 				<Card>
-					<CardHeader>
-						<h5>Total Debt</h5>
+					<CardHeader className="d-flex">
+						<h5 className="my-auto">Total Debt</h5>
 					</CardHeader>
 					<CardBody>
 						<CardSubtitle>Total amount of unpaid debt between all users</CardSubtitle>
@@ -104,35 +97,13 @@ export default function Payments() {
 					</CardBody>
 				</Card>
 			</CardDeck>
-			{!pending &&
-				<Card className="mt-3">
-					<CardHeader>
-						<h5>Pending Payments</h5>
-					</CardHeader>
-					<CardBody className="p-0">
-						<div className="p-3">
-							<Button color="primary" onClick={togglePFilter}>
-								Filter <FontAwesomeIcon icon={pFilterOpen ? faCaretUp : faCaretDown} />
-							</Button>
-							<Collapse isOpen={pFilterOpen}>
-
-							</Collapse>
-						</div>
-						<Table className="my-0" responsive>
-							<tbody>
-								{pending &&
-									pending.map(x => {
-										return <Entry data={x} />
-									})
-								}
-							</tbody>
-						</Table>
-					</CardBody>
-				</Card>
-			}
+			<Pending error={setError} />
 			<Card className="mt-3">
-				<CardHeader>
-					<h5>Past Transactions</h5>
+				<CardHeader className="d-flex">
+					<h5 className="my-auto">Past Transactions</h5>
+					<Button className="ml-auto my-auto" outline onClick={getTransactions}>
+						<FontAwesomeIcon icon={faSync} />
+					</Button>
 				</CardHeader>
 				<CardBody className="p-0">
 					<div className="p-3">

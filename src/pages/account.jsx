@@ -114,8 +114,8 @@ export default function Account() {
 			</Collapse>
 			<h4 className="text-left">Account</h4>
 			<Card className="mt-3">
-				<CardHeader>
-					<h5>Details</h5>
+				<CardHeader className="d-flex">
+					<h5 className="my-auto">Details</h5>
 				</CardHeader>
 				<Form className="p-3">
 					<FormGroup>
@@ -240,8 +240,8 @@ export default function Account() {
 				</Form>
 			</Card>
 			<Card className="mt-3">
-				<CardHeader>
-					<h5>Security</h5>
+				<CardHeader className="d-flex">
+					<h5 className="my-auto">Security</h5>
 				</CardHeader>
 				<Form className="p-3">
 					<FormGroup>
