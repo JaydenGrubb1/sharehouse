@@ -69,7 +69,9 @@ export function isLoggedIn() {
  * @returns The data object returned by the fetch request
  */
 export function doLogin(email, password) {
-	return fetch(SERVER + "/users/login", {
+	const url = new URL(SERVER + "/users/login");
+
+	return fetch(url.href, {
 		method: "POST",
 		cache: "no-store",
 		headers: {
@@ -105,7 +107,9 @@ export function doLogout() {
  * @returns The user's details
  */
 export function getUser() {
-	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
+
+	return fetch(url.href, {
 		method: "GET",
 		cache: "default",
 		headers: {
@@ -127,7 +131,9 @@ export function getUser() {
  * @returns The error status of the operation
  */
 export function setPassword(password) {
-	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
+
+	return fetch(url.href, {
 		method: "PUT",
 		cache: "no-store",
 		headers: {
@@ -152,7 +158,9 @@ export function setPassword(password) {
  * @returns The error status of the operation
  */
 export function setDetails(details) {
-	return fetch(SERVER + "/users/" + encodeURIComponent(getEmail()), {
+	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
+
+	return fetch(url.href, {
 		method: "PUT",
 		cache: "no-store",
 		headers: {
@@ -178,7 +186,9 @@ export function setDetails(details) {
  * @returns The user's debt
  */
 export function getDebt() {
-	return fetch(SERVER + "/statistics/debt/" + encodeURIComponent(getEmail()), {
+	const url = new URL(SERVER + "/statistics/debt/" + encodeURIComponent(getEmail()));
+
+	return fetch(url.href, {
 		method: "GET",
 		cache: "default",
 		headers: {
@@ -199,7 +209,9 @@ export function getDebt() {
  * @returns The total unpaid debt
  */
 export function getTotalDebt() {
-	return fetch(SERVER + "/statistics/total", {
+	const url = new URL(SERVER + "/statistics/total");
+
+	return fetch(url.href, {
 		method: "GET",
 		cache: "default",
 		headers: {
@@ -220,7 +232,10 @@ export function getTotalDebt() {
  * @returns A list of the users payments
  */
 export function getPayments() {
-	return fetch(SERVER + "/payments?user=" + encodeURIComponent(getEmail()), {
+	const url = new URL(SERVER + "/payments");
+	url.searchParams.append("user", getEmail());
+
+	return fetch(url.href, {
 		method: "GET",
 		cache: "default",
 		headers: {
