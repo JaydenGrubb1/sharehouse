@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Collapse, Table } from "reactstrap";
 import { getEmail, getPayments, } from "../../api";
+import Pager from "../pager";
 import Entry from "./entry";
 
 export default function Pending(props) {
@@ -19,6 +20,8 @@ export default function Pending(props) {
 		} else {
 			if (results.data && results.data.length > 0) {
 				setData(results.data);
+			} else {
+				setData(undefined);
 			}
 		}
 	}
@@ -49,11 +52,12 @@ export default function Pending(props) {
 						<tbody>
 							{data &&
 								data.map(x => {
-									return <Entry pending data={x} />
+									return <Entry pending data={x} error={props.error} refresh={getData} />
 								})
 							}
 						</tbody>
 					</Table>
+					<Pager />
 				</CardBody>
 			</Card>
 		);

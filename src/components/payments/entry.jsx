@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dateFormat from "dateformat";
 import React from "react";
 import { Button, ButtonGroup } from "reactstrap";
+import { approvePayment } from "../../api";
 
 export default function Entry(props) {
+
+	const timestamp = dateFormat(props.data.timestamp, "d mmm yy - h:MM tt")
 
 	const tableStyle = {
 		verticalAlign: "middle",
@@ -24,8 +27,14 @@ export default function Entry(props) {
 		}
 	}
 
-	const t = props.data.timestamp;
-	const tf = dateFormat(t, "d mmm yy - h:MM tt")
+	async function setStatus(approved) {
+		let results = await approvePayment(props.data.id, approved);
+		if (results.error) {
+			props.error(results.message);
+		}else{
+			props.refresh();
+		}
+	}
 
 	return (
 		<tr className="my-auto">
@@ -34,16 +43,16 @@ export default function Entry(props) {
 				<span>{props.pending ? props.data.from : props.data.to}</span>
 				<span className="sm-table-col">
 					<br />
-					<span className="text-muted small">{tf}</span>
+					<span className="text-muted small">{timestamp}</span>
 				</span>
 			</td>
-			<td className="col-3 lg-table-col" style={tableStyle}>{tf}</td>
+			<td className="col-3 lg-table-col" style={tableStyle}>{timestamp}</td>
 			{props.pending
 				?
 				<td className="col-2" style={tableStyle}>
 					<ButtonGroup className="w-100">
-						<Button color="success"><FontAwesomeIcon icon={faCheck} /></Button>
-						<Button color="danger"><FontAwesomeIcon icon={faTimes} /></Button>
+						<Button color="success" onClick={() => setStatus(true)}><FontAwesomeIcon icon={faCheck} /></Button>
+						<Button color="danger" onClick={() => setStatus(false)}><FontAwesomeIcon icon={faTimes} /></Button>
 					</ButtonGroup>
 				</td>
 				:

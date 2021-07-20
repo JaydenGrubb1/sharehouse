@@ -262,3 +262,29 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 		});
 	})
 }
+
+/**
+ * Approves or rejects a payment
+ * @param {integer} id The id of the payment
+ * @param {boolean} approved True to approve, false to reject
+ * @returns The error status of the operation
+ */
+export function approvePayment(id, approved) {
+	const url = new URL(SERVER + "/payments/" + id + "/approve");
+
+	return fetch(url.href, {
+		method: "PUT",
+		cache: "default",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		},
+		body: JSON.stringify({accepted: approved})
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}

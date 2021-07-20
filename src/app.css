@@ -13,6 +13,10 @@ input[type=number] {
 	border-top: 0px;
 }
 
+.remove-ul-margin > ul {
+	margin-bottom: 0px;
+}
+
 /* .remove-border > thead > th {
 	border-top: 0px;
 	border-bottom: 0px;
@@ -26,6 +30,11 @@ input[type=number] {
 	display:table-cell;
 }
 
+.pager-center {
+	margin-left: 1rem !important;
+	margin-right: auto !important;
+}
+
 @media screen and (max-width: 768px) {
 	.sm-table-col {
 		display: inline;
@@ -33,5 +42,10 @@ input[type=number] {
 	
 	.lg-table-col {
 		display:none;
+	}
+
+	.pager-center {
+		margin-left: auto !important;
+		margin-right: auto !important;
 	}
 }

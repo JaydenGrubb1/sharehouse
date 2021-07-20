@@ -37,12 +37,6 @@ export default function Login() {
 							<Label for="passwordfield">Password</Label>
 							<Input type="password" name="password" id="passwordfield" autoComplete="current-password" value={password} onChange={x => setPassword(x.target.value)} />
 						</FormGroup>
-						{/* <FormGroup check>
-							<Label check>
-								<Input type="checkbox" />
-								Remember Me
-							</Label>
-						</FormGroup> */}
 					</Form>
 					<p className="text-danger text-center">{error}</p>
 				</ModalBody>

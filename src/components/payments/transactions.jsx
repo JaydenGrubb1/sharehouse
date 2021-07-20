@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledDropdown } from "reactstrap";
 import { getPayments } from "../../api";
+import Pager from "../pager";
 import Entry from "./entry";
 
 export default function Transactions(props) {
@@ -21,6 +22,8 @@ export default function Transactions(props) {
 		} else {
 			if (results.data && results.data.length > 0) {
 				setPayments(results.data);
+			} else {
+				setPayments(undefined);
 			}
 		}
 		setReceipts();
@@ -64,7 +67,7 @@ export default function Transactions(props) {
 				<tbody>
 					{payments &&
 						payments.map(x => {
-							return <Entry data={x} />
+							return <Entry data={x} error={props.error} refresh={getData} />
 						})
 					}
 				</tbody>
@@ -73,11 +76,12 @@ export default function Transactions(props) {
 				<tbody>
 					{receipts &&
 						receipts.map(x => {
-							return <Entry data={x} />
+							return <Entry data={x} error={props.error} refresh={getData} />
 						})
 					}
 				</tbody>
 			</Table>
+			<Pager />
 		</CardBody>
 	</Card>
 	);
