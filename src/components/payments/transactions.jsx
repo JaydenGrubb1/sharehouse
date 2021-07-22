@@ -10,13 +10,14 @@ export default function Transactions(props) {
 	const [payments, setPayments] = useState(undefined);
 	const [receipts, setReceipts] = useState();
 
+	const [offset, setOffset] = useState(0);
 	const [limit, setLimit] = useState(10);
 	const [filterOpen, setFilterOpen] = useState(false);
 
 	const toggleFilter = () => setFilterOpen(!filterOpen);
 
 	async function getData() {
-		let results = await getPayments(undefined, undefined, undefined, limit, 0);
+		let results = await getPayments(undefined, undefined, undefined, limit, offset);
 		if (results.error) {
 			props.error(results.message);
 		} else {
@@ -36,9 +37,9 @@ export default function Transactions(props) {
 	return (<Card className="mt-3">
 		<CardHeader className="d-flex">
 			<h5 className="my-auto">Past Transactions</h5>
-			<Button className="ml-auto my-auto" outline onClick={getData}>
+			{/* <Button className="ml-auto my-auto" outline onClick={getData}>
 				<FontAwesomeIcon icon={faSync} />
-			</Button>
+			</Button> */}
 		</CardHeader>
 		<CardBody className="p-0">
 			<div className="p-3">
@@ -81,7 +82,9 @@ export default function Transactions(props) {
 					}
 				</tbody>
 			</Table>
-			<Pager />
+			{payments &&
+				< Pager results={payments.length} limit={limit} setOffset={setOffset} />
+			}
 		</CardBody>
 	</Card>
 	);
