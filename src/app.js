@@ -5,7 +5,7 @@ import "./app.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Header from "./components/header";
-import Login from "./components/login";
+import Login from "./components/modals/login";
 
 import Home from "./pages/home";
 import Payments from "./pages/payments";

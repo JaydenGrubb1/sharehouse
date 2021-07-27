@@ -240,7 +240,7 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 		url.searchParams.append("to", to);
 	if (status)
 		url.searchParams.append("status", status);
-	
+
 	url.searchParams.append("limit", limit);
 	url.searchParams.append("page", page);
 	url.searchParams.append("order", order);
@@ -279,7 +279,32 @@ export function approvePayment(id, approved) {
 			"Content-Type": "application/json",
 			"Authorization": "Bearer " + getCookie("token")
 		},
-		body: JSON.stringify({accepted: approved})
+		body: JSON.stringify({ accepted: approved })
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+/**
+ * Creates a receipt entry
+ * @param {object} details The details of the receipt
+ * @returns The error status of the operation
+ */
+export function createReceipt(details) {
+	const url = new URL(SERVER + "/receipts");
+
+	return fetch(url.href, {
+		method: "POST",
+		cache: "no-store",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		},
+		body: JSON.stringify(details)
 	}).then(res => res.json()).catch(e => {
 		console.log(e);
 		return JSON.stringify({
