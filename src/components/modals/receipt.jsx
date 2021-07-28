@@ -68,6 +68,7 @@ export default function Receipt(props) {
 					{loading &&
 						<Spinner color="primary"></Spinner>
 					}
+					<Button color="primary" onClick={props.toggle} outline disabled={loading}>Cancel</Button>
 					<Button color="primary" onClick={onSubmit} disabled={loading}>Save</Button>
 				</ModalFooter>
 			</Modal>

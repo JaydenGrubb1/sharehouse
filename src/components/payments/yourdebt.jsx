@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, CardSubtitle, CardText, UncontrolledTooltip } from "reactstrap";
 import { getDebt } from "../../api";
+import Payment from "../modals/payment";
 
 export default function YourDebt(props) {
 
 	const [debt, setDebt] = useState(0);
+	const [modal, setModal] = useState(false);
+	const toggle = () => setModal(!modal);
 
 	async function getData() {
 		let results = await getDebt();
@@ -37,8 +40,9 @@ export default function YourDebt(props) {
 					</UncontrolledTooltip>
 				</CardSubtitle>
 				<CardText tag="h2">${debt.toFixed(2)}</CardText>
-				<Button color="primary">Pay Debt</Button>
+				<Button color="primary" onClick={toggle}>Pay Debt</Button>
 			</CardBody>
+			<Payment open={modal} toggle={toggle} />
 		</Card>
 	);
 }
