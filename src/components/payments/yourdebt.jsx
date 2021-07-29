@@ -39,7 +39,7 @@ export default function YourDebt(props) {
 						"Your Debt" does not account for any pending payments. If you have already made a payment, please wait until it has been approved by the reciever.
 					</UncontrolledTooltip>
 				</CardSubtitle>
-				<CardText tag="h2">${debt.toFixed(2)}</CardText>
+				<CardText tag="h2">${debt && debt.toFixed(2)}</CardText>
 				<Button color="primary" onClick={toggle}>Pay Debt</Button>
 			</CardBody>
 			<Payment open={modal} toggle={toggle} />

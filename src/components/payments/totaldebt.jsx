@@ -29,7 +29,7 @@ export default function TotalDebt(props) {
 			</CardHeader>
 			<CardBody>
 				<CardSubtitle>Total amount of unpaid debt between all users</CardSubtitle>
-				<CardText tag="h2">${debt.toFixed(2)}</CardText>
+				<CardText tag="h2">${debt && debt.toFixed(2)}</CardText>
 				<Button color="primary" onClick={toggle}>Add Receipt</Button>
 			</CardBody>
 			<Receipt open={modal} toggle={toggle} />
