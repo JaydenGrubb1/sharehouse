@@ -42,7 +42,8 @@ app.use('/test', function (req, res, next) {
 app.use(function (req, res, next) {
 	res.status(404).json({
 		error: true,
-		message: "Page not found"
+		message: "Page not found",
+		url: req.protocol + '://' + req.get('host') + req.originalUrl
 	});
 });
 
