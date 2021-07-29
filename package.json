@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "nodemon -q ./bin/www",
-		"production": "node ./bin/www"
+        "production": "node ./bin/www"
     },
     "dependencies": {
         "bcrypt": "^5.0.1",
@@ -17,6 +17,7 @@
         "http-errors": "~1.6.3",
         "jsonwebtoken": "^8.5.1",
         "knex": "^0.95.6",
-        "morgan": "~1.9.1"
+        "morgan": "~1.9.1",
+        "mysql2": "^2.2.5"
     }
 }
