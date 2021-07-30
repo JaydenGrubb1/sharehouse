@@ -154,6 +154,12 @@ router.post('/', auth, function (req, res, next) {
 				message: "User created",
 				password: password
 			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
 		});
 	}).catch(error => {
 		res.status(500).json({
