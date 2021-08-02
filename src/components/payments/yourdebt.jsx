@@ -15,10 +15,13 @@ export default function YourDebt(props) {
 		let results = await getDebt();
 		if (results.error) {
 			props.error(results.message);
+			setDebt(0);
 		} else {
 			if (results.data) {
 				let debts = Object.values(results.data);
 				setDebt(debts.reduce((a, x) => a + x, 0));
+			}else{
+				setDebt(0);
 			}
 		}
 	}

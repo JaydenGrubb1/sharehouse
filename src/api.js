@@ -1,7 +1,14 @@
 /**
  * Server address
  */
-const SERVER = 'http://192.168.86.42:3001';
+let SERVER = "";
+ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    // dev code
+	SERVER = 'http://127.0.0.1:3001';
+} else {
+	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
+    // production code
+}
 
 /**
  * Gets the value of a specified cookie

@@ -13,8 +13,13 @@ export default function TotalDebt(props) {
 		let results = await getTotalDebt();
 		if (results.error) {
 			props.error(results.message);
+			setDebt(0);
 		} else {
-			setDebt(results.total);
+			if (results.total) {
+				setDebt(results.total);
+			} else {
+				setDebt(0);
+			}
 		}
 	}
 
