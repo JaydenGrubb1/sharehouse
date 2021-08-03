@@ -5,7 +5,8 @@ const auth = require('../auth');
 const ALLOWED_RECEIPT_FIELDS = {
 	user: "",
 	store: "",
-	cost: 0.0
+	cost: 0.0,
+	timestamp: ""
 }
 
 /**
@@ -90,22 +91,34 @@ router.post('/', auth, function (req, res, next) {
 		}
 	}
 
-	const user = req.body.user;
-	const cost = req.body.cost;
-
-	if (!user || !cost) {
+	if (!req.body.cost) {
 		res.status(400).json({
 			error: true,
-			message: "Request body incomplete, both a user and cost are required"
+			message: "Request body incomplete, cost is required"
 		});
 		return;
 	}
 
+	if(req.body.user && !req.admin){
+		res.status(403).json({
+			error: true,
+			message: "Forbidded, must be an admin user"
+		});
+		return;
+	}
+
+	if(!req.body.user)
+		req.body.user = req.email;
+
+	if(!req.body.timestamp)
+		req.body.timestamp = new Date();
+
 	req.knex.from('receipts').insert(req.body).then(rows => {
 		req.knex.from('payments').insert({
-			from: user,
-			to: user,
-			amount: cost,
+			from: req.body.user,
+			to: req.body.user,
+			amount: req.body.cost,
+			timestamp: req.body.timestamp,
 			status: "approved"
 		}).then(rows2 => {
 			res.status(201).json({
