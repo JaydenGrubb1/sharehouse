@@ -5,7 +5,8 @@ const auth = require('../auth');
 const ALLOWED_PAYMENT_FIELDS = {
 	from: "",
 	to: "",
-	amount: 0.0
+	amount: 0.0,
+	timestamp: ""
 }
 
 const ALLOWD_GETALL_FIELDS = {
@@ -179,6 +180,9 @@ router.post('/', auth, function (req, res, next) {
 		});
 		return;
 	}
+
+	if (!req.body.timestamp)
+		req.body.timestamp = new Date();
 
 	req.knex.from('payments').insert(req.body).then(rows => {
 		res.status(201).json({

@@ -31,6 +31,7 @@ router.get('/debt/:email', auth, function (req, res, next) {
 				continue;
 			for (let y = 0; y < x; y++) {
 				let transfer = Math.min(Math.abs(rows[y].debt), rows[x].debt);
+				transfer = parseFloat(transfer.toFixed(2));
 				if (transfer === 0)
 					continue;
 
