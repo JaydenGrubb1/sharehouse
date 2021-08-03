@@ -9,7 +9,7 @@ export default function Payment(props) {
 
 	async function onSubmit() {
 		setLoading(true);
-
+		setError(undefined)
 		setLoading(false);
 	}
 

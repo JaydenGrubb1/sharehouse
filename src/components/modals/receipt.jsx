@@ -1,7 +1,7 @@
 import dateFormat from "dateformat";
 import React, { useState, useEffect } from "react";
 import { Button, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
-import { createReceipt, getEmail } from "../../api";
+import { createReceipt } from "../../api";
 
 export default function Receipt(props) {
 

@@ -263,7 +263,9 @@ export default function Account() {
 								setPwd(str);
 							}}
 						></Input>
-						<FormFeedback invalid>Passwords is not strong enough</FormFeedback>
+						{pwdInvalid() &&
+							<FormFeedback invalid>Passwords is not strong enough</FormFeedback>
+						}
 						{/* <FormFeedback valid>Good password</FormFeedback> */}
 						{change &&
 							<Collapse isOpen={pwdInvalid()}>
