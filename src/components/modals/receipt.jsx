@@ -16,9 +16,9 @@ export default function Receipt(props) {
 	async function onSubmit() {
 		setLoading(true);
 		let details = {
-			"store": store,
-			"cost": amount,
-			"timestamp": "".concat(date, " ", time)
+			store: store,
+			cost: amount,
+			timestamp: "".concat(date, " ", time)
 		};
 		let results = await createReceipt(details);
 		if (results.error) {

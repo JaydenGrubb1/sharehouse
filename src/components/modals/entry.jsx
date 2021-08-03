@@ -1,19 +1,43 @@
-import React, { useState } from "react";
+import dateFormat from "dateformat";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label } from "reactstrap";
+import { getEmail } from "../../api";
 
-export default function Entry(props) {
+function Entry(props, ref) {
 
 	const [checked, setChecked] = useState(false);
 	const [showDatetime, setShowDatetime] = useState(true);
 
 	const [amount, setAmount] = useState();
+	const [date, setDate] = useState();
+	const [time, setTime] = useState();
+
+	useImperativeHandle(ref, () => ({
+		getDetails() {
+			if (checked === false)
+				return null;
+
+			return {
+				from: getEmail(),
+				to: props.user,
+				amount: amount,
+				timestamp: "".concat(date, " ", time)
+			}
+		}
+	}), [checked, amount]);
+
+	useEffect(() => {
+		setAmount(props.cost.toFixed(2));
+		setDate(dateFormat(new Date(), "yyyy-mm-dd"));
+		setTime(dateFormat(new Date(), "HH:MM"));
+	}, []);
 
 	return (
 		<div className={!props.end && "border-bottom"}>
 			<Form className="p-3">
 				<FormGroup check>
 					<Label check>
-						<Input type="checkbox" checked={checked} onClick={x => setChecked(x.target.checked)} />{props.email}
+						<Input type="checkbox" checked={checked} onClick={x => setChecked(x.target.checked)} />{props.user}
 					</Label>
 				</FormGroup>
 				<Collapse isOpen={checked}>
@@ -34,11 +58,11 @@ export default function Entry(props) {
 					<Collapse isOpen={!showDatetime}>
 						<FormGroup>
 							<Label for="datefield">Date</Label>
-							<Input type="date" name="date" id="datefield" />
+							<Input type="date" name="date" id="datefield" value={date} onChange={x => setDate(x.target.value)} />
 						</FormGroup>
 						<FormGroup>
 							<Label for="timefield">Time</Label>
-							<Input type="time" name="time" id="timefield" />
+							<Input type="time" name="time" id="timefield" value={time} onChange={x => setTime(x.target.value)} />
 						</FormGroup>
 					</Collapse>
 				</Collapse>
@@ -46,3 +70,5 @@ export default function Entry(props) {
 		</div>
 	);
 }
+
+export default forwardRef(Entry);

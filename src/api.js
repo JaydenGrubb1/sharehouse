@@ -320,3 +320,28 @@ export function createReceipt(details) {
 		});
 	})
 }
+
+/**
+ * Creates a payment entry
+ * @param {object} details The details of the payment
+ * @returns The error status of the operation
+ */
+export function createPayment(details) {
+	const url = new URL(SERVER + "/payments");
+
+	return fetch(url.href, {
+		method: "POST",
+		cache: "no-store",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		},
+		body: JSON.stringify(details)
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
