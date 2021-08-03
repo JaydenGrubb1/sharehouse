@@ -17,14 +17,19 @@ function Entry(props, ref) {
 			if (checked === false)
 				return null;
 
+			if (!showDatetime) {
+				setDate(dateFormat(new Date(), "yyyy-mm-dd"));
+				setTime(dateFormat(new Date(), "HH:MM"));
+			}
+
 			return {
 				from: getEmail(),
 				to: props.user,
 				amount: amount,
-				timestamp: showDatetime ? "".concat(date, " ", time) : new Date()
+				timestamp: Date.parse("".concat(date, " ", time))
 			}
 		}
-	}), [checked, amount]);
+	}), [checked, amount, showDatetime, date, time]);
 
 	useEffect(() => {
 		setAmount(props.cost.toFixed(2));

@@ -15,10 +15,16 @@ export default function Receipt(props) {
 
 	async function onSubmit() {
 		setLoading(true);
+
+		if (!showDatetime) {
+			setDate(dateFormat(new Date(), "yyyy-mm-dd"));
+			setTime(dateFormat(new Date(), "HH:MM"));
+		}
+
 		let details = {
 			store: store,
 			cost: amount,
-			timestamp: showDatetime ? "".concat(date, " ", time) : new Date()
+			timestamp: Date.parse("".concat(date, " ", time))
 		};
 		let results = await createReceipt(details);
 		if (results.error) {
