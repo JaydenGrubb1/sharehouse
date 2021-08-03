@@ -18,7 +18,7 @@ export default function Receipt(props) {
 		let details = {
 			store: store,
 			cost: amount,
-			timestamp: "".concat(date, " ", time)
+			timestamp: showDatetime ? "".concat(date, " ", time) : new Date()
 		};
 		let results = await createReceipt(details);
 		if (results.error) {

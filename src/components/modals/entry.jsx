@@ -21,7 +21,7 @@ function Entry(props, ref) {
 				from: getEmail(),
 				to: props.user,
 				amount: amount,
-				timestamp: "".concat(date, " ", time)
+				timestamp: showDatetime ? "".concat(date, " ", time) : new Date()
 			}
 		}
 	}), [checked, amount]);
