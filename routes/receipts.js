@@ -112,6 +112,8 @@ router.post('/', auth, function (req, res, next) {
 
 	if(!req.body.timestamp)
 		req.body.timestamp = new Date();
+	else
+		req.body.timestamp = new Date(req.body.timestamp);
 
 	req.knex.from('receipts').insert(req.body).then(rows => {
 		req.knex.from('payments').insert({
