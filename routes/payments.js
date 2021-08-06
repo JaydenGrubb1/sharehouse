@@ -114,9 +114,12 @@ router.get('/', auth, function (req, res, next) {
 		query.orderBy(order, reverse ? 'asc' : 'dec');
 
 	query.then(rows => {
-		res.status(200).json({
-			error: false,
-			data: rows
+		req.knex.raw('select FOUND_ROWS() as count').then(result => {
+			res.status(200).json({
+				error: false,
+				data: rows,
+				count: result[0][0].count
+			});
 		});
 	}).catch(error => {
 		res.status(500).json({
