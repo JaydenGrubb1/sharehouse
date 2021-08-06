@@ -55,7 +55,7 @@ export default function Pager(props) {
 		let count = Math.ceil(props.results / props.limit);
 		setPages(count);
 		updatePage(0, count);
-	}, [props.results]);
+	}, [props.results, props.limit]);
 
 	if (pages > 1) {
 		return (

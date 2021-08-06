@@ -271,6 +271,37 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 }
 
 /**
+ * Gets a list of the users receipts
+ * @returns A list of the users payments
+ */
+export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', reverse = false) {
+	const url = new URL(SERVER + "/receipts");
+
+	if (user)
+		url.searchParams.append("user", user);
+
+	// url.searchParams.append("limit", limit);
+	// url.searchParams.append("page", page);
+	// url.searchParams.append("order", order);
+	// url.searchParams.append("reverse", reverse);
+
+	return fetch(url.href, {
+		method: "GET",
+		cache: "default",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + getCookie("token")
+		}
+	}).then(res => res.json()).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	})
+}
+
+/**
  * Approves or rejects a payment
  * @param {integer} id The id of the payment
  * @param {boolean} approved True to approve, false to reject

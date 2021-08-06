@@ -5,7 +5,7 @@ import React from "react";
 import { Button, ButtonGroup } from "reactstrap";
 import { approvePayment } from "../../api";
 
-export default function Entry(props) {
+export default function PaymentEntry(props) {
 
 	const timestamp = dateFormat(props.data.timestamp, "d mmm yy - h:MM tt")
 
