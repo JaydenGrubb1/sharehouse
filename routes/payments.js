@@ -98,7 +98,7 @@ router.get('/', auth, function (req, res, next) {
 
 	let query = req.knex.from(function () {
 		this.select(req.knex.raw('*, (`from` = `to`) as `self`')).from(`payments`).as(`all`)
-	}).select('*');
+	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *'));
 
 	if (Object.keys(req.query).length > 0)
 		query.where(req.query);
