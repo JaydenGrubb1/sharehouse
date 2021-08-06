@@ -5,8 +5,8 @@ let SERVER = "";
  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // dev code
 	SERVER = 'http://127.0.0.1:3001';
-	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 } else {
+	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
     // production code
 }
 
