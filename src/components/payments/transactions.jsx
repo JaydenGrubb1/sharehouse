@@ -1,4 +1,4 @@
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faSync } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledDropdown } from "reactstrap";
@@ -37,9 +37,9 @@ export default function Transactions(props) {
 	return (<Card className="mt-3">
 		<CardHeader className="d-flex">
 			<h5 className="my-auto">Past Transactions</h5>
-			{/* <Button className="ml-auto my-auto" outline onClick={getData}>
+			<Button className="ml-auto my-auto" outline onClick={getData}>
 				<FontAwesomeIcon icon={faSync} />
-			</Button> */}
+			</Button>
 		</CardHeader>
 		<CardBody className="p-0">
 			<div className="p-3">
@@ -82,9 +82,9 @@ export default function Transactions(props) {
 					}
 				</tbody>
 			</Table>
-			{payments &&
+			{/* {payments &&
 				< Pager results={payments.length} limit={limit} setOffset={setOffset} />
-			}
+			} */}
 		</CardBody>
 	</Card>
 	);

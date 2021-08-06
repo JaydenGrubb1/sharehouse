@@ -1,4 +1,4 @@
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faSync } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Collapse, Table } from "reactstrap";
@@ -9,17 +9,20 @@ import Entry from "./entry";
 export default function Pending(props) {
 
 	const [data, setData] = useState();
+	const [count, setCount] = useState();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const toggleFilter = () => setFilterOpen(!filterOpen);
 
-	async function getData() {
-		let results = await getPayments(undefined, getEmail(), "pending");
+	const [page, setPage] = useState(0);
+
+	async function getData(pg = page) {
+		let results = await getPayments(undefined, getEmail(), "pending", 5, pg);
 		if (results.error) {
-			console.log(results);
 			props.error(results.message);
 		} else {
 			if (results.data && results.data.length > 0) {
 				setData(results.data);
+				setCount(results.count);
 			} else {
 				setData(undefined);
 			}
@@ -28,16 +31,16 @@ export default function Pending(props) {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [page]);
 
 	if (data)
 		return (
 			<Card className="mt-3">
 				<CardHeader className="d-flex">
 					<h5 className="my-auto">Pending Payments</h5>
-					{/* <Button className="ml-auto my-auto" outline onClick={getData}>
+					<Button className="ml-auto my-auto" outline onClick={getData}>
 						<FontAwesomeIcon icon={faSync} />
-					</Button> */}
+					</Button>
 				</CardHeader>
 				<CardBody className="p-0">
 					<div className="p-3">
@@ -57,7 +60,7 @@ export default function Pending(props) {
 							}
 						</tbody>
 					</Table>
-					<Pager />
+					<Pager results={count} limit={5} setOffset={setPage} />
 				</CardBody>
 			</Card>
 		);

@@ -42,15 +42,20 @@ export default function Pager(props) {
 
 		setPageList(list);
 		setActivePage(page);
-		if (props.setOffset)
-			props.setOffset(activePage);
+		// if (props.setOffset)
+		// 	props.setOffset(activePage);
 	}
 
 	useEffect(() => {
-		let count = props.results / props.limit;
+		if (props.setOffset)
+			props.setOffset(activePage);
+	}, [activePage]);
+
+	useEffect(() => {
+		let count = Math.ceil(props.results / props.limit);
 		setPages(count);
 		updatePage(0, count);
-	}, []);
+	}, [props.results]);
 
 	if (pages > 1) {
 		return (
