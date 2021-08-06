@@ -17,7 +17,7 @@ router.get('/', auth, function (req, res, next) {
 		return;
 
 	if (req.query.user) {
-		req.knex.from('receipts').select('*').where('user', '=', req.query.user).then(rows => {
+		req.knex.from('receipts').select('*').where('timestamp','>=','1970-01-01 00:00:00').where('user', '=', req.query.user).then(rows => {
 			res.status(200).json({
 				error: false,
 				data: rows
@@ -30,7 +30,7 @@ router.get('/', auth, function (req, res, next) {
 			console.log(error);
 		});
 	} else {
-		req.knex.from('receipts').select('*').then(rows => {
+		req.knex.from('receipts').select('*').where('timestamp','>=','1970-01-01 00:00:00').then(rows => {
 			res.status(200).json({
 				error: false,
 				data: rows

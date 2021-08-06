@@ -98,7 +98,7 @@ router.get('/', auth, function (req, res, next) {
 
 	let query = req.knex.from(function () {
 		this.select(req.knex.raw('*, (`from` = `to`) as `self`')).from(`payments`).as(`all`)
-	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *'));
+	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *')).where('timestamp','>=','1970-01-01 00:00:00');
 
 	if (Object.keys(req.query).length > 0)
 		query.where(req.query);
