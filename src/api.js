@@ -105,7 +105,7 @@ export function getEmail() {
  * Gets the current user's admin state
  * @returns True if the current user is an admin
  */
-export function isAdmin() {
+export function getAdmin() {
 	const token = getCookie("token");
 	const payload = token.split(".")[1];
 	const data = JSON.parse(atob(payload));

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Collapse, Modal, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Progress } from "reactstrap";
-import { doLogout, isAdmin, isDev } from "../api";
+import { doLogout, getAdmin, isDev } from "../api";
 
 export default function Header() {
 
@@ -30,7 +30,7 @@ export default function Header() {
 								<NavLink href="/statistics">Statistics</NavLink>
 							</NavItem>
 						}
-						{isAdmin() &&
+						{getAdmin() &&
 							<NavItem>
 								<NavLink href="/admin">Admin</NavLink>
 							</NavItem>
