@@ -2,12 +2,12 @@
  * Server address
  */
 let SERVER = "";
- if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    // dev code
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-} else {
 	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
-    // production code
+} else {
+	// production code
 }
 
 /**
@@ -37,6 +37,50 @@ function setCookie(name, value, expiry) {
 	let date = new Date();
 	date.setSeconds(date.getSeconds() + expiry);
 	document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/; samesite=lax;";
+}
+
+/**
+ * Performs a fetch request with a set of arguements
+ * @param {URL} url The URL of the endpoint to access
+ * @param {string} method The request method, i.e. GET, POST, PUT, etc
+ * @param {object} body The body of the request (will be passed through JSON.Stringify())
+ * @param {string} cache The cacheing protocol
+ * @param {function} then A function to execute after fetch
+ * @returns The error status and/or results of the fetch request
+ */
+function doFetch(url, method, body, cache = "default", then) {
+	let auth = undefined;
+	if (isLoggedIn()) {
+		auth = "Bearer " + getCookie("token");
+	}
+
+	return fetch(url, {
+		method: method.toUpperCase(),
+		cache: cache,
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": auth
+		},
+		body: JSON.stringify(body)
+	}).then(res => res.json()).then(data => {
+		if (data) {
+			if (then)
+				return then(data);
+			else
+				return data;
+		} else {
+			if (then)
+				return then();
+			else
+				return null;
+		}
+	}).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	});
 }
 
 /**
@@ -78,26 +122,10 @@ export function isLoggedIn() {
 export function doLogin(email, password) {
 	const url = new URL(SERVER + "/users/login");
 
-	return fetch(url.href, {
-		method: "POST",
-		cache: "no-store",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			email,
-			password
-		})
-	}).then(res => res.json()).then(data => {
+	return doFetch(url, "POST", { email, password }, "no-store", (data) => {
 		if (!data.error)
 			setCookie("token", data.token, data.expires_in);
 		return data;
-	}).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
 	})
 }
 
@@ -116,20 +144,7 @@ export function doLogout() {
 export function getUser() {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return fetch(url.href, {
-		method: "GET",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		}
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "GET");
 }
 
 /**
@@ -140,23 +155,7 @@ export function getUser() {
 export function setPassword(password) {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return fetch(url.href, {
-		method: "PUT",
-		cache: "no-store",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		},
-		body: JSON.stringify({
-			password
-		})
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "PUT", password, "no-store");
 }
 
 /**
@@ -167,24 +166,10 @@ export function setPassword(password) {
 export function setDetails(details) {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return fetch(url.href, {
-		method: "PUT",
-		cache: "no-store",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		},
-		body: JSON.stringify(details)
-	}).then(res => res.json()).then(data => {
+	return doFetch(url, "PUT", details, "no-store", (data) => {
 		if (!data.error && data.new_token)
 			setCookie("token", data.new_token.token, data.new_token.expires_in);
 		return data;
-	}).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
 	})
 }
 
@@ -195,20 +180,7 @@ export function setDetails(details) {
 export function getDebt() {
 	const url = new URL(SERVER + "/statistics/debt/" + encodeURIComponent(getEmail()));
 
-	return fetch(url.href, {
-		method: "GET",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		}
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "GET");
 }
 
 /**
@@ -218,25 +190,12 @@ export function getDebt() {
 export function getTotalDebt() {
 	const url = new URL(SERVER + "/statistics/total");
 
-	return fetch(url.href, {
-		method: "GET",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		}
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "GET");
 }
 
 /**
- * Gets a list of the users payments
- * @returns A list of the users payments
+ * Gets a list of payments
+ * @returns A list of payments
  */
 export function getPayments(from, to, status, limit = 5, page = 0, order = 'timestamp', reverse = false, self = false) {
 	const url = new URL(SERVER + "/payments");
@@ -254,25 +213,12 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 	url.searchParams.append("reverse", reverse);
 	url.searchParams.append("self", self);
 
-	return fetch(url.href, {
-		method: "GET",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		}
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "GET");
 }
 
 /**
- * Gets a list of the users receipts
- * @returns A list of the users payments
+ * Gets a list of receipts
+ * @returns A list of receipts
  */
 export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', reverse = false) {
 	const url = new URL(SERVER + "/receipts");
@@ -285,46 +231,19 @@ export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', rev
 	// url.searchParams.append("order", order);
 	// url.searchParams.append("reverse", reverse);
 
-	return fetch(url.href, {
-		method: "GET",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		}
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "GET");
 }
 
 /**
  * Approves or rejects a payment
  * @param {integer} id The id of the payment
- * @param {boolean} approved True to approve, false to reject
+ * @param {boolean} accepted True to approve, false to reject
  * @returns The error status of the operation
  */
-export function approvePayment(id, approved) {
+export function approvePayment(id, accepted) {
 	const url = new URL(SERVER + "/payments/" + id + "/approve");
 
-	return fetch(url.href, {
-		method: "PUT",
-		cache: "default",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		},
-		body: JSON.stringify({ accepted: approved })
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "PUT", accepted);
 }
 
 /**
@@ -335,21 +254,7 @@ export function approvePayment(id, approved) {
 export function createReceipt(details) {
 	const url = new URL(SERVER + "/receipts");
 
-	return fetch(url.href, {
-		method: "POST",
-		cache: "no-store",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		},
-		body: JSON.stringify(details)
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "POST", details, "no-store");
 }
 
 /**
@@ -360,19 +265,5 @@ export function createReceipt(details) {
 export function createPayment(details) {
 	const url = new URL(SERVER + "/payments");
 
-	return fetch(url.href, {
-		method: "POST",
-		cache: "no-store",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + getCookie("token")
-		},
-		body: JSON.stringify(details)
-	}).then(res => res.json()).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	})
+	return doFetch(url, "POST", details, "no-store");
 }
