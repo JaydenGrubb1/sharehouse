@@ -11,7 +11,7 @@ export function isDev() {
  */
 let SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 
-if (isDev) {
+if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
 	// SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
