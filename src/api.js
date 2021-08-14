@@ -1,13 +1,12 @@
 /**
  * Server address
  */
-let SERVER = "";
+let SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
+
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
-} else {
-	// production code
+	// SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 }
 
 /**
