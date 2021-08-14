@@ -1,9 +1,17 @@
 /**
+ * Checks if this is a dev version of the site
+ * @returns True if this is a dev version of the site
+ */
+export function isDev() {
+	return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+}
+
+/**
  * Server address
  */
 let SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+if (isDev) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
 	// SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
@@ -97,7 +105,7 @@ export function getEmail() {
  * Gets the current user's admin state
  * @returns True if the current user is an admin
  */
-export function getAdmin() {
+export function isAdmin() {
 	const token = getCookie("token");
 	const payload = token.split(".")[1];
 	const data = JSON.parse(atob(payload));
