@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
-import { doLogin } from "../../api";
+import { doLogin, isLoggedIn } from "../../api";
 
 export default function Login() {
 
@@ -18,7 +18,8 @@ export default function Login() {
 			setError(result.message);
 		} else {
 			setError("");
-			window.location.reload();
+			if(isLoggedIn())
+				window.location.reload();
 		}
 		setLoading(false);
 	}
