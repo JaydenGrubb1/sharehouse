@@ -27,7 +27,6 @@ export default function Transactions(props) {
 			props.error(results.message);
 		} else {
 			if (results.data && results.data.length > 0) {
-				console.log(results.data[0]);
 				setPCount(results.count);
 				setPayments(results.data);
 			} else {
@@ -40,7 +39,6 @@ export default function Transactions(props) {
 			props.error(results.message);
 		} else {
 			if (results.data && results.data.length > 0) {
-				console.log(results.data[0]);
 				setRCount(results.count);
 				setReceipts(results.data);
 			} else {
@@ -95,7 +93,7 @@ export default function Transactions(props) {
 						<tbody>
 							{receipts &&
 								receipts.map(x => {
-									return <ReceiptEntry data={x} error={props.error} refresh={getData} />
+									return <ReceiptEntry data={x} error={props.error} refresh={getData} key={x.id} />
 								})
 							}
 						</tbody>
@@ -110,7 +108,7 @@ export default function Transactions(props) {
 						<tbody>
 							{payments &&
 								payments.map(x => {
-									return <PaymentEntry data={x} error={props.error} refresh={getData} />
+									return <PaymentEntry data={x} error={props.error} refresh={getData} key={x.id} />
 								})
 							}
 						</tbody>

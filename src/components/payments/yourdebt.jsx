@@ -61,11 +61,11 @@ export default function YourDebt(props) {
 					<Table>
 						<tbody>
 							{debtList &&
-								debtList.map(x => {
+								debtList.map((data, index) => {
 									return (
-										<tr>
-											<td>${x.cost.toFixed(2)}</td>
-											<td>{x.user}</td>
+										<tr key={index}>
+											<td>${data.cost.toFixed(2)}</td>
+											<td>{data.user}</td>
 										</tr>
 									)
 								})

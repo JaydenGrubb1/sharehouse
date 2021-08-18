@@ -51,6 +51,7 @@ export default function Payment(props) {
 								cost={debt.cost}
 								end={index === props.debts.length - 1}
 								ref={refs[index]}
+								key={index}
 							/>
 						})
 					}
