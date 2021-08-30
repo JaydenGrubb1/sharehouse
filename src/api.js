@@ -16,7 +16,7 @@ let SERVER = 'https://sharehouse.jaydengrubb.com:' + PORT + '/api';
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	// SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
+	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 	// SERVER = 'https://sharehouse.jaydengrubb.com:8082/api';
 }
 
@@ -236,10 +236,10 @@ export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', rev
 	if (user)
 		url.searchParams.append("user", user);
 
-	// url.searchParams.append("limit", limit);
-	// url.searchParams.append("page", page);
-	// url.searchParams.append("order", order);
-	// url.searchParams.append("reverse", reverse);
+	url.searchParams.append("limit", limit);
+	url.searchParams.append("page", page);
+	url.searchParams.append("order", order);
+	url.searchParams.append("reverse", reverse);
 
 	return doFetch(url, "GET");
 }

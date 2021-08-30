@@ -1,4 +1,4 @@
-import { faCaretDown, faCaretUp, faSync } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Card, CardBody, CardHeader, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Table, UncontrolledDropdown } from "reactstrap";
@@ -21,6 +21,8 @@ export default function Transactions(props) {
 
 	const toggleFilter = () => setFilterOpen(!filterOpen);
 
+	// TODO Add more filter/sorting options
+
 	async function getData() {
 		let results = await getPayments(undefined, undefined, undefined, limit, offset);
 		if (results.error) {
@@ -34,7 +36,7 @@ export default function Transactions(props) {
 			}
 		}
 
-		results = await getReceipts();
+		results = await getReceipts(undefined, limit, offset);
 		if (results.error) {
 			props.error(results.message);
 		} else {
