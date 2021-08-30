@@ -28,6 +28,7 @@ export default function Payment(props) {
 		}
 
 		setLoading(false);
+		props.setRefresh(props.refresh + 1);
 	}
 
 	useEffect(() => {

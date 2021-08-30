@@ -25,7 +25,7 @@ export default function TotalDebt(props) {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [props.refresh]);
 
 	return (
 		<Card>
@@ -37,7 +37,7 @@ export default function TotalDebt(props) {
 				<CardText tag="h2">${debt && debt.toFixed(2)}</CardText>
 				<Button color="primary" onClick={toggle}>Add Receipt</Button>
 			</CardBody>
-			<Receipt open={modal} toggle={toggle} />
+			<Receipt open={modal} toggle={toggle} refresh={props.refresh} setRefresh={props.setRefresh} />
 		</Card>
 	);
 }

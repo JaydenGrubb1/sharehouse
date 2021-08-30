@@ -9,6 +9,7 @@ import YourDebt from "../components/payments/yourdebt";
 export default function Payments() {
 
 	const [error, setError] = useState();
+	const [refresh, setRefresh] = useState(0);
 
 	return (
 		<div className="container p-3">
@@ -20,11 +21,11 @@ export default function Payments() {
 			</Collapse>
 			<h4 className="text-left">Payments</h4>
 			<CardDeck className="mt-3">
-				<YourDebt error={setError} />
-				<TotalDebt error={setError} />
+				<YourDebt error={setError} refresh={refresh} setRefresh={setRefresh} />
+				<TotalDebt error={setError} refresh={refresh} setRefresh={setRefresh} />
 			</CardDeck>
-			<Pending error={setError} />
-			<Transactions error={setError} />
+			<Pending error={setError} refresh={refresh} setRefresh={setRefresh} />
+			<Transactions error={setError} refresh={refresh} setRefresh={setRefresh} />
 		</div>
 	);
 }

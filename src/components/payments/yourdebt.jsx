@@ -37,7 +37,7 @@ export default function YourDebt(props) {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [props.refresh]);
 
 	return (
 		<Card>
@@ -75,7 +75,7 @@ export default function YourDebt(props) {
 				</Collapse>
 				<Button color="primary" onClick={toggleModal} disabled={!debtList}>Pay Debt</Button>
 			</CardBody>
-			<Payment open={modal} toggle={toggleModal} debts={debtList} />
+			<Payment open={modal} toggle={toggleModal} debts={debtList} refresh={props.refresh} setRefresh={props.setRefresh} />
 		</Card>
 	);
 }

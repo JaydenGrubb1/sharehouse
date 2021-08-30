@@ -31,16 +31,16 @@ export default function Pending(props) {
 
 	useEffect(() => {
 		getData();
-	}, [page]);
+	}, [page, props.refresh]);
 
 	if (data)
 		return (
 			<Card className="mt-3">
 				<CardHeader className="d-flex">
 					<h5 className="my-auto">Pending Payments</h5>
-					<Button className="ml-auto my-auto" outline onClick={getData}>
+					{/* <Button className="ml-auto my-auto" outline onClick={getData}>
 						<FontAwesomeIcon icon={faSync} />
-					</Button>
+					</Button> */}
 				</CardHeader>
 				<CardBody className="p-0">
 					<div className="p-3">

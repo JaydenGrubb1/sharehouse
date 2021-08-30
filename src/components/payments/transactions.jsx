@@ -49,14 +49,14 @@ export default function Transactions(props) {
 
 	useEffect(() => {
 		getData();
-	}, [offset, limit]);
+	}, [offset, limit, props.refresh]);
 
 	return (<Card className="mt-3">
 		<CardHeader className="d-flex">
 			<h5 className="my-auto">Past Transactions</h5>
-			<Button className="ml-auto my-auto" outline onClick={getData}>
+			{/* <Button className="ml-auto my-auto" outline onClick={getData}>
 				<FontAwesomeIcon icon={faSync} />
-			</Button>
+			</Button> */}
 		</CardHeader>
 		<CardBody className="p-0">
 			<div className="p-3">
