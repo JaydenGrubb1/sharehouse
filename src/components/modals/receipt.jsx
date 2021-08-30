@@ -33,12 +33,14 @@ export default function Receipt(props) {
 			setError();
 			props.toggle();
 		}
-		
+
 		setLoading(false);
 		props.setRefresh(props.refresh + 1);
 	}
 
 	useEffect(() => {
+		setStore();
+		setAmount();
 		setShowDatetime(false);
 		setDate(dateFormat(new Date(), "yyyy-mm-dd"));
 		setTime(dateFormat(new Date(), "HH:MM"));
