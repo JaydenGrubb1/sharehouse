@@ -9,6 +9,10 @@ const ALLOWED_RECEIPT_FIELDS = {
 	timestamp: ""
 }
 
+const ALLOWD_GETALL_FIELDS = {
+	user: ""
+}
+
 /**
  * Gets all receipts
  */
@@ -16,33 +20,85 @@ router.get('/', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	if (req.query.user) {
-		req.knex.from('receipts').select('*').where('timestamp','>=','1970-01-01 00:00:00').where('user', '=', req.query.user).then(rows => {
-			res.status(200).json({
-				error: false,
-				data: rows
-			});
-		}).catch(error => {
-			res.status(500).json({
+	const limit = req.query.limit;
+	const offset = req.query.page * limit;
+	const order = req.query.order;
+	const reverse = req.query.reverse === true;
+
+	delete req.query.limit;
+	delete req.query.page;
+	delete req.query.order;
+	delete req.query.reverse;
+
+	for (var prop in req.query) {
+		if (!ALLOWD_GETALL_FIELDS.hasOwnProperty(prop)) {
+			res.status(400).json({
 				error: true,
-				message: "Internal server error"
+				message: "Invalid query parameter"
 			});
-			console.log(error);
-		});
-	} else {
-		req.knex.from('receipts').select('*').where('timestamp','>=','1970-01-01 00:00:00').then(rows => {
-			res.status(200).json({
-				error: false,
-				data: rows
-			});
-		}).catch(error => {
-			res.status(500).json({
-				error: true,
-				message: "Internal server error"
-			});
-			console.log(error);
-		});
+			return;
+		}
 	}
+
+	let query = req.knex.from('receipts').select(req.knex.raw('SQL_CALC_FOUND_ROWS *'))
+		.where('timestamp', '>=', '1970-01-01 00:00:00');
+
+	if (Object.keys(req.query).length > 0)
+		query.where(req.query);
+
+	if (limit && limit > 0) {
+		query.limit(limit);
+
+		if (offset && offset >= 0)
+			query.offset(offset);
+	}
+
+	if (order)
+		query.orderBy(order, reverse ? 'asc' : 'dec');
+
+	query.then(rows => {
+		req.knex.raw('select FOUND_ROWS() as count').then(result => {
+			res.status(200).json({
+				error: false,
+				data: rows,
+				count: result[0][0].count
+			});
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+
+	// if (req.query.user) {
+	// 	req.knex.from('receipts').select('*').where('timestamp', '>=', '1970-01-01 00:00:00').where('user', '=', req.query.user).then(rows => {
+	// 		res.status(200).json({
+	// 			error: false,
+	// 			data: rows
+	// 		});
+	// 	}).catch(error => {
+	// 		res.status(500).json({
+	// 			error: true,
+	// 			message: "Internal server error"
+	// 		});
+	// 		console.log(error);
+	// 	});
+	// } else {
+	// 	req.knex.from('receipts').select('*').where('timestamp', '>=', '1970-01-01 00:00:00').then(rows => {
+	// 		res.status(200).json({
+	// 			error: false,
+	// 			data: rows
+	// 		});
+	// 	}).catch(error => {
+	// 		res.status(500).json({
+	// 			error: true,
+	// 			message: "Internal server error"
+	// 		});
+	// 		console.log(error);
+	// 	});
+	// }
 });
 
 /**
@@ -99,7 +155,7 @@ router.post('/', auth, function (req, res, next) {
 		return;
 	}
 
-	if(req.body.user && !req.admin){
+	if (req.body.user && !req.admin) {
 		res.status(403).json({
 			error: true,
 			message: "Forbidded, must be an admin user"
@@ -107,10 +163,10 @@ router.post('/', auth, function (req, res, next) {
 		return;
 	}
 
-	if(!req.body.user)
+	if (!req.body.user)
 		req.body.user = req.email;
 
-	if(!req.body.timestamp)
+	if (!req.body.timestamp)
 		req.body.timestamp = new Date();
 	else
 		req.body.timestamp = new Date(req.body.timestamp);
