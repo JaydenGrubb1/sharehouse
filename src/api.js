@@ -1,11 +1,6 @@
 /**
- * Checks if this is a dev version of the site
- * @returns True if this is a dev version of the site
+ * Server port
  */
-export function isDev() {
-	return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-}
-
 let PORT = 8080;
 
 /**
@@ -113,6 +108,14 @@ export function isAdmin() {
 	const payload = token.split(".")[1];
 	const data = JSON.parse(atob(payload));
 	return data.admin === 1;
+}
+
+/**
+ * Checks if this is a dev version of the site
+ * @returns True if this is a dev version of the site
+ */
+export function isDev() {
+	return !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 }
 
 /**
@@ -276,4 +279,15 @@ export function createPayment(details) {
 	const url = new URL(SERVER + "/payments");
 
 	return doFetch(url, "POST", details, "no-store");
+}
+
+/**
+ * Gets a list of averages
+ * @param {string} mode The averaging mode to use
+ * @returns A list of average data points
+ */
+export function getAverages(mode) {
+	const url = new URL(SERVER + "/statistics/average/" + mode);
+
+	return doFetch(url, "GET");
 }
