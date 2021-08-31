@@ -16,6 +16,10 @@ const ALLOWD_GETALL_FIELDS = {
 	self: 0
 }
 
+const DEFAULT_SORTING_ORDERS = {
+	timestamp: false
+}
+
 /**
  * Approves a payment record
  */
@@ -79,7 +83,7 @@ router.get('/', auth, function (req, res, next) {
 	const limit = req.query.limit;
 	const offset = req.query.page * limit;
 	const order = req.query.order;
-	const reverse = req.query.reverse === true;
+	const reverse = req.query.reverse === 'true';
 
 	delete req.query.limit;
 	delete req.query.page;
@@ -94,6 +98,14 @@ router.get('/', auth, function (req, res, next) {
 			});
 			return;
 		}
+	}
+
+	if (DEFAULT_SORTING_ORDERS[order] === undefined) {
+		res.status(400).json({
+			error: true,
+			message: "Invalid sorting parameter"
+		});
+		return;
 	}
 
 	let query = req.knex.from(function () {
@@ -111,7 +123,7 @@ router.get('/', auth, function (req, res, next) {
 	}
 
 	if (order)
-		query.orderBy(order, reverse ? 'asc' : 'dec');
+		query.orderBy(order, (reverse ^ DEFAULT_SORTING_ORDERS[order]) ? 'asc' : 'desc');
 
 	query.then(rows => {
 		req.knex.raw('select FOUND_ROWS() as count').then(result => {

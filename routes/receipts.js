@@ -13,6 +13,10 @@ const ALLOWD_GETALL_FIELDS = {
 	user: ""
 }
 
+const DEFAULT_SORTING_ORDERS = {
+	timestamp: false
+}
+
 /**
  * Gets all receipts
  */
@@ -23,7 +27,7 @@ router.get('/', auth, function (req, res, next) {
 	const limit = req.query.limit;
 	const offset = req.query.page * limit;
 	const order = req.query.order;
-	const reverse = req.query.reverse === true;
+	const reverse = req.query.reverse === 'true';
 
 	delete req.query.limit;
 	delete req.query.page;
@@ -40,6 +44,14 @@ router.get('/', auth, function (req, res, next) {
 		}
 	}
 
+	if (DEFAULT_SORTING_ORDERS[order] === undefined) {
+		res.status(400).json({
+			error: true,
+			message: "Invalid sorting parameter"
+		});
+		return;
+	}
+
 	let query = req.knex.from('receipts').select(req.knex.raw('SQL_CALC_FOUND_ROWS *'))
 		.where('timestamp', '>=', '1970-01-01 00:00:00');
 
@@ -54,7 +66,7 @@ router.get('/', auth, function (req, res, next) {
 	}
 
 	if (order)
-		query.orderBy(order, reverse ? 'asc' : 'dec');
+		query.orderBy(order, (reverse ^ DEFAULT_SORTING_ORDERS[order]) ? 'asc' : 'desc');
 
 	query.then(rows => {
 		req.knex.raw('select FOUND_ROWS() as count').then(result => {
