@@ -29,8 +29,7 @@ router.get('/total', auth, function (req, res, next) {
 	});
 });
 
-// TODO add auth to this function
-router.get('/average/:months', function (req, res, next) {
+router.get('/average/:months', auth, function (req, res, next) {
 	// if (!req.email)
 	// 	return;
 
