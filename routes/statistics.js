@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../auth');
 
+const ALLOWED_AVERAGE_MODES = [
+	'average_01',
+	'average_02',
+	'average_03',
+	'average_06',
+	'average_12',
+	'average_all'
+]
+
 router.get('/total', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -10,6 +19,34 @@ router.get('/total', auth, function (req, res, next) {
 		res.status(200).json({
 			error: false,
 			total: rows[0].total
+		});
+	}).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+});
+
+// TODO add auth to this function
+router.get('/average/:months', function (req, res, next) {
+	// if (!req.email)
+	// 	return;
+
+	const mode = req.params.months;
+	if (!ALLOWED_AVERAGE_MODES.includes(mode)) {
+		res.status(400).json({
+			error: true,
+			message: "Invalid average mode"
+		});
+		return;
+	}
+
+	req.knex.from(mode).select('*').then(rows => {
+		res.status(200).json({
+			error: false,
+			data: rows
 		});
 	}).catch(error => {
 		res.status(500).json({
@@ -67,6 +104,13 @@ router.get('/debt/:email', auth, function (req, res, next) {
  * Method not allowed handlers
  */
 router.all('/total', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
+	});
+});
+router.all('/average/:months', function (req, res, next) {
 	res.set('Allow', 'GET');
 	res.status(405).json({
 		error: true,

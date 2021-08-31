@@ -9,12 +9,13 @@ const ALLOWED_RECEIPT_FIELDS = {
 	timestamp: ""
 }
 
-const ALLOWD_GETALL_FIELDS = {
+const ALLOWED_GETALL_FIELDS = {
 	user: ""
 }
 
 const DEFAULT_SORTING_ORDERS = {
-	timestamp: false
+	timestamp: false,
+	cost: false
 }
 
 /**
@@ -35,7 +36,7 @@ router.get('/', auth, function (req, res, next) {
 	delete req.query.reverse;
 
 	for (var prop in req.query) {
-		if (!ALLOWD_GETALL_FIELDS.hasOwnProperty(prop)) {
+		if (!ALLOWED_GETALL_FIELDS.hasOwnProperty(prop)) {
 			res.status(400).json({
 				error: true,
 				message: "Invalid query parameter"
