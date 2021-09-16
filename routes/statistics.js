@@ -75,7 +75,10 @@ router.get('/debt/:email', auth, function (req, res, next) {
 				rows[x].debt -= transfer;
 				if (!rows[x].paying)
 					rows[x].paying = {};
+				if (!rows[y].paying)
+					rows[y].paying = {};
 				rows[x].paying[rows[y].user] = transfer;
+				rows[y].paying[rows[x].user] = -1 * transfer;
 			}
 		}
 
