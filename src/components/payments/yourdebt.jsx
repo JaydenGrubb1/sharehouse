@@ -53,7 +53,7 @@ export default function YourDebt(props) {
 				</CardSubtitle>
 				<CardText tag="h2">
 					${debt && debt.toFixed(2)}{' '}
-					{debtList &&
+					{debtList && debt > 0 &&
 						<FontAwesomeIcon icon={showDetails ? faCaretUp : faCaretDown} onClick={toggleDetails} />
 					}
 				</CardText>
@@ -73,7 +73,7 @@ export default function YourDebt(props) {
 						</tbody>
 					</Table>
 				</Collapse>
-				<Button color="primary" onClick={toggleModal} disabled={!debtList}>Pay Debt</Button>
+				<Button color="primary" onClick={toggleModal} disabled={debt && debt <= 0}>Pay Debt</Button>
 			</CardBody>
 			<Payment open={modal} toggle={toggleModal} debts={debtList} refresh={props.refresh} setRefresh={props.setRefresh} />
 		</Card>

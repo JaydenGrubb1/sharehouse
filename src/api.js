@@ -11,7 +11,7 @@ let SERVER = 'https://sharehouse.jaydengrubb.com:' + PORT + '/api';
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
+	// SERVER = 'https://sharehouse.jaydengrubb.com:8080/api';
 	// SERVER = 'https://sharehouse.jaydengrubb.com:8082/api';
 }
 
