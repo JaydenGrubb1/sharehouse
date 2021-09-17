@@ -256,7 +256,7 @@ export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', rev
 export function approvePayment(id, accepted) {
 	const url = new URL(SERVER + "/payments/" + id + "/approve");
 
-	return doFetch(url, "PUT", accepted);
+	return doFetch(url, "PUT", { accepted: accepted });
 }
 
 /**
