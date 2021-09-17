@@ -110,7 +110,7 @@ router.get('/', auth, function (req, res, next) {
 
 	let query = req.knex.from(function () {
 		this.select(req.knex.raw('*, (`from` = `to`) as `self`')).from(`payments`).as(`all`)
-	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *')).where('timestamp','>=','1970-01-01 00:00:00');
+	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *')).where('timestamp', '>=', '1970-01-01 00:00:00');
 
 	if (Object.keys(req.query).length > 0)
 		query.where(req.query);
@@ -140,6 +140,27 @@ router.get('/', auth, function (req, res, next) {
 		});
 		console.log(error);
 	});
+});
+
+router.get('/pending', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('payments').select('to').sum({ total: 'amount' })
+		.where({ status: 'pending', from: req.email }).groupBy('to').then(rows => {
+			let sum = rows.reduce((a, x) => a += x.total, 0);
+			res.status(200).json({
+				error: false,
+				data: rows,
+				total: sum
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
 });
 
 /**
