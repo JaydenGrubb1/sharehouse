@@ -230,6 +230,16 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 }
 
 /**
+ * Gets a list of the current users pending payments
+ * @returns A list of pending payments
+ */
+export function getPending() {
+	const url = new URL(SERVER + "/payments/pending");
+
+	return doFetch(url, "GET");
+}
+
+/**
  * Gets a list of receipts
  * @returns A list of receipts
  */

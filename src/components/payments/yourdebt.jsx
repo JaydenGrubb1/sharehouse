@@ -2,19 +2,20 @@ import { faCaretDown, faCaretUp, faQuestionCircle } from "@fortawesome/free-soli
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, CardSubtitle, CardText, Collapse, Table, UncontrolledTooltip } from "reactstrap";
-import { getDebt } from "../../api";
+import { getDebt, getPending } from "../../api";
 import Payment from "../modals/payment";
 
 export default function YourDebt(props) {
 
 	const [debt, setDebt] = useState(0);
+	const [pending, setPending] = useState();
 	const [debtList, setDebtList] = useState();
 	const [modal, setModal] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
 	const toggleModal = () => setModal(!modal);
 	const toggleDetails = () => setShowDetails(!showDetails);
 
-	async function getData() {
+	async function getDebtData() {
 		let results = await getDebt();
 		if (results.error) {
 			props.error(results.message);
@@ -35,8 +36,23 @@ export default function YourDebt(props) {
 		}
 	}
 
+	async function getPendingData() {
+		let results = await getPending();
+		if (results.error) {
+			props.error(results.message);
+			setPending(undefined);
+		} else {
+			if (results.total) {
+				setPending(results.total);
+			} else {
+				setPending(undefined)
+			}
+		}
+	}
+
 	useEffect(() => {
-		getData();
+		getDebtData();
+		getPendingData();
 	}, [props.refresh]);
 
 	return (
@@ -56,6 +72,9 @@ export default function YourDebt(props) {
 					{debtList && debt > 0 &&
 						<FontAwesomeIcon icon={showDetails ? faCaretUp : faCaretDown} onClick={toggleDetails} />
 					}
+					{pending &&
+						<span className="h5 text-warning">{' '}${pending.toFixed(2)}{' '}pending</span>
+					}
 				</CardText>
 				<Collapse isOpen={showDetails}>
 					<Table>
@@ -73,7 +92,7 @@ export default function YourDebt(props) {
 						</tbody>
 					</Table>
 				</Collapse>
-				<Button color="primary" onClick={toggleModal} disabled={debt && debt <= 0}>Pay Debt</Button>
+				<Button color="primary" onClick={toggleModal} disabled={debt <= 0}>Pay Debt</Button>
 			</CardBody>
 			<Payment open={modal} toggle={toggleModal} debts={debtList} refresh={props.refresh} setRefresh={props.setRefresh} />
 		</Card>
