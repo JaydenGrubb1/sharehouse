@@ -14,6 +14,7 @@ import Account from "./pages/account";
 import Admin from "./pages/admin";
 
 import { isLoggedIn } from "./api";
+import Footer from "./components/footer";
 
 export default function App() {
 	if (isLoggedIn()) {
@@ -40,6 +41,7 @@ export default function App() {
 							</Route>
 						</Switch>
 					</main>
+					<Footer />
 				</Router>
 			</div>
 		);
