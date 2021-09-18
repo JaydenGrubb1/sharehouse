@@ -36,7 +36,7 @@ app.use('/users', userRouter);
 app.use('/test', function (req, res, next) {
 	res.status(200).json({
 		error: false,
-		message: "Test successful"
+		message: "Test completed succesfully at " + new Date().toLocaleString()
 	});
 });
 app.use(function (req, res, next) {

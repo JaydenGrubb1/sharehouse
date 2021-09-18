@@ -142,6 +142,9 @@ router.get('/', auth, function (req, res, next) {
 	});
 });
 
+/**
+ * Gets the total amount of pending payments to each user
+ */
 router.get('/pending', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -304,6 +307,13 @@ router.all('/:id', function (req, res, next) {
 	res.status(405).json({
 		error: true,
 		message: "Method not allowed, allowed methods are: GET, PUT and DELETE"
+	});
+});
+router.all('/pending', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
 	});
 });
 router.all('/:id/approve', function (req, res, next) {
