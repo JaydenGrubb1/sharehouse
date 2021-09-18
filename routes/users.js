@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const auth = require('../auth');
 
 const ALLOWED_USER_FIELDS = {
 	name: "",
@@ -91,28 +91,6 @@ router.get('/', auth, function (req, res, next) {
 });
 
 /**
- * Get a user's details
- */
-router.get('/:email', auth, function (req, res, next) {
-	if (!req.email)
-		return;
-
-	req.knex.from('users').select('name', 'email', 'updated', 'bsb', 'acc', 'admin')
-		.where('email', '=', req.params.email).then(rows => {
-			res.status(200).json({
-				error: false,
-				data: rows[0]
-			});
-		}).catch(error => {
-			res.status(500).json({
-				error: true,
-				message: "Internal server error"
-			});
-			console.log(error);
-		});
-});
-
-/**
  * Creates a user
  */
 router.post('/', auth, function (req, res, next) {
@@ -170,6 +148,58 @@ router.post('/', auth, function (req, res, next) {
 	});
 });
 
+router.get('/config', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('user_config').select('*').where('user', '=', req.email)
+		.orderBy('position').then(rows => {
+			res.status(200).json({
+				error: false,
+				data: rows
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
+});
+
+router.post('/config', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	res.status(501).json({
+		error: true,
+		message: "Not implemented"
+	});
+});
+
+/**
+ * Get a user's details
+ */
+router.get('/:email/details', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('users').select('name', 'email', 'updated', 'bsb', 'acc', 'admin')
+		.where('email', '=', req.params.email).then(rows => {
+			res.status(200).json({
+				error: false,
+				data: rows[0]
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
+});
+
+// FIXME unknown routes match email address instead
 /**
  * Updates a user's details
  */
