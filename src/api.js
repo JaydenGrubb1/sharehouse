@@ -155,7 +155,17 @@ export function doLogout() {
  * @returns The user's details
  */
 export function getUser() {
-	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
+	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()) + "/details");
+
+	return doFetch(url, "GET");
+}
+
+/**
+ * Gets the current user's config
+ * @returns The user's config
+ */
+export function getUserConfig() {
+	const url = new URL(SERVER + "/users/config");
 
 	return doFetch(url, "GET");
 }
