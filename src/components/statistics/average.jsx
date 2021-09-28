@@ -27,20 +27,20 @@ export default function Averages(props) {
 		labels: labels,
 		datasets: [
 			{
-				type: 'bar',
-				label: 'Weekly Amount',
-				backgroundColor: 'rgb(255, 99, 132)',
-				data: costData,
-				borderColor: 'white',
-				borderWidth: 2,
-			},
-			{
 				type: 'line',
 				label: '7-day Average',
 				borderColor: 'rgb(54, 162, 235)',
 				borderWidth: 2,
 				fill: false,
 				data: averageData,
+			},
+			{
+				type: 'bar',
+				label: 'Weekly Amount',
+				backgroundColor: 'rgb(255, 99, 132)',
+				data: costData,
+				borderColor: 'white',
+				borderWidth: 2,
 			}
 		],
 	};
