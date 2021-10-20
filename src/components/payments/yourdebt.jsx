@@ -69,7 +69,7 @@ export default function YourDebt(props) {
 				</CardSubtitle>
 				<CardText tag="h2">
 					${debt && debt.toFixed(2)}{' '}
-					{debtList && debt > 0 &&
+					{debtList &&
 						<FontAwesomeIcon icon={showDetails ? faCaretUp : faCaretDown} onClick={toggleDetails} />
 					}
 					{pending &&

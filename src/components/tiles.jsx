@@ -39,7 +39,7 @@ export default function Tiles(props) {
 
 	async function getConfig() {
 		let results = await getUserConfig();
-		if (results.error) {
+		if (results.error || !results.data) {
 			props.error(results.message);
 		} else {
 			setElements(results.data.map(elm => elm.element));
