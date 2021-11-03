@@ -47,7 +47,7 @@ export default function Home() {
 			<Collapse isOpen={error}>
 				<UncontrolledAlert color="danger">{error}</UncontrolledAlert>
 			</Collapse>
-			<Tiles error={setError} setError={setError} />
+			{/* <Tiles error={setError} setError={setError} /> */}
 		</div>
 	);
 }
