@@ -92,7 +92,7 @@ export default function YourDebt(props) {
 						</tbody>
 					</Table>
 				</Collapse>
-				<Button color="primary" onClick={toggleModal} disabled={debt <= 0}>Pay Debt</Button>
+				<Button color="primary" onClick={toggleModal} disabled={debt <= 0}>Add Payment</Button>
 			</CardBody>
 			<Payment open={modal} toggle={toggleModal} debts={debtList} refresh={props.refresh} setRefresh={props.setRefresh} />
 		</Card>
