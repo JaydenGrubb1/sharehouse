@@ -11,11 +11,14 @@ export default function Receipt(props) {
 	const [showDatetime, setShowDatetime] = useState(false);
 	const [showContributions, setShowContributions] = useState(false);
 	const [store, setStore] = useState();
+	const [location, setLocation] = useState();
 	const [amount, setAmount] = useState();
 	const [date, setDate] = useState();
 	const [time, setTime] = useState();
-	const [contributions, setContributions] = useState();
+	const [users, setUsers] = useState();
 	const [refs, setRefs] = useState([]);
+	const [updateCount, setUC] = useState(0);
+	const update = () => setUC(updateCount + 1);
 
 	async function onSubmit() {
 		setLoading(true);
@@ -42,32 +45,65 @@ export default function Receipt(props) {
 		props.setRefresh(props.refresh + 1);
 	}
 
+	function calculate() {
+		if (!users) {
+			return;
+		}
+
+		let count = 0;
+		let details = [];
+
+		for (let i = 0; i < refs.length; i++) {
+			let ref = refs[i];
+			if (!ref.current)
+				return;
+			details.push(ref.current.getDetails());
+			if (details[i].checked)
+				count++;
+		}
+
+		let total = amount;
+
+		for (let i = 0; i < refs.length; i++) {
+			total -= details[i].offset;
+		}
+
+		for (let i = 0; i < refs.length; i++) {
+			let value = 0;
+
+			if (details[i].checked) {
+				value = (total/count) + details[i].offset;
+			}
+
+			refs[i].current.setDetails(value);
+		}
+	}
+
 	async function getUsers() {
-		let test = {
-			id: 1,
-			name: "Jayden",
-			offset: 0
-		};
 		let list = [
-			{ id: 1, user: "jaydengrubb1@gmail.com", offset: 0, paying: 32.45 },
-			{ id: 2, user: "jaydengrubb1@gmail.com", offset: 0, paying: 32.45 },
-			{ id: 3, user: "jaydengrubb1@gmail.com", offset: 0, paying: 32.45 }
+			"elliot.phelps.official@gmail.com",
+			"jaydengrubb1@gmail.com",
+			"tli146@hotmail.com",
+			"tompnyx@gmail.com"
 		];
 
-		setContributions(list);
-
+		setUsers(list);
 		setRefs(ref => (
 			Array(list.length).fill().map((_, i) => refs[i] || createRef())
 		));
 	}
 
 	useEffect(() => {
-		getUsers();
+		calculate();
+	}, [amount, updateCount]);
 
+	useEffect(() => {
+		getUsers();
 		setStore();
-		setAmount();
+		setLocation();
+		setAmount(0);
 		setShowDatetime(false);
-		setShowContributions(false); // TODO Re enable this
+		setShowContributions(false);
 		setDate(dateFormat(new Date(), "yyyy-mm-dd"));
 		setTime(dateFormat(new Date(), "HH:MM"));
 	}, [props.open]);
@@ -82,6 +118,10 @@ export default function Receipt(props) {
 							<FormGroup>
 								<Label for="storefield">Store</Label>
 								<Input type="text" name="store" id="storefield" value={store} onChange={x => setStore(x.target.value)} />
+							</FormGroup>
+							<FormGroup>
+								<Label for="locationfield">Location</Label>
+								<Input type="text" name="location" id="locationfield" value={location} onChange={x => setLocation(x.target.value)} />
 							</FormGroup>
 							<FormGroup>
 								<Label for="amountfield">Amount</Label>
@@ -115,13 +155,14 @@ export default function Receipt(props) {
 						</div>
 						<Collapse isOpen={showContributions}>
 							<div className="border-top">
-								{contributions &&
-									contributions.map((data, index) => {
+								{users &&
+									users.map((user, index) => {
 										return <ContributionEntry
-											data={data}
-											end={index === contributions.length - 1}
+											user={user}
+											end={index === users.length - 1}
 											ref={refs[index]}
 											key={index}
+											update={update}
 										/>
 									})
 								}
