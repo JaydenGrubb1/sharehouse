@@ -71,9 +71,9 @@ export default function Pager(props) {
 							<PaginationLink previous onClick={() => updatePage(activePage - 1)} />
 						</PaginationItem>
 						{pageList &&
-							pageList.map(x => {
+							pageList.map((x, i) => {
 								return (
-									<PaginationItem active={x === activePage + 1}>
+									<PaginationItem active={x === activePage + 1} key={i}>
 										<PaginationLink onClick={() => updatePage(x - 1)}>
 											{x}
 										</PaginationLink>
