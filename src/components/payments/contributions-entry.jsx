@@ -20,13 +20,15 @@ function ContributionEntry(props, ref) {
 		getDetails() {
 			return {
 				checked,
-				offset: parseFloat(offset)
+				offset: parseFloat(offset),
+				paying: paying,
+				user: props.user
 			};
 		},
 		setDetails(amount) {
 			setPaying(amount);
 		}
-	}), [checked, offset])
+	}), [checked, offset, paying])
 
 	return (
 		<div className={!props.end && "border-bottom"}>

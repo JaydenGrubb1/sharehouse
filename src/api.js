@@ -214,7 +214,7 @@ export function getTotalDebt() {
  * Gets a list of payments
  * @returns A list of payments
  */
-export function getPayments(from, to, status, limit = 5, page = 0, order = 'timestamp', reverse = false, self = false) {
+export function getPayments(from, to, status, limit = 5, page = 0, order = 'timestamp', reverse = false) {
 	const url = new URL(SERVER + "/payments");
 
 	if (from)
@@ -228,7 +228,6 @@ export function getPayments(from, to, status, limit = 5, page = 0, order = 'time
 	url.searchParams.append("page", page);
 	url.searchParams.append("order", order);
 	url.searchParams.append("reverse", reverse);
-	url.searchParams.append("self", self);
 
 	return doFetch(url, "GET");
 }

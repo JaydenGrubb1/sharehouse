@@ -28,10 +28,24 @@ export default function Receipt(props) {
 			setTime(dateFormat(new Date(), "HH:MM"));
 		}
 
+		let contributions = [];
+
+		for (let i = 0; i < refs.length; i++) {
+			let ref = refs[i];
+			if (!ref.current)
+				return;
+			let current = ref.current.getDetails();
+			if (current.checked && current.paying !== 0) {
+				contributions.push({ user: current.user, amount: current.paying });
+			}
+		}
+
 		let details = {
 			store: store,
-			cost: amount,
-			timestamp: Date.parse("".concat(date, " ", time))
+			location: location,
+			amount: amount,
+			timestamp: Date.parse("".concat(date, " ", time)),
+			contributions: contributions
 		};
 		let results = await createReceipt(details);
 		if (results.error) {
@@ -72,7 +86,7 @@ export default function Receipt(props) {
 			let value = 0;
 
 			if (details[i].checked) {
-				value = (total/count) + details[i].offset;
+				value = (total / count) + details[i].offset;
 			}
 
 			refs[i].current.setDetails(value);

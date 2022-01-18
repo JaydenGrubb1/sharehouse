@@ -12,7 +12,7 @@ export default function ReceiptEntry(props) {
 
 	return (
 		<tr className="my-auto">
-			<td className="col-2 text-left" style={tableStyle}>${props.data.cost.toFixed(2)}</td>
+			<td className="col-2 text-left" style={tableStyle}>${props.data.amount.toFixed(2)}</td>
 			<td className="col-5" style={tableStyle}>
 				<span>{props.data.user}</span>
 				<span className="sm-table-col">
