@@ -49,7 +49,7 @@ export default function Payment(props) {
 						props.debts.map((debt, index) => {
 							return <Entry
 								user={debt.user}
-								cost={debt.cost}
+								amount={debt.amount}
 								end={index === props.debts.length - 1}
 								ref={refs[index]}
 								key={index}

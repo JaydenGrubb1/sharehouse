@@ -52,7 +52,7 @@ export default function Averages(props) {
 			props.error(results.message);
 		} else {
 			setLabels(results.data.map(x => x.week));
-			setCostData(results.data.map(x => x.cost));
+			setCostData(results.data.map(x => x.amount));
 			setAverageData(results.data.map(x => x.average));
 		}
 	}

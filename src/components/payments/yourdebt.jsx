@@ -27,7 +27,7 @@ export default function YourDebt(props) {
 
 				debts = Object.keys(results.data).map(key => ({
 					user: key,
-					cost: results.data[key]
+					amount: results.data[key]
 				}))
 				setDebtList(debts);
 			} else {
@@ -83,7 +83,7 @@ export default function YourDebt(props) {
 								debtList.map((data, index) => {
 									return (
 										<tr key={index}>
-											<td>${data.cost.toFixed(2)}</td>
+											<td>${data.amount.toFixed(2)}</td>
 											<td>{data.user}</td>
 										</tr>
 									)
