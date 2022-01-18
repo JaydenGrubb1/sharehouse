@@ -94,6 +94,7 @@ export default function Receipt(props) {
 	}
 
 	async function getUsers() {
+		// TODO Properly get the list of users
 		let list = [
 			"elliot.phelps.official@gmail.com",
 			"jaydengrubb1@gmail.com",

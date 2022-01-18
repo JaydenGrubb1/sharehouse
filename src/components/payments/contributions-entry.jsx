@@ -2,7 +2,7 @@ import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useEffect, useState } from "react/cjs/react.development";
-import { Badge, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, UncontrolledDropdown } from "reactstrap";
+import { Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label } from "reactstrap";
 
 function ContributionEntry(props, ref) {
 
@@ -43,7 +43,7 @@ function ContributionEntry(props, ref) {
 						}} />
 						{props.user}{' '}
 						<span className="text-muted font-italic">
-							$({paying.toFixed(2)})
+							{/* $({paying && paying.toFixed(2)}) */}
 						</span>
 					</Label>
 					<FontAwesomeIcon className="ml-auto my-auto" icon={expanded ? faCaretUp : faCaretDown} onClick={toggleExpanded} />
