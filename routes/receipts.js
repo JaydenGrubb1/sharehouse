@@ -158,7 +158,7 @@ router.get('/:id', auth, function (req, res, next) {
 });
 
 /**
- * Creates a receipt //FIXME
+ * Creates a receipt
  */
 router.post('/', auth, function (req, res, next) {
 	if (!req.email)

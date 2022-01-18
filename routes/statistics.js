@@ -15,7 +15,7 @@ router.get('/total', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('debt').sum({ total: 'debt' }).where('debt', '>', 0).then(rows => {
+	req.knex.from('v_debt').sum({ total: 'debt' }).where('debt', '>', 0).then(rows => {
 		res.status(200).json({
 			error: false,
 			total: rows[0].total
@@ -29,6 +29,7 @@ router.get('/total', auth, function (req, res, next) {
 	});
 });
 
+// FIXME Does not work with new database yet
 router.get('/average/:months', auth, function (req, res, next) {
 	// if (!req.email)
 	// 	return;
@@ -60,7 +61,7 @@ router.get('/debt/:email', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('debt').select('*').then(rows => {
+	req.knex.from('v_debt').select('*').then(rows => {
 		let count = rows.length;
 		for (let x = 0; x < count; x++) {
 			if (rows[x].debt < 0)
