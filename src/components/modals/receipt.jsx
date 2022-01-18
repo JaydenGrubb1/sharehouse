@@ -113,7 +113,7 @@ export default function Receipt(props) {
 	}, [amount, updateCount]);
 
 	useEffect(() => {
-		// getUsers();
+		getUsers();
 		setStore();
 		setLocation();
 		setAmount(0);
@@ -170,7 +170,7 @@ export default function Receipt(props) {
 						</div>
 						<Collapse isOpen={showContributions}>
 							<div className="border-top">
-								{users && false &&
+								{users &&
 									users.map((user, index) => {
 										return <ContributionEntry
 											user={user}
