@@ -42,8 +42,7 @@ function ContributionEntry(props, ref) {
 						}} />
 						{props.user}{' '}
 						<span className="text-muted font-italic">
-							TO FIX
-							{/* $({paying && paying.toFixed(2)}) */}
+							$({paying && paying.toFixed(2)})
 						</span>
 					</Label>
 					<FontAwesomeIcon className="ml-auto my-auto" icon={expanded ? faCaretUp : faCaretDown} onClick={toggleExpanded} />
