@@ -170,7 +170,7 @@ export default function Receipt(props) {
 						</div>
 						<Collapse isOpen={showContributions}>
 							<div className="border-top">
-								{users &&
+								{/* {users &&
 									users.map((user, index) => {
 										return <ContributionEntry
 											user={user}
@@ -180,7 +180,7 @@ export default function Receipt(props) {
 											update={update}
 										/>
 									})
-								}
+								} */}
 							</div>
 						</Collapse>
 					</Form>
