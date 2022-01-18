@@ -1,7 +1,7 @@
 import dateFormat from "dateformat";
 import React, { createRef, useState, useEffect } from "react";
 import { Button, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
-import { createReceipt } from "../../api";
+import { createReceipt, getAllUsers } from "../../api";
 import ContributionEntry from "../payments/contributions-entry";
 
 export default function Receipt(props) {
@@ -94,18 +94,17 @@ export default function Receipt(props) {
 	}
 
 	async function getUsers() {
-		// TODO Properly get the list of users
-		let list = [
-			"elliot.phelps.official@gmail.com",
-			"jaydengrubb1@gmail.com",
-			"tli146@hotmail.com",
-			"tompnyx@gmail.com"
-		];
-
-		setUsers(list);
-		setRefs(ref => (
-			Array(list.length).fill().map((_, i) => refs[i] || createRef())
-		));
+		let results = await getAllUsers();
+		if (results.error || !results.data) {
+			setError(results.message);
+		} else {
+			setError();
+			let list = results.data.map(x => x.email);
+			setUsers(list);
+			setRefs(ref => (
+				Array(list.length).fill().map((_, i) => refs[i] || createRef())
+			));
+		}
 	}
 
 	useEffect(() => {

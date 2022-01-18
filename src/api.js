@@ -6,7 +6,7 @@ let SERVER = 'https://sharehouse.jaydengrubb.com/api';
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	SERVER = 'https://sharehouse.jaydengrubb.com/api';
+	// SERVER = 'https://sharehouse.jaydengrubb.com/api';
 }
 
 /**
@@ -150,6 +150,16 @@ export function doLogout() {
  */
 export function getUser() {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()) + "/details");
+
+	return doFetch(url, "GET");
+}
+
+/**
+ * Gets a list of all users
+ * @returns A list of user's
+ */
+export function getAllUsers() {
+	const url = new URL(SERVER + "/users");
 
 	return doFetch(url, "GET");
 }
