@@ -28,7 +28,7 @@ function ContributionEntry(props, ref) {
 		setDetails(amount) {
 			setPaying(amount);
 		}
-	}), [checked, offset, paying])
+	}), [checked, offset, paying]);
 
 	return (
 		<div className={!props.end && "border-bottom"}>
