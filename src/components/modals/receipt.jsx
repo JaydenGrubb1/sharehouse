@@ -30,15 +30,15 @@ export default function Receipt(props) {
 
 		let contributions = [];
 
-		for (let i = 0; i < refs.length; i++) {
-			let ref = refs[i];
-			if (!ref.current)
-				return;
-			let current = ref.current.getDetails();
-			if (current.checked && current.paying !== 0) {
-				contributions.push({ user: current.user, amount: current.paying });
-			}
-		}
+		// for (let i = 0; i < refs.length; i++) {
+		// 	let ref = refs[i];
+		// 	if (!ref.current)
+		// 		return;
+		// 	let current = ref.current.getDetails();
+		// 	if (current.checked && current.paying !== 0) {
+		// 		contributions.push({ user: current.user, amount: current.paying });
+		// 	}
+		// }
 
 		let details = {
 			store: store,
@@ -109,11 +109,11 @@ export default function Receipt(props) {
 	}
 
 	useEffect(() => {
-		calculate();
+		// calculate();
 	}, [amount, updateCount]);
 
 	useEffect(() => {
-		getUsers();
+		// getUsers();
 		setStore();
 		setLocation();
 		setAmount(0);
@@ -170,7 +170,7 @@ export default function Receipt(props) {
 						</div>
 						<Collapse isOpen={showContributions}>
 							<div className="border-top">
-								{users &&
+								{users && false &&
 									users.map((user, index) => {
 										return <ContributionEntry
 											user={user}
