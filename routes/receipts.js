@@ -5,8 +5,15 @@ const auth = require('../auth');
 const ALLOWED_RECEIPT_FIELDS = {
 	user: "",
 	store: "",
-	cost: 0.0,
-	timestamp: ""
+	location: "",
+	amount: 0.0,
+	timestamp: "",
+	contributions: []
+}
+
+const ALLOWED_CONTRIBUTION_FIELDS = {
+	user: "",
+	amount: 0.0
 }
 
 const ALLOWED_GETALL_FIELDS = {
@@ -17,6 +24,8 @@ const DEFAULT_SORTING_ORDERS = {
 	timestamp: false,
 	cost: false
 }
+
+const CONTRIBUTION_ERROR_THRESHOLD = 0.00000001;
 
 /**
  * Gets all receipts
@@ -53,7 +62,7 @@ router.get('/', auth, function (req, res, next) {
 		return;
 	}
 
-	let query = req.knex.from('receipts').select(req.knex.raw('SQL_CALC_FOUND_ROWS *'))
+	let query = req.knex.from('v_receipts').select(req.knex.raw('SQL_CALC_FOUND_ROWS *'))
 		.where('timestamp', '>=', '1970-01-01 00:00:00');
 
 	if (Object.keys(req.query).length > 0)
@@ -85,6 +94,7 @@ router.get('/', auth, function (req, res, next) {
 		console.log(error);
 	});
 
+	// TODO Figure out why this was here
 	// if (req.query.user) {
 	// 	req.knex.from('receipts').select('*').where('timestamp', '>=', '1970-01-01 00:00:00').where('user', '=', req.query.user).then(rows => {
 	// 		res.status(200).json({
@@ -121,7 +131,7 @@ router.get('/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('receipts').select('*').where('id', '=', req.params.id).then(rows => {
+	req.knex.from('v_receipts').select('*').where('id', '=', req.params.id).then(rows => {
 		if (rows.length !== 1) {
 			res.status(404).json({
 				error: true,
@@ -130,10 +140,14 @@ router.get('/:id', auth, function (req, res, next) {
 			return;
 		}
 
-		res.status(200).json({
-			error: false,
-			data: rows[0]
-		});
+		req.knex.from('transactions').select('user', req.knex.raw('-amount as amount'))
+			.where('receipt_id', '=', req.params.id).where('amount', '<', 0).then(rows2 => {
+				rows[0].contributions = rows2;
+				res.status(200).json({
+					error: false,
+					data: rows[0]
+				});
+			});
 	}).catch(error => {
 		res.status(500).json({
 			error: true,
@@ -144,7 +158,7 @@ router.get('/:id', auth, function (req, res, next) {
 });
 
 /**
- * Creates a receipt
+ * Creates a receipt //FIXME
  */
 router.post('/', auth, function (req, res, next) {
 	if (!req.email)
@@ -160,15 +174,39 @@ router.post('/', auth, function (req, res, next) {
 		}
 	}
 
-	if (!req.body.cost) {
+	let contributions = req.body.contributions;
+	let amount = req.body.amount;
+	let user = req.body.user;
+
+	if (!amount || !contributions) {
 		res.status(400).json({
 			error: true,
-			message: "Request body incomplete, cost is required"
+			message: "Request body incomplete, both cost and contributions are required"
 		});
 		return;
 	}
 
-	if (req.body.user && !req.admin) {
+	contributions.forEach(x => {
+		for (var prop in x) {
+			if (!ALLOWED_CONTRIBUTION_FIELDS.hasOwnProperty(prop)) {
+				res.status(400).json({
+					error: true,
+					message: "Invalid contributions parameter"
+				});
+				return;
+			}
+		}
+	});
+
+	if (Math.abs(contributions.reduce((a, x) => a += x.amount, 0) - amount) > CONTRIBUTION_ERROR_THRESHOLD) {
+		res.status(400).json({
+			error: true,
+			message: "Invalid contributions distribution"
+		});
+		return;
+	}
+
+	if (user && !req.admin) {
 		res.status(403).json({
 			error: true,
 			message: "Forbidded, must be an admin user"
@@ -176,29 +214,39 @@ router.post('/', auth, function (req, res, next) {
 		return;
 	}
 
-	if (!req.body.user)
-		req.body.user = req.email;
+	if (!user)
+		user = req.email;
 
 	if (!req.body.timestamp)
 		req.body.timestamp = new Date();
 	else
 		req.body.timestamp = new Date(req.body.timestamp);
 
+	delete req.body.contributions;
+	delete req.body.amount;
+	delete req.body.user;
+
 	req.knex.from('receipts').insert(req.body).then(rows => {
-		req.knex.from('payments').insert({
-			from: req.body.user,
-			to: req.body.user,
-			amount: req.body.cost,
-			timestamp: req.body.timestamp,
-			status: "approved"
-		}).then(rows2 => {
+		const receiptID = rows[0];
+		contributions.push({ user, amount: -amount });
+		contributions.forEach(x => {
+			x.receipt_id = receiptID;
+			x.amount *= -1;
+		});
+
+		req.knex.from('transactions').insert(contributions).then(() => {
 			res.status(201).json({
 				error: false,
 				message: "Receipt created",
-				receiptID: rows[0],
-				paymentID: rows2[0]
+				id: receiptID
 			});
-		})
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
 	}).catch(error => {
 		res.status(500).json({
 			error: true,
@@ -211,6 +259,8 @@ router.post('/', auth, function (req, res, next) {
 /**
  * Updates a receipt's details
  */
+// TODO Reimplement this
+/*
 router.put('/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -238,9 +288,10 @@ router.put('/:id', auth, function (req, res, next) {
 		console.log(error);
 	});
 });
+*/
 
 /**
- * Deletes a receipt
+ * Deletes a receipt //TODO Should work, needs testing
  */
 router.delete('/:id', auth, function (req, res, next) {
 	if (!req.admin)
