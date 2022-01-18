@@ -34,6 +34,13 @@ router.get('/average/:months', auth, function (req, res, next) {
 	// if (!req.email)
 	// 	return;
 
+	// FIXME
+	res.status(501).json({
+		error: true,
+		message: "Statistics has not yet been reimplemented"
+	});
+	return;
+
 	const mode = req.params.months;
 	if (!ALLOWED_AVERAGE_MODES.includes(mode)) {
 		res.status(400).json({
