@@ -12,23 +12,23 @@ function ContributionEntry(props, ref) {
 	const [paying, setPaying] = useState(0);
 	const toggleExpanded = () => setExpanded(!expanded);
 
-	useEffect(() => {
-		props.update();
-	}, [checked, offset]);
+	// useEffect(() => {
+	// 	props.update();
+	// }, [checked, offset]);
 
-	useImperativeHandle(ref, () => ({
-		getDetails() {
-			return {
-				checked,
-				offset: parseFloat(offset),
-				paying: paying,
-				user: props.user
-			};
-		},
-		setDetails(amount) {
-			setPaying(amount);
-		}
-	}), [checked, offset, paying]);
+	// useImperativeHandle(ref, () => ({
+	// 	getDetails() {
+	// 		return {
+	// 			checked,
+	// 			offset: parseFloat(offset),
+	// 			paying: paying,
+	// 			user: props.user
+	// 		};
+	// 	},
+	// 	setDetails(amount) {
+	// 		setPaying(amount);
+	// 	}
+	// }), [checked, offset, paying]);
 
 	return (
 		<div className={!props.end && "border-bottom"}>
@@ -59,7 +59,6 @@ function ContributionEntry(props, ref) {
 								$
 							</InputGroupText>
 						</InputGroupAddon>
-						{/* <Input value={(offset > 0 ? "+" : "") + offset} onChange={x => setOffset(x.target.value)} /> */}
 						<Input value={offset} onChange={x => setOffset(x.target.value)} />
 					</InputGroup>
 				</Collapse>
