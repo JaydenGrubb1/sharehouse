@@ -38,7 +38,7 @@ router.put('/:id/approve', auth, function (req, res, next) {
 		return;
 	}
 
-	req.knex.from('payments').select('to', 'status').where('id', '=', id).then(rows => {
+	req.knex.from('v_payments').select('to', 'status').where('id', '=', id).then(rows => {
 		if (!req.admin) {
 			if (rows[0].to !== req.email) {
 				res.status(403).json({
@@ -109,7 +109,7 @@ router.get('/', auth, function (req, res, next) {
 	}
 
 	let query = req.knex.from(function () {
-		this.select(req.knex.raw('*, (`from` = `to`) as `self`')).from(`payments`).as(`all`)
+		this.select('*').from(`v_payments`).as(`all`)
 	}).select(req.knex.raw('SQL_CALC_FOUND_ROWS *')).where('timestamp', '>=', '1970-01-01 00:00:00');
 
 	if (Object.keys(req.query).length > 0)
@@ -149,7 +149,7 @@ router.get('/pending', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('payments').select('to').sum({ total: 'amount' })
+	req.knex.from('v_payments').select('to').sum({ total: 'amount' })
 		.where({ status: 'pending', from: req.email }).groupBy('to').then(rows => {
 			let sum = rows.reduce((a, x) => a += x.total, 0);
 			res.status(200).json({
@@ -173,7 +173,7 @@ router.get('/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('payments').select('*').where('id', '=', req.params.id).then(rows => {
+	req.knex.from('v_payments').select('*').where('id', '=', req.params.id).then(rows => {
 		if (rows.length !== 1) {
 			res.status(404).json({
 				error: true,
@@ -212,7 +212,15 @@ router.post('/', auth, function (req, res, next) {
 		}
 	}
 
-	if (!req.body.from || !req.body.to || !req.body.amount) {
+	const from = req.body.from;
+	const to = req.body.to;
+	const amount = req.body.amount;
+
+	delete req.body.from;
+	delete req.body.to;
+	delete req.body.amount;
+
+	if (!from || !to || !amount) {
 		res.status(400).json({
 			error: true,
 			message: "Request body incomplete, fields: from, to and amount are all required"
@@ -226,10 +234,22 @@ router.post('/', auth, function (req, res, next) {
 		req.body.timestamp = new Date(req.body.timestamp);
 
 	req.knex.from('payments').insert(req.body).then(rows => {
-		res.status(201).json({
-			error: false,
-			message: "Payment recorded",
-			id: rows[0]
+		const paymentID = rows[0];
+		req.knex.from('transactions').insert([
+			{ "payment_id": paymentID, "user": from, "amount": amount },
+			{ "payment_id": paymentID, "user": to, "amount": -amount }
+		]).then(() => {
+			res.status(201).json({
+				error: false,
+				message: "Payment recorded",
+				id: paymentID
+			})
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
 		});
 	}).catch(error => {
 		res.status(500).json({
@@ -243,6 +263,8 @@ router.post('/', auth, function (req, res, next) {
 /**
  * Updates a payment record's details
  */
+// TODO Reimplement this
+/*
 router.put('/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -270,6 +292,7 @@ router.put('/:id', auth, function (req, res, next) {
 		console.log(error);
 	});
 });
+*/
 
 /**
  * Deletes a payment record
@@ -278,7 +301,7 @@ router.delete('/:id', auth, function (req, res, next) {
 	if (!req.admin)
 		return;
 
-	req.knex.from('payment').del().where('id', '=', req.params.id).then(() => {
+	req.knex.from('payments').del().where('id', '=', req.params.id).then(() => {
 		res.status(200).json({
 			error: false,
 			message: "Payment record deleted"
