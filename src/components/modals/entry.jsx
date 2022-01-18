@@ -32,7 +32,7 @@ function Entry(props, ref) {
 	}), [checked, amount, showDatetime, date, time]);
 
 	useEffect(() => {
-		setAmount(props.cost.toFixed(2));
+		setAmount(props.amount.toFixed(2));
 		setDate(dateFormat(new Date(), "yyyy-mm-dd"));
 		setTime(dateFormat(new Date(), "HH:MM"));
 	}, []);
@@ -42,7 +42,7 @@ function Entry(props, ref) {
 			<Form className="p-3">
 				<FormGroup check>
 					<Label check>
-						<Input type="checkbox" checked={checked} onClick={x => setChecked(x.target.checked)} />{props.user}
+						<Input type="checkbox" checked={checked} onChange={x => setChecked(x.target.checked)} />{props.user}
 					</Label>
 				</FormGroup>
 				<Collapse isOpen={checked}>
@@ -57,7 +57,7 @@ function Entry(props, ref) {
 					</FormGroup>
 					<FormGroup check>
 						<Label check>
-							<Input type="checkbox" checked={showDatetime} onClick={x => setShowDatetime(x.target.checked)} />Use current date and time
+							<Input type="checkbox" checked={showDatetime} onChange={x => setShowDatetime(x.target.checked)} />Use current date and time
 						</Label>
 					</FormGroup>
 					<Collapse isOpen={!showDatetime}>
