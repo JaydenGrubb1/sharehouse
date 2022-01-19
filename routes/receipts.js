@@ -22,7 +22,7 @@ const ALLOWED_GETALL_FIELDS = {
 
 const DEFAULT_SORTING_ORDERS = {
 	timestamp: false,
-	cost: false
+	amount: false
 }
 
 const CONTRIBUTION_ERROR_THRESHOLD = 0.00000001;
@@ -181,7 +181,7 @@ router.post('/', auth, function (req, res, next) {
 	if (!amount || !contributions) {
 		res.status(400).json({
 			error: true,
-			message: "Request body incomplete, both cost and contributions are required"
+			message: "Request body incomplete, both amount and contributions are required"
 		});
 		return;
 	}

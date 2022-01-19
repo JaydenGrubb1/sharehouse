@@ -76,7 +76,7 @@ router.get('/', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('users').select('name', 'email', 'bsb', 'acc', 'admin').then(rows => {
+	req.knex.from('users').select('name', 'email', 'bsb', 'acc', 'admin', 'default').then(rows => {
 		res.status(200).json({
 			error: false,
 			data: rows
@@ -184,7 +184,7 @@ router.get('/:email/details', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	req.knex.from('users').select('name', 'email', 'updated', 'bsb', 'acc', 'admin')
+	req.knex.from('users').select('name', 'email', 'updated', 'bsb', 'acc', 'admin', 'default')
 		.where('email', '=', req.params.email).then(rows => {
 			res.status(200).json({
 				error: false,
