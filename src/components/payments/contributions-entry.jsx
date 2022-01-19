@@ -29,6 +29,11 @@ function ContributionEntry(props, ref) {
 		}
 	}), [checked, offset, paying]);
 
+	useEffect(() => {
+		setChecked(props.user.default);
+		setOffset(0);
+	}, [props.visible]);
+
 	return (
 		<div className={!props.end && "border-bottom"}>
 			<Form className="p-3">
@@ -40,10 +45,12 @@ function ContributionEntry(props, ref) {
 								setOffset(0);
 							}
 						}} />
-						{props.user}{' '}
-						<span className="text-muted font-italic">
-							$({paying && paying.toFixed(2)})
-						</span>
+						{props.user.name}{' '}
+						{checked &&
+							<span className="text-muted font-italic">
+								- (${paying && paying.toFixed(2)})
+							</span>
+						}
 					</Label>
 					<FontAwesomeIcon className="ml-auto my-auto" icon={expanded ? faCaretUp : faCaretDown} onClick={toggleExpanded} />
 				</FormGroup>

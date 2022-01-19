@@ -12,12 +12,13 @@ export default function Receipt(props) {
 	const [showContributions, setShowContributions] = useState(false);
 	const [store, setStore] = useState();
 	const [location, setLocation] = useState();
-	const [amount, setAmount] = useState();
+	const [amount, setAmount] = useState(0);
 	const [date, setDate] = useState();
 	const [time, setTime] = useState();
 	const [users, setUsers] = useState();
 	const [refs, setRefs] = useState([]);
 	const [updateCount, setUC] = useState(0);
+	const [userCount, setUserCount] = useState();
 	const update = () => setUC(updateCount + 1);
 
 	async function onSubmit() {
@@ -47,6 +48,7 @@ export default function Receipt(props) {
 			timestamp: Date.parse("".concat(date, " ", time)),
 			contributions: contributions
 		};
+
 		let results = await createReceipt(details);
 		if (results.error) {
 			setError(results.message);
@@ -76,6 +78,8 @@ export default function Receipt(props) {
 				count++;
 		}
 
+		setUserCount(count);
+
 		let total = amount;
 
 		for (let i = 0; i < refs.length; i++) {
@@ -99,7 +103,10 @@ export default function Receipt(props) {
 			setError(results.message);
 		} else {
 			setError();
-			let list = results.data.map(x => x.email);
+			let list = results.data.map(x => ({
+				name: x.email,
+				default: x.default === 1
+			}));
 			setUsers(list);
 			setRefs(ref => (
 				Array(list.length).fill().map((_, i) => refs[i] || createRef())
@@ -164,6 +171,12 @@ export default function Receipt(props) {
 							<FormGroup check>
 								<Label check>
 									<Input type="checkbox" checked={!showContributions} onChange={x => setShowContributions(!x.target.checked)} />Distribute evenly
+									{' '}
+									{!showContributions &&
+										<span className="text-muted font-italic">
+											- (${amount && (amount / userCount).toFixed(2)} each for {userCount} users)
+										</span>
+									}
 								</Label>
 							</FormGroup>
 						</div>
@@ -177,6 +190,7 @@ export default function Receipt(props) {
 											ref={refs[index]}
 											key={index}
 											update={update}
+											visible={showContributions}
 										/>
 									})
 								}
