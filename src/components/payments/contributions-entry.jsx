@@ -45,7 +45,7 @@ function ContributionEntry(props, ref) {
 								setOffset(0);
 							}
 						}} />
-						{props.user.name}{' '}
+						{props.user.email}{' '}
 						{checked &&
 							<span className="text-muted font-italic">
 								- (${paying && paying.toFixed(2)})

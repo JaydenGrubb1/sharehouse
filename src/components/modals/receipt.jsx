@@ -37,7 +37,7 @@ export default function Receipt(props) {
 				return;
 			let current = ref.current.getDetails();
 			if (current.checked && current.paying !== 0) {
-				contributions.push({ user: current.user, amount: current.paying });
+				contributions.push({ user: current.user.email, amount: current.paying });
 			}
 		}
 
@@ -104,7 +104,7 @@ export default function Receipt(props) {
 		} else {
 			setError();
 			let list = results.data.map(x => ({
-				name: x.email,
+				email: x.email,
 				default: x.default === 1
 			}));
 			setUsers(list);
