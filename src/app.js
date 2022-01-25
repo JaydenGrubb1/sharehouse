@@ -31,7 +31,9 @@ export default function App() {
 							<Route path="/statistics">
 								<Statistics />
 							</Route>
-							<Route path="/users/:user" component={User} />
+							<Route path="/users/test">
+								<User />
+							</Route>
 							<Route path="/account">
 								<Account />
 							</Route>
