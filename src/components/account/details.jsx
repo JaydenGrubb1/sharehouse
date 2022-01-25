@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from "reactstrap";
+import { Button, Card, CardHeader, Col, Form, FormFeedback, FormGroup, FormText, Input, Label, Row, Spinner } from "reactstrap";
 import { getUser, setDetails } from "../../api";
 
 export default function Details(props) {
@@ -137,6 +137,9 @@ export default function Details(props) {
 								}}
 							></Input>
 							<FormFeedback invalid>{bsbValid}</FormFeedback>
+							<FormText>
+								BSB
+							</FormText>
 						</FormGroup>
 					</Col>
 					<Col>
@@ -165,6 +168,9 @@ export default function Details(props) {
 								}}
 							></Input>
 							<FormFeedback invalid>{accValid}</FormFeedback>
+							<FormText>
+								ACC
+							</FormText>
 						</FormGroup>
 					</Col>
 				</Row>
