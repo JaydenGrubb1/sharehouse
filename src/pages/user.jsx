@@ -4,13 +4,13 @@ import { useParams } from "react-router-dom";
 import { Collapse, UncontrolledAlert } from "reactstrap";
 import { getUser } from "../api";
 
-export default function User(props) {
+export default function User() {
 	const { user } = useParams();
 	const [error, setError] = useState();
 	// const [details, setDetails] = useState();
 
 	async function getDetails() {
-		let results = await getUser(decodeURIComponent(user));
+		let results = await getUser(user);
 
 		if (results.error || !results.data) {
 			if (results.error)
