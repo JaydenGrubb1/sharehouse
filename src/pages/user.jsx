@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
+import { Collapse, UncontrolledAlert } from "reactstrap";
 import { getUser } from "../api";
 
 export default function User(props) {
 	const { user } = useParams();
+	const [error, setError] = useState();
 	const [details, setDetails] = useState();
 
 	async function getDetails() {
@@ -15,7 +18,7 @@ export default function User(props) {
 			else
 				setError("An unknown error occured");
 		} else {
-			setDetails(JSON.stringify(results.data, null, 3));
+			setDetails(JSON.stringify(results.data));
 		}
 	}
 
@@ -24,8 +27,17 @@ export default function User(props) {
 	}, []);
 
 	return (
-		<div>
-			{details}
+		<div className="container p-3">
+			<Helmet>
+				<title>Sharehouse - Account</title>
+			</Helmet>
+			<Collapse isOpen={error}>
+				<UncontrolledAlert color="danger">{error}</UncontrolledAlert>
+			</Collapse>
+			<h4 className="text-left">Details</h4>
+			<div>
+				{details}
+			</div>
 		</div>
-	)
-};
+	);
+}
