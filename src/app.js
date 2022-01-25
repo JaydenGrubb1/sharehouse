@@ -37,10 +37,10 @@ export default function App() {
 							<Route path="/admin">
 								<Admin />
 							</Route>
-							<Route exact path="/users/:user">
+							<Route path="/users/:user">
 								<User />
 							</Route>
-							<Route path="/">
+							<Route exact path="/">
 								<Home />
 							</Route>
 						</Switch>
