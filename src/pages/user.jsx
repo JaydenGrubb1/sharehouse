@@ -5,12 +5,12 @@ import { Collapse, UncontrolledAlert } from "reactstrap";
 import { getUser } from "../api";
 
 export default function User(props) {
-	// const { user } = useParams();
+	const { user } = useParams();
 	const [error, setError] = useState();
 	// const [details, setDetails] = useState();
 
 	async function getDetails() {
-		let results = await getUser(user);
+		let results = await getUser(decodeURIComponent(user));
 
 		if (results.error || !results.data) {
 			if (results.error)
@@ -19,6 +19,7 @@ export default function User(props) {
 				setError("An unknown error occured");
 		} else {
 			setError();
+			console.log(results.data);
 			// setDetails(JSON.stringify(results.data));
 		}
 	}
