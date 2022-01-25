@@ -37,7 +37,7 @@ export default function App() {
 							<Route path="/admin">
 								<Admin />
 							</Route>
-							<Route path="/:user">
+							<Route exact path="/users/:user">
 								<User />
 							</Route>
 							<Route path="/">
