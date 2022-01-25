@@ -31,14 +31,14 @@ export default function App() {
 							<Route path="/statistics">
 								<Statistics />
 							</Route>
-							<Route path="/test">
-								<User />
-							</Route>
 							<Route path="/account">
 								<Account />
 							</Route>
 							<Route path="/admin">
 								<Admin />
+							</Route>
+							<Route path="/:user">
+								<User />
 							</Route>
 							<Route path="/">
 								<Home />
