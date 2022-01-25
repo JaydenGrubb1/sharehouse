@@ -5,7 +5,7 @@ import { Collapse, UncontrolledAlert } from "reactstrap";
 import { getUser } from "../api";
 
 export default function User(props) {
-	const { user } = useParams();
+	// const { user } = useParams();
 	const [error, setError] = useState();
 	// const [details, setDetails] = useState();
 
