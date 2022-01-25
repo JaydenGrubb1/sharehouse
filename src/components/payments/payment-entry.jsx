@@ -31,7 +31,7 @@ export default function PaymentEntry(props) {
 		let results = await approvePayment(props.data.id, approved);
 		if (results.error) {
 			props.error(results.message);
-		}else{
+		} else {
 			props.refresh();
 		}
 	}
@@ -40,7 +40,14 @@ export default function PaymentEntry(props) {
 		<tr className="my-auto">
 			<td className="col-2 text-left" style={tableStyle}>${props.data.amount.toFixed(2)}</td>
 			<td className="col-5" style={tableStyle}>
-				<span>{props.pending ? props.data.from : props.data.to}</span>
+				<span>
+					{props.pending
+						?
+						<a href={"/account/" + props.data.from}>{props.data.from}</a>
+						:
+						<a href={"/account/" + props.data.to}>{props.data.to}</a>
+					}
+				</span>
 				<span className="sm-table-col">
 					<br />
 					<span className="text-muted small">{timestamp}</span>

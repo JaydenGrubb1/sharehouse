@@ -145,11 +145,16 @@ export function doLogout() {
 }
 
 /**
- * Gets the current user's details
+ * Gets a user's details or the current user if not specified
+ * @param {string} email The users email
  * @returns The user's details
  */
-export function getUser() {
-	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()) + "/details");
+export function getUser(email) {
+	if (!email) {
+		email = getEmail();
+	}
+
+	const url = new URL(SERVER + "/users/" + encodeURIComponent(email) + "/details");
 
 	return doFetch(url, "GET");
 }

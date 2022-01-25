@@ -14,7 +14,7 @@ export default function ReceiptEntry(props) {
 		<tr className="my-auto">
 			<td className="col-2 text-left" style={tableStyle}>${props.data.amount.toFixed(2)}</td>
 			<td className="col-5" style={tableStyle}>
-				<span>{props.data.user}</span>
+				<span><a href={"/account/" + props.data.user}>{props.data.user}</a></span>
 				<span className="sm-table-col">
 					<br />
 					<span className="text-muted small">{timestamp}</span>

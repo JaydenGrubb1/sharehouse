@@ -10,6 +10,7 @@ import Login from "./components/modals/login";
 import Home from "./pages/home";
 import Payments from "./pages/payments";
 import Statistics from "./pages/statistics";
+import User from "./pages/user";
 import Account from "./pages/account";
 import Admin from "./pages/admin";
 
@@ -29,6 +30,9 @@ export default function App() {
 							</Route>
 							<Route path="/statistics">
 								<Statistics />
+							</Route>
+							<Route path="/account/:user">
+								<User />
 							</Route>
 							<Route path="/account">
 								<Account />
