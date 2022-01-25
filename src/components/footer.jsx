@@ -8,7 +8,7 @@ export default function Footer() {
 		<footer className="footer">
 			<div className="container d-flex h-100">
 				<div className="my-auto w-100 d-flex">
-					<span className="text-muted my-auto">&copy; Copyright 2021 Jayden Grubb</span>
+					<span className="text-muted my-auto">&copy; Copyright 2021-{new Date().getFullYear()} Jayden Grubb</span>
 					{/* <span className="ml-auto"><a className="text-muted" href="mailto:contact@jaydengrubb.com">contact@jaydengrubb.com</a></span> */}
 					<a className="ml-auto my-auto h4" href="https://github.com/JaydenGrubb1" target="_blank"><FontAwesomeIcon className="text-muted" icon={faGithub} /></a>
 					<a className="ml-1 my-auto h4" href="https://www.linkedin.com/in/jayden-grubb-ab162a123/" target="_blank"><FontAwesomeIcon className="text-muted" icon={faLinkedin} /></a>
