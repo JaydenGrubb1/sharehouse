@@ -7,7 +7,7 @@ import { getUser } from "../api";
 export default function User(props) {
 	const { user } = useParams();
 	const [error, setError] = useState();
-	const [details, setDetails] = useState();
+	// const [details, setDetails] = useState();
 
 	async function getDetails() {
 		let results = await getUser(user);
@@ -18,7 +18,8 @@ export default function User(props) {
 			else
 				setError("An unknown error occured");
 		} else {
-			setDetails(JSON.stringify(results.data));
+			setError();
+			// setDetails(JSON.stringify(results.data));
 		}
 	}
 
@@ -36,7 +37,8 @@ export default function User(props) {
 			</Collapse>
 			<h4 className="text-left">Details</h4>
 			<div>
-				{details}
+				{/* {details} */}
+				DETAILS HERE
 			</div>
 		</div>
 	);
