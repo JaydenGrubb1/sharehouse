@@ -158,8 +158,8 @@ export default function Details(props) {
 
 									if (!/^[0-9]*$/.test(str))
 										setAccValid("ACC must only contain numbers");
-									else if (str && str.length !== 8 && str.length !== 9)
-										setAccValid("ACC must be between 8 and 9 digits long");
+									else if (str && (str.length < 6 || str.length > 9))
+										setAccValid("ACC must be between 6 and 9 digits long");
 									else
 										setAccValid("");
 								}}
