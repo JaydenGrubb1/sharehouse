@@ -45,7 +45,7 @@ function ContributionEntry(props, ref) {
 								setOffset(0);
 							}
 						}} />
-						<a href={"/account/" + props.user.email}>{props.user.email}</a>{' '}
+						<a href={"/users/" + props.user.email}>{props.user.email}</a>{' '}
 						{checked &&
 							<span className="text-muted font-italic">
 								- (${paying && paying.toFixed(2)})

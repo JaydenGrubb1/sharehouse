@@ -43,9 +43,9 @@ export default function PaymentEntry(props) {
 				<span>
 					{props.pending
 						?
-						<a href={"/account/" + props.data.from}>{props.data.from}</a>
+						<a href={"/users/" + props.data.from}>{props.data.from}</a>
 						:
-						<a href={"/account/" + props.data.to}>{props.data.to}</a>
+						<a href={"/users/" + props.data.to}>{props.data.to}</a>
 					}
 				</span>
 				<span className="sm-table-col">

@@ -84,7 +84,7 @@ export default function YourDebt(props) {
 									return (
 										<tr key={index}>
 											<td>${data.amount.toFixed(2)}</td>
-											<td><a href={"/account/" + data.user}>{data.user}</a></td>
+											<td><a href={"/users/" + data.user}>{data.user}</a></td>
 										</tr>
 									)
 								})

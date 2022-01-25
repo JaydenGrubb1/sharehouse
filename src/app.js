@@ -31,7 +31,7 @@ export default function App() {
 							<Route path="/statistics">
 								<Statistics />
 							</Route>
-							<Route path="/account/:user">
+							<Route path="/users/:user">
 								<User />
 							</Route>
 							<Route path="/account">
