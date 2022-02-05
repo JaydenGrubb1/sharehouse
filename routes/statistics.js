@@ -110,6 +110,44 @@ router.get('/debt/:email', auth, function (req, res, next) {
 	});
 });
 
+router.get('/info/stores', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('receipts').select('store').count({ frequency: '*' })
+		.groupBy('store').orderBy('frequency', 'desc').then(rows => {
+			res.status(200).json({
+				error: false,
+				data: rows.filter(x => x.store !== null)
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
+});
+
+router.get('/info/locations', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('receipts').select('location').count({ frequency: '*' })
+		.groupBy('location').orderBy('frequency', 'desc').then(rows => {
+			res.status(200).json({
+				error: false,
+				data: rows.filter(x => x.location !== null)
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
+});
+
 /**```
  * Method not allowed handlers
  */
@@ -128,6 +166,20 @@ router.all('/average/:months', function (req, res, next) {
 	});
 });
 router.all('/debt/:email', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
+	});
+});
+router.all('/info/stores', function (req, res, next) {
+	res.set('Allow', 'GET');
+	res.status(405).json({
+		error: true,
+		message: "Method not allowed, allowed methods are: GET"
+	});
+});
+router.all('/info/locations', function (req, res, next) {
 	res.set('Allow', 'GET');
 	res.status(405).json({
 		error: true,
