@@ -225,6 +225,12 @@ export function getTotalDebt() {
 	return doFetch(url, "GET");
 }
 
+export function getStatInfo(type = "store") {
+	const url = new URL(SERVER + "/statistics/info/" + type);
+
+	return doFetch(url, "GET");
+}
+
 /**
  * Gets a list of payments
  * @returns A list of payments

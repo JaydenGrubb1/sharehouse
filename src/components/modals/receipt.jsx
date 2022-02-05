@@ -3,6 +3,7 @@ import React, { createRef, useState, useEffect } from "react";
 import { Button, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
 import { createReceipt, getAllUsers } from "../../api";
 import ContributionEntry from "../payments/contributions-entry";
+import Predictions from "../predictions";
 
 export default function Receipt(props) {
 
@@ -129,20 +130,28 @@ export default function Receipt(props) {
 		setTime(dateFormat(new Date(), "HH:MM"));
 	}, [props.open]);
 
+	const fixBorder = { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 };
+
 	return (
 		<div>
 			<Modal isOpen={props.open} toggle={props.toggle}>
 				<ModalHeader toggle={props.toggle}>Create Receipt</ModalHeader>
 				<ModalBody className="p-0">
-					<Form onSubmit={onSubmit}>
+					<Form onSubmit={onSubmit} autoComplete={false}>
 						<div className="p-3">
 							<FormGroup>
 								<Label for="storefield">Store</Label>
-								<Input type="text" name="store" id="storefield" value={store} onChange={x => setStore(x.target.value)} />
+								<InputGroup>
+									<Predictions text={store} setText={setStore} type="stores" />
+									<Input autoComplete="off" className="rounded-left" type="text" name="store" id="storefield" value={store} onChange={x => setStore(x.target.value)} />
+								</InputGroup>
 							</FormGroup>
 							<FormGroup>
 								<Label for="locationfield">Location</Label>
-								<Input type="text" name="location" id="locationfield" value={location} onChange={x => setLocation(x.target.value)} />
+								<InputGroup>
+									<Predictions text={location} setText={setLocation} type="locations" />
+									<Input autoComplete="off" className="rounded-left" type="text" name="location" id="locationfield" value={location} onChange={x => setLocation(x.target.value)} />
+								</InputGroup>
 							</FormGroup>
 							<FormGroup>
 								<Label for="amountfield">Amount</Label>
