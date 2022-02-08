@@ -7,6 +7,7 @@ const logger = require('morgan');
 const options = require('./knexfile');
 const knex = require('knex')(options);
 const helmet = require('helmet');
+const mailer = require('nodemailer');
 const cors = require('cors');
 
 const paymentsRouter = require('./routes/payments');
@@ -15,6 +16,13 @@ const statisticsRouter = require('./routes/statistics');
 const userRouter = require('./routes/users');
 
 const app = express();
+const transporter = mailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: process.env.MAIL_USER,
+		pass: process.env.MAIL_PASS
+	}
+});
 
 app.use(logger('combined'));
 app.use(helmet());
@@ -25,6 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	req.knex = knex;
+	req.mail = transporter;
 	next();
 });
 

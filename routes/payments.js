@@ -239,11 +239,29 @@ router.post('/', auth, function (req, res, next) {
 			{ "payment_id": paymentID, "user": from, "amount": amount },
 			{ "payment_id": paymentID, "user": to, "amount": -amount }
 		]).then(() => {
+			// Send the response to the web app
 			res.status(201).json({
 				error: false,
 				message: "Payment recorded",
 				id: paymentID
 			})
+
+			// Send a notification to the recipient
+			email = {
+				from: process.env.MAIL_USER,
+				to: to,
+				subject: "Sharehouse Pending Payment",
+				text: "User " + from + " has made a payment to you of $" + amount.toFixed(2) + ", and is pending approval.\n" +
+					"Please check your bank transactions and then head to https://sharehouse.jaydengrubb.com/payments to approve or reject this payment.\n\n" +
+					"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper."
+			};
+			req.mail.sendMail(email).catch(error => {
+				res.status(201).json({
+					error: false,
+					message: "Payment recorded, but failed to send email",
+					id: paymentID
+				})
+			});
 		}).catch(error => {
 			res.status(500).json({
 				error: true,
