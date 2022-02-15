@@ -210,3 +210,6 @@ dist
 
 # Build directory
 /build
+
+# VScode settings
+/.vscode
