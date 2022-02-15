@@ -1,0 +1,61 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.remove-border > tbody:nth-child(1) > tr:nth-child(1) > td {
+	border-top: 0px;
+}
+
+.remove-ul-margin > ul {
+	margin-bottom: 0px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	display: block;
+	background-color: rgba(0,0,0,.03);
+	border: 1px solid rgba(0,0,0,.125);
+}
+
+/* .remove-border > thead > th {
+	border-top: 0px;
+	border-bottom: 0px;
+} */
+
+.sm-table-col {
+	display: none;
+}
+
+.lg-table-col {
+	display:table-cell;
+}
+
+.pager-center {
+	margin-left: 1rem !important;
+	margin-right: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+	.sm-table-col {
+		display: inline;
+	}
+	
+	.lg-table-col {
+		display:none;
+	}
+
+	.pager-center {
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+}
