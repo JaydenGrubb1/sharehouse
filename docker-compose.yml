@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+  sql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: sharehouse
+      MYSQL_HOST: localhost
+      MYSQL_USER: sharehouse
+      MYSQL_PASSWORD:
+    volumes:
+      - "${MYSQL_DATA}:/var/lib/mysql"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+  server:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    restart: unless-stopped
+    depends_on:
+      - sql
+    environment:
+      DB_HOST: sql
+      DB_NAME: sharehouse
+      DB_USER: sharehouse
+      DB_PASS: "${MYSQL_PASSWORD}"
+      JWT_SECRET:
+      JWT_SALT_ROUNDS:
+    ports:
+      - "3001:3001"
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    depends_on:
+      - client
+    volumes:
+      - "./nginx/http/:/etc/nginx/templates/"
+    ports:
+      - "9000:80"
+    links:
+      - client
+      - server
+    environment:
+      SERVER_URL: server
+      CLIENT_URL: client
