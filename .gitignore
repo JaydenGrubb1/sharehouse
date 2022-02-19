@@ -213,3 +213,4 @@ dist
 
 # VScode settings
 /.vscode
+/local
