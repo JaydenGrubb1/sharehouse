@@ -13,6 +13,7 @@ export default function Receipt(props) {
 	const [showContributions, setShowContributions] = useState(false);
 	const [store, setStore] = useState();
 	const [location, setLocation] = useState();
+	const [description, setDescription] = useState();
 	const [amount, setAmount] = useState(0);
 	const [date, setDate] = useState();
 	const [time, setTime] = useState();
@@ -45,6 +46,7 @@ export default function Receipt(props) {
 		let details = {
 			store: store,
 			location: location,
+			description: description,
 			amount: amount,
 			timestamp: Date.parse("".concat(date, " ", time)),
 			contributions: contributions
@@ -123,6 +125,7 @@ export default function Receipt(props) {
 		getUsers();
 		setStore();
 		setLocation();
+		setDescription();
 		setAmount(0);
 		setShowDatetime(false);
 		setShowContributions(false);
@@ -147,10 +150,16 @@ export default function Receipt(props) {
 								</InputGroup>
 							</FormGroup>
 							<FormGroup>
-								<Label for="locationfield">Location</Label>
+								<Label for="locationfield">Location <span className="text-muted">(Optional)</span></Label>
 								<InputGroup>
 									<Predictions text={location} setText={setLocation} type="locations" />
 									<Input autoComplete="off" className="rounded-left" type="text" name="location" id="locationfield" value={location} onChange={x => setLocation(x.target.value)} />
+								</InputGroup>
+							</FormGroup>
+							<FormGroup>
+								<Label for="descriptionfield">Description <span className="text-muted">(Optional)</span></Label>
+								<InputGroup>
+									<Input className="rounded-left" type="text" name="description" id="descriptionfield" value={description} onChange={x => setDescription(x.target.value)} />
 								</InputGroup>
 							</FormGroup>
 							<FormGroup>

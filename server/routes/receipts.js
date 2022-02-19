@@ -6,6 +6,7 @@ const ALLOWED_RECEIPT_FIELDS = {
 	user: "",
 	store: "",
 	location: "",
+	description: "",
 	amount: 0.0,
 	timestamp: "",
 	contributions: []
