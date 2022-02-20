@@ -148,6 +148,7 @@ router.post('/', auth, function (req, res, next) {
 	});
 });
 
+// DOC
 router.get('/config', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -167,6 +168,7 @@ router.get('/config', auth, function (req, res, next) {
 		});
 });
 
+// DOC
 router.post('/config', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -175,6 +177,82 @@ router.post('/config', auth, function (req, res, next) {
 		error: true,
 		message: "Not implemented"
 	});
+});
+
+/**
+ * Get a user's notofication settings
+ */
+router.get('/notify', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	req.knex.from('users').select('notify_receipt', 'notify_payment')
+		.where('email', '=', req.email).then(rows => {
+			res.status(200).json({
+				error: false,
+				data: {
+					paymentEmail: rows[0].notify_payment === 'email' || rows[0].notify_payment === 'both',
+					paymentPush: rows[0].notify_payment === 'push' || rows[0].notify_payment === 'both',
+					receiptEmail: rows[0].notify_receipt === 'email' || rows[0].notify_receipt === 'both',
+					receiptPush: rows[0].notify_receipt === 'push' || rows[0].notify_receipt === 'both'
+				}
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
+});
+
+/**
+ * Set a user's notofication settings
+ */
+router.put('/notify', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	let paymentEmail = req.body.paymentEmail;
+	let paymentPush = req.body.paymentPush;
+	let receiptEmail = req.body.receiptEmail;
+	let receiptPush = req.body.receiptPush;
+
+	let notify_payment = "off";
+	if (paymentEmail) {
+		if (paymentPush) {
+			notify_payment = "both";
+		} else {
+			notify_payment = "email";
+		}
+	} else if (paymentPush) {
+		notify_payment = "push";
+	}
+
+	let notify_receipt = "off";
+	if (receiptEmail) {
+		if (receiptPush) {
+			notify_receipt = "both";
+		} else {
+			notify_receipt = "email";
+		}
+	} else if (receiptPush) {
+		notify_receipt = "push";
+	}
+
+	req.knex.from('users').where('email', '=', req.email)
+		.update({ notify_payment, notify_receipt }).then(() => {
+			res.status(200).json({
+				error: false,
+				message: "User notification update successful"
+			});
+		}).catch(error => {
+			res.status(500).json({
+				error: true,
+				message: "Internal server error"
+			});
+			console.log(error);
+		});
 });
 
 /**

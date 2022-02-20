@@ -206,6 +206,27 @@ export function setDetails(details) {
 }
 
 /**
+ * Gets the current user's notification options
+ * @returns The user's notification options
+ */
+export function getNotifyOptions() {
+	const url = new URL(SERVER + "/users/notify");
+
+	return doFetch(url, "GET");
+}
+
+/**
+ * Sets the current user's notification options
+ * @param {object} options The user's new notification options
+ * @returns The error status of the operation
+ */
+export function setNotifyOptions(options) {
+	const url = new URL(SERVER + "/users/notify");
+
+	return doFetch(url, "PUT", options, "no-store");
+}
+
+/**
  * Gets the current user's debt
  * @returns The user's debt
  */

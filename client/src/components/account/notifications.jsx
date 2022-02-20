@@ -1,24 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Card, CardHeader, Col, Collapse, Form, FormFeedback, FormGroup, FormText, Input, Label, Row, Spinner, UncontrolledAlert } from "reactstrap";
+import { getNotifyOptions, setNotifyOptions } from "../../api";
 
 export default function Notifications(props) {
+
+	const [original, setOriginal] = useState();
 
 	const [payEmail, setPayEmail] = useState(true);
 	const [payPush, setPayPush] = useState(true);
 	const [recEmail, setRecEmail] = useState(false);
 	const [recPush, setRecPush] = useState(false);
 
-	const [pushAvailable, setPushAvailable] = useState(false);
+	const [pushAvailable, setPushAvailable] = useState(true);
 	const [loading, setLoading] = useState(false);
 	const [permLoading, setPermLoading] = useState(false);
-	const altered = () => false;
+	const altered = () => original && (original.paymentEmail !== payEmail || original.paymentPush !== payPush || original.receiptEmail !== recEmail || original.receiptPush !== recPush);
 
 	async function getPermission() {
 		setPermLoading(true);
+		setPushAvailable(true);
+		setPermLoading(false);
+	}
+
+	async function saveOptions() {
+		setLoading(true);
+		let options = {
+			paymentEmail: payEmail,
+			paymentPush: payPush,
+			receiptEmail: recEmail,
+			receiptPush: recPush
+		}
+		let results = await setNotifyOptions(options);
+
+		if (results.error)
+			props.error(results.error);
+		else
+			setOriginal(options);
+
+		setLoading(false);
 	}
 
 	async function getOptions() {
+		let results = await getNotifyOptions();
 
+		if (results.error || !results.data) {
+			if (results.error)
+				props.error(results.error);
+			else
+				props.error("An unknown error occured");
+		} else {
+			setOriginal(results.data);
+			setPayEmail(results.data.paymentEmail);
+			setPayPush(results.data.paymentPush);
+			setRecEmail(results.data.receiptEmail);
+			setRecPush(results.data.receiptPush);
+		}
+		setPushAvailable(Notification.permission === "granted");
 	}
 
 	useEffect(() => {
@@ -26,7 +63,7 @@ export default function Notifications(props) {
 	}, [payEmail, payPush, recEmail, recPush]);
 
 	useEffect(() => {
-		// setPushAvailable(Notification.permission === "granted");
+		getOptions();
 	}, []);
 
 
@@ -42,7 +79,10 @@ export default function Notifications(props) {
 						<br />
 						<div className="mt-2 d-flex">
 							<Button color="danger" onClick={getPermission}>Allow</Button>
-							<Button color="danger" className="ml-2" outline onClick={getPermission}>Disable</Button>
+							<Button color="danger" className="ml-2" outline onClick={() => {
+								setPayPush(false);
+								setRecPush(false);
+							}}>Disable</Button>
 							{permLoading &&
 								<Spinner color="danger" className="ml-auto my-auto" />
 							}
@@ -93,8 +133,13 @@ export default function Notifications(props) {
 					</FormGroup>
 				</div>
 				<div className="d-flex mt-3">
-					<Button color="primary" disabled={!altered()} outline>Cancel</Button>
-					<Button color="primary" disabled={!altered()} className="ml-2">Save</Button>
+					<Button color="primary" disabled={!altered()} outline onClick={() => {
+						setPayEmail(original.paymentEmail);
+						setPayPush(original.paymentPush);
+						setRecEmail(original.receiptEmail);
+						setRecPush(original.receiptPush);
+					}}>Cancel</Button>
+					<Button color="primary" disabled={!altered()} className="ml-2" onClick={saveOptions}>Save</Button>
 					{loading &&
 						<Spinner color="primary" className="ml-auto my-auto" />
 					}
