@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Card, CardHeader, Col, Collapse, Form, FormFeedback, FormGroup, FormText, Input, Label, Row, Spinner, UncontrolledAlert } from "reactstrap";
-import { getNotifyOptions, setNotifyOptions } from "../../api";
+import { getNotifyOptions, getVAPID, registerDevice, setNotifyOptions } from "../../api";
 
 export default function Notifications(props) {
 
@@ -16,10 +16,34 @@ export default function Notifications(props) {
 	const [permLoading, setPermLoading] = useState(false);
 	const altered = () => original && (original.paymentEmail !== payEmail || original.paymentPush !== payPush || original.receiptEmail !== recEmail || original.receiptPush !== recPush);
 
+	async function handlePermission(status) {
+		if (status === 'granted') {
+			let worker = await navigator.serviceWorker.ready;
+			let push = await worker.pushManager;
+			let vapid = await getVAPID();
+
+			if (vapid.error || !vapid.key) {
+				if (vapid.error)
+					props.error(vapid.error);
+				else
+					props.error("An unknown error occured");
+			}
+
+			let result = await push.subscribe({
+				userVisibleOnly: true,
+				applicationServerKey: vapid.key
+			});
+
+			let pass = await registerDevice({ endpoint: result });
+
+			setPermLoading(false);
+			setPushAvailable(true);
+		}
+	}
+
 	async function getPermission() {
 		setPermLoading(true);
-		setPushAvailable(true);
-		setPermLoading(false);
+		Notification.requestPermission(handlePermission);
 	}
 
 	async function saveOptions() {
@@ -59,13 +83,8 @@ export default function Notifications(props) {
 	}
 
 	useEffect(() => {
-
-	}, [payEmail, payPush, recEmail, recPush]);
-
-	useEffect(() => {
 		getOptions();
 	}, []);
-
 
 	return (
 		<Card className="mt-3" id="notifications">

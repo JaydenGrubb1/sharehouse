@@ -226,6 +226,20 @@ export function setNotifyOptions(options) {
 	return doFetch(url, "PUT", options, "no-store");
 }
 
+// DOC
+export function getVAPID() {
+	const url = new URL(SERVER + "/notification/vapid");
+
+	return doFetch(url, "GET");
+}
+
+// DOC
+export function registerDevice(endpoint) {
+	const url = new URL(SERVER + "/notification/register");
+
+	return doFetch(url, "POST", endpoint, "no-store");
+}
+
 /**
  * Gets the current user's debt
  * @returns The user's debt
