@@ -60,7 +60,7 @@ export default function Details(props) {
 	}, []);
 
 	return (
-		<Card className="mt-3">
+		<Card className="mt-3" id="details">
 			<CardHeader className="d-flex">
 				<h5 className="my-auto">Details</h5>
 			</CardHeader>
@@ -174,7 +174,7 @@ export default function Details(props) {
 						</FormGroup>
 					</Col>
 				</Row>
-				<div style={{ display: "flex" }}>
+				<div className="d-flex">
 					<Button color="primary" disabled={!altered()} outline onClick={() => {
 						setNameValid("");
 						setEmailValid("");
