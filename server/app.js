@@ -8,8 +8,10 @@ const options = require('./knexfile');
 const knex = require('knex')(options);
 const helmet = require('helmet');
 const mailer = require('nodemailer');
+const push = require('web-push');
 const cors = require('cors');
 
+const notificationRouter = require('./routes/notification');
 const paymentsRouter = require('./routes/payments');
 const receiptsRouter = require('./routes/receipts');
 const statisticsRouter = require('./routes/statistics');
@@ -37,6 +39,7 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.use('/notification', notificationRouter);
 app.use('/payments', paymentsRouter);
 app.use('/receipts', receiptsRouter);
 app.use('/statistics', statisticsRouter);

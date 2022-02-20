@@ -333,6 +333,7 @@ router.delete('/:id', auth, function (req, res, next) {
 	});
 });
 
+// TODO
 /**
  * Method not allowed handlers
  */
