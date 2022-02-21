@@ -3,7 +3,7 @@ self.addEventListener('push', (event) => {
 
 	let body = "";
 	let title = "";
-	
+
 	if (payload.type === 'receipt') {
 		body = payload.user + " added a receipt of $" + payload.amount.toFixed(2);
 		title = "Receipt Added";
@@ -19,6 +19,7 @@ self.addEventListener('push', (event) => {
 		badge: 'favicon.ico',
 		// vibrate: [100, 50, 100],
 		// Star Wars because why not
+		// Doesn't work on devices newer than Android 8.0
 		vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500],
 		tag: 'sharehouse-' + payload.type,
 		renotify: true,
@@ -43,8 +44,10 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-	if (event.action === 'close')
+	if (event.action === 'close'){
+		event.notification.close();
 		return;
+	}
 
 	clients.openWindow('https://sharehouse.jaydengrubb.com/payments');
 });
