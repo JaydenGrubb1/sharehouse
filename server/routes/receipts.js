@@ -241,6 +241,8 @@ router.post('/', auth, function (req, res, next) {
 				message: "Receipt created",
 				id: receiptID
 			});
+			let recipients = contributions.filter(x => Math.sign(x.amount) !== Math.sign(amount));
+			sendNotification(req, recipients, req.body, user, amount);
 		}).catch(error => {
 			res.status(500).json({
 				error: true,
@@ -256,6 +258,45 @@ router.post('/', auth, function (req, res, next) {
 		console.log(error);
 	});
 });
+
+async function sendNotification(req, recipients, details, user, amount) {
+	recipients.forEach(recipient => {
+		req.knex.from('users').select('notify_receipt').where('email', '=', recipient.user).then(rows => {
+			let useEmail = rows[0].notify_receipt === 'email' || rows[0].notify_receipt === 'both';
+			let usePush = rows[0].notify_receipt === 'push' || rows[0].notify_receipt === 'both';
+
+			if (useEmail) {
+				email = {
+					from: process.env.MAIL_USER,
+					to: recipient.user,
+					subject: "Sharehouse Receipt Added",
+					text: "User " + user + " has added a receipt of $" + amount.toFixed(2) + ".\n" +
+						"To view details about this receipt head to https://sharehouse.jaydengrubb.com/payments .\n\n" +
+						"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
+						"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
+				};
+				req.mail.sendMail(email).catch(error => {
+					// TODO Error message
+					console.log(error);
+				});
+			}
+
+			if (usePush) {
+				req.knex.from('subscriptions').select('endpoint').where('user', '=', recipient.user).then(rows => {
+					rows.forEach(row => {
+						req.webpush.sendNotification(JSON.parse(row.endpoint), 'Test Message');
+					});
+				}).catch(error => {
+					// TODO Error message
+					console.log(error);
+				});;
+			}
+		}).catch(error => {
+			// TODO Error message
+			console.log(error);
+		});
+	});
+}
 
 /**
  * Updates a receipt's details

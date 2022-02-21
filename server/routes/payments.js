@@ -246,10 +246,6 @@ router.post('/', auth, function (req, res, next) {
 			});
 
 			sendNotification(req, from, to, amount);
-
-
-			// Send a notification to the recipient
-
 		}).catch(error => {
 			res.status(500).json({
 				error: true,
@@ -300,7 +296,7 @@ async function sendNotification(req, from, to, amount) {
 	}).catch(error => {
 		// TODO Error message
 		console.log(error);
-	});;
+	});
 }
 
 /**
