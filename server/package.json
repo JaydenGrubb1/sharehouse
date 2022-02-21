@@ -1,6 +1,6 @@
 {
-    "name": "go",
-    "version": "0.0.0",
+    "name": "sharehouse-server",
+    "version": "1.1.3",
     "private": true,
     "scripts": {
         "start": "nodemon -q ./bin/www",
