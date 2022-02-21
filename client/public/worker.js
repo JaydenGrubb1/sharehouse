@@ -1,24 +1,50 @@
-self.addEventListener('push', (e) => {
+self.addEventListener('push', (event) => {
+	payload = JSON.parse(event.data.text());
+
+	let body = "";
+	let title = "";
+	
+	if (payload.type === 'receipt') {
+		body = payload.user + " added a receipt of $" + payload.amount.toFixed(2);
+		title = "Receipt Added";
+	}
+	else {
+		body = payload.user + " paid you $" + payload.amount.toFixed(2);
+		title = "Payment Added"
+	}
+
 	let options = {
-		body: 'This notification was generated from a push!',
-		icon: 'images/example.png',
-		vibrate: [100, 50, 100],
+		body: body,
+		// icon: 'favicon.ico',
+		badge: 'favicon.ico',
+		// vibrate: [100, 50, 100],
+		// Star Wars because why not
+		vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500],
+		tag: 'sharehouse-' + payload.type,
+		renotify: true,
 		data: {
 			dateOfArrival: Date.now(),
 			primaryKey: '2'
 		},
 		actions: [
 			{
-				action: 'explore', title: 'Explore this new world',
-				icon: 'images/checkmark.png'
+				action: 'view', title: payload.type === 'receipt' ? 'View Receipts' : 'View Payments',
+				// icon: 'images/checkmark.png'
 			},
 			{
 				action: 'close', title: 'Close',
-				icon: 'images/xmark.png'
+				// icon: 'images/xmark.png'
 			},
 		]
 	};
-	e.waitUntil(
-		self.registration.showNotification('Hello world!', options)
+	event.waitUntil(
+		self.registration.showNotification(title, options)
 	);
+});
+
+self.addEventListener('notificationclick', (event) => {
+	if (event.action === 'close')
+		return;
+
+	clients.openWindow('https://sharehouse.jaydengrubb.com/payments');
 });

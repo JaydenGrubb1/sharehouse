@@ -284,7 +284,12 @@ async function sendNotification(req, recipients, details, user, amount) {
 			if (usePush) {
 				req.knex.from('subscriptions').select('endpoint').where('user', '=', recipient.user).then(rows => {
 					rows.forEach(row => {
-						req.webpush.sendNotification(JSON.parse(row.endpoint), 'Test Message');
+						let payload = {
+							type: "receipt",
+							user: user,
+							amount: amount
+						}
+						req.webpush.sendNotification(JSON.parse(row.endpoint), JSON.stringify(payload));
 					});
 				}).catch(error => {
 					// TODO Error message
