@@ -1,7 +1,7 @@
 {
 	"name": "sharehouse-gui",
 	"homepage": "https://sharehouse.jaydengrubb.com",
-	"version": "0.1.0",
+	"version": "0.1.7",
 	"description": "sharehouse management front-end",
 	"keywords": [],
 	"main": "src/index.js",

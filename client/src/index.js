@@ -11,6 +11,8 @@ ReactDOM.render(
 	rootElement
 );
 
+// FIXME Probably fails on mobile due to https/locahost restriction
+// try-catch ???
 navigator.serviceWorker.register('/worker.js').then(rego => {
 	console.log(rego);
 }).catch(error => {

@@ -25,6 +25,7 @@ const transporter = mailer.createTransport({
 		pass: process.env.MAIL_PASS
 	}
 });
+push.setVapidDetails('mailto:' + process.env.MAIL_USER, process.env.VAPID_PUBLIC, process.env.VAPID_PRIVATE);
 
 app.use(logger('combined'));
 app.use(helmet());
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	req.knex = knex;
 	req.mail = transporter;
+	req.webpush = push;
 	next();
 });
 

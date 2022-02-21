@@ -6,8 +6,8 @@ export default function Notifications(props) {
 
 	const [original, setOriginal] = useState();
 
-	const [payEmail, setPayEmail] = useState(true);
-	const [payPush, setPayPush] = useState(true);
+	const [payEmail, setPayEmail] = useState(false);
+	const [payPush, setPayPush] = useState(false);
 	const [recEmail, setRecEmail] = useState(false);
 	const [recPush, setRecPush] = useState(false);
 
