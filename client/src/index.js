@@ -15,7 +15,8 @@ ReactDOM.render(
 // try-catch ???
 try {
 	navigator.serviceWorker.register('/worker.js').then(rego => {
-		console.log(rego);
+		// console.log(rego);
+		// DO MORE, IDK
 	});
 } catch (error) {
 	console.log(error);

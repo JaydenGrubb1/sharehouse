@@ -44,10 +44,10 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-	if (event.action === 'close'){
-		event.notification.close();
+	if (event.action === 'close') {
 		return;
 	}
 
 	clients.openWindow('https://sharehouse.jaydengrubb.com/payments');
+	event.notification.close();
 });
