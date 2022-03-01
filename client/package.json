@@ -1,7 +1,7 @@
 {
 	"name": "sharehouse-client",
 	"homepage": "https://sharehouse.jaydengrubb.com",
-	"version": "1.2.7",
+	"version": "1.2.9",
 	"description": "sharehouse management front-end",
 	"keywords": [],
 	"main": "src/index.js",
