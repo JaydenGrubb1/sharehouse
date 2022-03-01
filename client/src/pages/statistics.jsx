@@ -17,7 +17,7 @@ export default function Statistics() {
 			</Collapse>
 			<h4 className="text-left">Statistics</h4>
 			<CardDeck className="mt-3">
-				<Averages error={setError} />
+				{/* <Averages error={setError} /> */}
 			</CardDeck>
 		</div>
 	);
