@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./app.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -24,30 +24,18 @@ export default function App() {
 				<Router>
 					<Header />
 					<main>
-						<Switch>
-							<Route path="/payments">
-								<Payments />
-							</Route>
-							<Route path="/statistics">
-								<Statistics />
-							</Route>
-							<Route path="/account">
-								<Account />
-							</Route>
-							<Route path="/admin">
-								<Admin />
-							</Route>
-							<Route path="/users/:user">
-								<User />
-							</Route>
-							<Route exact path="/">
-								<Home />
-							</Route>
-						</Switch>
+						<Routes>
+							<Route path="/payments" element={<Payments />} />
+							<Route path="/statistics" element={<Statistics />} />
+							<Route path="/account" element={<Account />} />
+							<Route path="/admin" element={<Admin />} />
+							<Route path="/users/:user" element={<User />} />
+							<Route path="/" element={<Home />} />
+						</Routes>
 					</main>
 					<Footer />
 				</Router>
-			</div>
+			</div >
 		);
 	} else {
 		return (
