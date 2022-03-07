@@ -267,6 +267,8 @@ async function sendNotification(req, from, to, amount) {
 		let useEmail = rows[0].notify_payment === 'email' || rows[0].notify_payment === 'both';
 		let usePush = rows[0].notify_payment === 'push' || rows[0].notify_payment === 'both';
 
+		amount = parseFloat(amount);
+
 		if (useEmail) {
 			email = {
 				from: process.env.MAIL_USER,
