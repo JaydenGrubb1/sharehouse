@@ -24,7 +24,7 @@
 		"reactstrap": "^8.9.0"
 	},
 	"devDependencies": {
-		"css-loader": "^6.6.0",
+		"css-loader": "^6.7.0",
 		"typescript": "^4.6.2"
 	},
 	"scripts": {

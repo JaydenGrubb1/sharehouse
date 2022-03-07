@@ -1,5 +1,11 @@
 self.addEventListener('push', (event) => {
-	payload = JSON.parse(event.data.text());
+	let payload;
+	try {
+		payload = JSON.parse(event.data.text());
+	} catch (error) {
+		// TODO Check error
+		return;
+	}
 
 	let body = "";
 	let title = "";
@@ -44,10 +50,11 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
+	event.notification.close();
+	
 	if (event.action === 'close') {
 		return;
 	}
 
 	clients.openWindow('https://sharehouse.jaydengrubb.com/payments');
-	event.notification.close();
 });

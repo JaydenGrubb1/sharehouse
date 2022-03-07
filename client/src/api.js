@@ -6,7 +6,6 @@ let SERVER = 'https://sharehouse.jaydengrubb.com/api';
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	// SERVER = 'https://sharehouse.jaydengrubb.com/api';
 }
 
 /**
