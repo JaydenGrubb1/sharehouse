@@ -286,14 +286,25 @@ async function sendNotification(req, from, to, amount) {
 		}
 
 		if (usePush) {
-			req.knex.from('subscriptions').select('endpoint').where('user', '=', to).then(rows => {
+			req.knex.from('subscriptions').select('id', 'endpoint').where('user', '=', to).then(rows => {
 				rows.forEach(row => {
 					let payload = {
 						type: "payment",
 						user: from,
 						amount: amount
 					}
-					req.webpush.sendNotification(JSON.parse(row.endpoint), JSON.stringify(payload));
+					req.webpush.sendNotification(JSON.parse(row.endpoint), JSON.stringify(payload)).catch(err => {
+						if (err.statusCode === 404 || err.statusCode === 410) {
+							// Subscription expired or no longer valid
+							req.knex.from('subscriptions').where('id', '=', row.id).del().catch(error => {
+								// TODO Error message
+								console.log(error);
+							})
+						} else {
+							// TODO Error message
+							console.log(err);
+						}
+					});
 				});
 			}).catch(error => {
 				// TODO Error message
