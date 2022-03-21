@@ -3,10 +3,10 @@
  */
 let SERVER = 'https://sharehouse.jaydengrubb.com/api';
 
-if (isDev()) {
-	// dev code
-	SERVER = 'http://127.0.0.1:3001';
-}
+// if (isDev()) {
+// 	// dev code
+// 	SERVER = 'http://127.0.0.1:3001';
+// }
 
 /**
  * Gets the value of a specified cookie
