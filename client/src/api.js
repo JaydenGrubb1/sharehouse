@@ -1,7 +1,7 @@
 /**
  * Server address
  */
-let SERVER = 'https://sharehouse.jaydengrubb.com/api';
+let SERVER = process.env.REACT_APP_API;
 
 // if (isDev()) {
 // 	// dev code
@@ -186,7 +186,7 @@ export function getUserConfig() {
 export function setPassword(password) {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return doFetch(url, "PUT", password, "no-store");
+	return doFetch(url, "PUT", { password }, "no-store");
 }
 
 /**
