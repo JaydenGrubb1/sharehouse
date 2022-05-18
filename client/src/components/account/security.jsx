@@ -40,7 +40,7 @@ export default function Security(props) {
 	}
 
 	return (
-		<Card className="mt-3">
+		<Card className="mt-3" id="security">
 			<CardHeader className="d-flex">
 				<h5 className="my-auto">Security</h5>
 			</CardHeader>

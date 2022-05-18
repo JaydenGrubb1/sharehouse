@@ -1,12 +1,11 @@
 /**
  * Server address
  */
-let SERVER = 'https://sharehouse.jaydengrubb.com/api';
+let SERVER = process.env.REACT_APP_API;
 
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
-	SERVER = 'https://sharehouse.jaydengrubb.com/api';
 }
 
 /**
@@ -187,7 +186,7 @@ export function getUserConfig() {
 export function setPassword(password) {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return doFetch(url, "PUT", password, "no-store");
+	return doFetch(url, "PUT", { password }, "no-store");
 }
 
 /**
@@ -203,6 +202,41 @@ export function setDetails(details) {
 			setCookie("token", data.new_token.token, data.new_token.expires_in);
 		return data;
 	})
+}
+
+/**
+ * Gets the current user's notification options
+ * @returns The user's notification options
+ */
+export function getNotifyOptions() {
+	const url = new URL(SERVER + "/users/notify");
+
+	return doFetch(url, "GET");
+}
+
+/**
+ * Sets the current user's notification options
+ * @param {object} options The user's new notification options
+ * @returns The error status of the operation
+ */
+export function setNotifyOptions(options) {
+	const url = new URL(SERVER + "/users/notify");
+
+	return doFetch(url, "PUT", options, "no-store");
+}
+
+// DOC
+export function getVAPID() {
+	const url = new URL(SERVER + "/notification/vapid");
+
+	return doFetch(url, "GET");
+}
+
+// DOC
+export function registerDevice(endpoint) {
+	const url = new URL(SERVER + "/notification/register");
+
+	return doFetch(url, "POST", endpoint, "no-store");
 }
 
 /**

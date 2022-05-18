@@ -8,8 +8,10 @@ const options = require('./knexfile');
 const knex = require('knex')(options);
 const helmet = require('helmet');
 const mailer = require('nodemailer');
+const push = require('web-push');
 const cors = require('cors');
 
+const notificationRouter = require('./routes/notification');
 const paymentsRouter = require('./routes/payments');
 const receiptsRouter = require('./routes/receipts');
 const statisticsRouter = require('./routes/statistics');
@@ -23,6 +25,7 @@ const transporter = mailer.createTransport({
 		pass: process.env.MAIL_PASS
 	}
 });
+push.setVapidDetails('mailto:' + process.env.MAIL_USER, process.env.VAPID_PUBLIC, process.env.VAPID_PRIVATE);
 
 app.use(logger('combined'));
 app.use(helmet());
@@ -34,9 +37,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	req.knex = knex;
 	req.mail = transporter;
+	req.webpush = push;
 	next();
 });
 
+app.use('/notification', notificationRouter);
 app.use('/payments', paymentsRouter);
 app.use('/receipts', receiptsRouter);
 app.use('/statistics', statisticsRouter);

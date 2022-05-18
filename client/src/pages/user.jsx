@@ -26,7 +26,6 @@ export default function User() {
 				setError("An unknown error occured");
 		} else {
 			setError();
-			console.log(results.data);
 			setDetails(results.data);
 		}
 	}

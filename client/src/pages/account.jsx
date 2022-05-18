@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Collapse, UncontrolledAlert } from "reactstrap";
 import { getUser } from "../api";
 import Details from "../components/account/details";
+import Notifications from "../components/account/notifications";
 import Security from "../components/account/security";
 
 export default function Account() {
@@ -44,6 +45,7 @@ export default function Account() {
 			</Collapse>
 			<h4 className="text-left">Account</h4>
 			<Details error={setError} />
+			<Notifications error={setError} />
 			<Security error={setError} updated={updated} getUpdated={getLastUpdated} />
 		</div>
 	);
