@@ -38,19 +38,19 @@ services:
     depends_on:
       - server
     ports:
-      - "3000:3000"
-  nginx:
-    image: nginx
-    restart: unless-stopped
-    depends_on:
-      - client
-    volumes:
-      - "./nginx/http/:/etc/nginx/templates/"
-    ports:
-      - "9000:80"
-    links:
-      - client
-      - server
-    environment:
-      SERVER_URL: server
-      CLIENT_URL: client
+      - "80:80"
+  # nginx:
+  #   image: nginx
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - client
+  #   volumes:
+  #     - "./nginx/http/:/etc/nginx/templates/"
+  #   ports:
+  #     - "9000:80"
+  #   links:
+  #     - client
+  #     - server
+  #   environment:
+  #     SERVER_URL: server
+  #     CLIENT_URL: client
