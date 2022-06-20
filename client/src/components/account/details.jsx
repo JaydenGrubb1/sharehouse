@@ -16,7 +16,7 @@ export default function Details(props) {
 	const [bsbValid, setBsbValid] = useState("");
 	const [accValid, setAccValid] = useState("");
 	const detailsInvalid = () => nameValid || emailValid || bsbValid || accValid;
-	const altered = () => original && (name !== original.name || email !== original.email || bsb !== original.bsb || acc !== original.acc);
+	const altered = () => original && (name !== original.name || email.toLowerCase() !== original.email || bsb !== original.bsb || acc !== original.acc);
 
 	const [detailsLoading, setDetailsLoading] = useState(false);
 
@@ -93,7 +93,7 @@ export default function Details(props) {
 						type="email"
 						name="email"
 						id="emailfield"
-						valid={!emailValid && original && email !== original.email}
+						valid={!emailValid && original && email.toLowerCase() !== original.email}
 						invalid={emailValid}
 						value={email}
 						onChange={x => {
