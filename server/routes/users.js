@@ -17,7 +17,7 @@ const ALLOWED_USER_FIELDS = {
  * Log a user in
  */
 router.post('/login', function (req, res, next) {
-	const email = req.body.email;
+	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
 
 	if (!email || !password) {
@@ -105,7 +105,7 @@ router.post('/', auth, function (req, res, next) {
 		return;
 	}
 
-	const email = req.body.email;
+	const email = req.body.email.toLowerCase();
 
 	if (!email) {
 		res.status(400).json({
@@ -286,7 +286,7 @@ router.put('/:email', auth, function (req, res, next) {
 		return;
 
 	const old_email = req.params.email;
-	const new_email = req.body.email;
+	const new_email = req.body.email.toLowerCase();
 
 	if (req.email !== old_email && !req.admin) {
 		res.status(403).json({
