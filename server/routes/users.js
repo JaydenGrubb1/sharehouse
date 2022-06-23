@@ -286,7 +286,10 @@ router.put('/:email', auth, function (req, res, next) {
 		return;
 
 	const old_email = req.params.email;
-	const new_email = req.body.email.toLowerCase();
+
+	const new_email = undefined;
+	if (req.body.email)
+		new_email = req.body.email.toLowerCase();
 
 	if (req.email !== old_email && !req.admin) {
 		res.status(403).json({
