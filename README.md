@@ -9,14 +9,12 @@ Note. This document is still a work in progress and may be missing sections or s
 - [Screenshots](#screenshots)
 - [Tech](#tech)
 - [Setup](#setup)
-	<!-- - [Standalone Installation](#standalone-installation) -->
 	- [Download and install required software](#1-download-and-install-required-software)
 	- [Download sharehouse source](#2-download-sharehouse-source)
 	- [Configure back-end server](#3-configure-back-end-server)
 	- [Run back-end server](#4-run-back-end-server)
 	- [Build front-end client](#5-build-front-end-client)
 	- [Move front-end client](#6-move-front-end-client)
-	<!-- - [Docker Installation](#docker-installation) -->
 - [License](#license)
 
 ## Features
@@ -37,7 +35,6 @@ Note. This document is still a work in progress and may be missing sections or s
 - Spending statistics
 - Dark theme
 - Setup script
-<!-- - Docker deployment -->
 
 ## Screenshots
 *coming soon*
@@ -56,24 +53,23 @@ Note. This document is still a work in progress and may be missing sections or s
 | [web-push](https://www.npmjs.com/package/web-push) | Node library for sending push notifications |
 
 ## Setup
-### Standalone Installation
 For this simple deployment, we will use [nginx](https://www.nginx.com/) as a reverse proxy as well as to serve the front-end client. Additionally we will use the [pm2](https://pm2.keymetrics.io/) node package to serve the api. Tested on Ubuntu 21.10.
 
-#### 1. Download and install required software
+### 1. Download and install required software
 ```console
 sudo apt update
 sudo apt install nodejs nginx mysql-server
 npm install pm2 -g
 ```
 
-#### 2. Download `sharehouse` source
+### 2. Download `sharehouse` source
 ```console
 git clone https://github.com/JaydenGrubb1/sharehouse.git
 cd sharehouse
 ```
 
 <!-- TODO packages need installing first -->
-#### 3. Generate VAPID keys
+### 3. Generate VAPID keys
 ```console
 node server/gen-vapid.js
 ```
@@ -85,14 +81,14 @@ Example output:
 }
 ```
 
-#### 3. Configure back-end server
+### 3. Configure back-end server
 ```console
 cp docs/example.env server/.env
 nano server/.env
 ```
 Change the values of the variables in the `.env` file as needed, using the comments as a guide.
 
-#### 4. Run back-end server
+### 4. Run back-end server
 ```console
 cd server
 npm install --production
@@ -110,7 +106,7 @@ Example output in browser:
 }
 ```
 
-#### 5. Build front-end client
+### 5. Build front-end client
 ```console
 cd client
 npm install --production
@@ -118,7 +114,7 @@ npm run build
 cd ../
 ```
 
-#### 6. Move front-end client
+### 6. Move front-end client
 ```console
 mkdir /var/www/sharehouse
 mv client/build /var/www/sharehouse/html
@@ -126,9 +122,6 @@ mv client/build /var/www/sharehouse/html
 ```console
 sudo systemctl restart nginx
 ```
-
-<!-- ### Docker Installation
-*coming soon...* -->
 
 ## License
 [BSD-3-Clause License](LICENSE)
