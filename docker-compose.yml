@@ -1,5 +1,4 @@
 version: '2'
-
 services:
   sql:
     image: mysql
@@ -28,6 +27,10 @@ services:
       DB_PASS: "${MYSQL_PASSWORD}"
       JWT_SECRET:
       JWT_SALT_ROUNDS:
+      MAIL_USER:
+      MAIL_PASS:
+      VAPID_PUBLIC:
+      VAPID_PRIVATE:
     ports:
       - "3001:3001"
   client:
@@ -39,18 +42,3 @@ services:
       - server
     ports:
       - "80:80"
-  # nginx:
-  #   image: nginx
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - client
-  #   volumes:
-  #     - "./nginx/http/:/etc/nginx/templates/"
-  #   ports:
-  #     - "9000:80"
-  #   links:
-  #     - client
-  #     - server
-  #   environment:
-  #     SERVER_URL: server
-  #     CLIENT_URL: client

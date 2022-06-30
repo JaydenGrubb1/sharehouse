@@ -1,12 +1,16 @@
 /**
  * Server address
  */
-let SERVER = process.env.REACT_APP_API;
+// let SERVER = 'http://127.0.0.1:3001';
 
-if (isDev()) {
-	// dev code
-	SERVER = 'http://127.0.0.1:3001';
-}
+// if (!isDev()) {
+// 	if (window._env_) {
+// 		SERVER = window._env_.REACT_APP_API;
+// 	} else {
+// 		SERVER = process.env.REACT_APP_API;
+// 	}
+// }
+let SERVER = '%PUBLIC_URL%/api'
 
 /**
  * Gets the value of a specified cookie

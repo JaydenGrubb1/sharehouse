@@ -214,3 +214,6 @@ dist
 # VScode settings
 /.vscode
 /local
+
+#Other
+/client/public/env.json

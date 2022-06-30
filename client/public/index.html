@@ -5,6 +5,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="theme-color" content="#343A40">
+	<script>
+		fetch("%PUBLIC_URL%/env.json").then(res => {
+			return res.json();
+		}).then(data => {
+			window._env_ = data;
+		}).catch(e => {
+			console.log(e);
+		});
+	</script>
 </head>
 
 <body style="margin-bottom: 60px;">
