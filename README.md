@@ -9,14 +9,14 @@ Note. This document is still a work in progress and may be missing sections or s
 - [Screenshots](#screenshots)
 - [Tech](#tech)
 - [Setup](#setup)
-	- [Standalone Installation](#standalone-installation)
-		- [Download and install required software](#1-download-and-install-required-software)
-		- [Download sharehouse source](#2-download-sharehouse-source)
-		- [Configure back-end server](#3-configure-back-end-server)
-		- [Run back-end server](#4-run-back-end-server)
-		- [Build front-end client](#5-build-front-end-client)
-		- [Move front-end client](#6-move-front-end-client)
-	- [Docker Installation](#docker-installation)
+	<!-- - [Standalone Installation](#standalone-installation) -->
+	- [Download and install required software](#1-download-and-install-required-software)
+	- [Download sharehouse source](#2-download-sharehouse-source)
+	- [Configure back-end server](#3-configure-back-end-server)
+	- [Run back-end server](#4-run-back-end-server)
+	- [Build front-end client](#5-build-front-end-client)
+	- [Move front-end client](#6-move-front-end-client)
+	<!-- - [Docker Installation](#docker-installation) -->
 - [License](#license)
 
 ## Features
@@ -37,7 +37,7 @@ Note. This document is still a work in progress and may be missing sections or s
 - Spending statistics
 - Dark theme
 - Setup script
-- Docker deployment
+<!-- - Docker deployment -->
 
 ## Screenshots
 *coming soon*
@@ -127,8 +127,8 @@ mv client/build /var/www/sharehouse/html
 sudo systemctl restart nginx
 ```
 
-### Docker Installation
-*coming soon...*
+<!-- ### Docker Installation
+*coming soon...* -->
 
 ## License
 [BSD-3-Clause License](LICENSE)
