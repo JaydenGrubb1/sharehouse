@@ -125,3 +125,11 @@ sudo systemctl restart nginx
 
 ## License
 [BSD-3-Clause License](LICENSE)
+
+
+
+<!-- https://gist.github.com/zkiraly/c378a1a43d8be9c9a8f9 -->
+<!-- To Restore delete docker branch
+```console
+git checkout -b docker archive/docker
+``` -->
