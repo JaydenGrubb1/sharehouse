@@ -287,7 +287,7 @@ router.put('/:email', auth, function (req, res, next) {
 
 	const old_email = req.params.email;
 
-	const new_email = undefined;
+	let new_email = undefined;
 	if (req.body.email)
 		new_email = req.body.email.toLowerCase();
 
