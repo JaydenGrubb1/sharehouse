@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./app.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./app.css";
 
 import Header from "./components/header";
 import Login from "./components/modals/login";
