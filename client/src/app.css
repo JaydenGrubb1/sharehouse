@@ -287,6 +287,14 @@ a:hover {
 	background-color: var(--button);
 	border-color: var(--border);
 }
+
+.jumbotron {
+	background-color: var(--card-body);
+}
+
+hr {
+	border-color: var(--border);
+}
 /* End Color Scheme Stuff */
 
 
