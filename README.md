@@ -30,10 +30,10 @@ Note. This document is still a work in progress and may be missing sections or s
 - Rich JSON REST API
 - JWT session management
 - Easy configuration via .env file
+- Dark theme
 
 ### Comming Soon
 - Spending statistics
-- Dark theme
 - Setup script
 
 ## Screenshots
