@@ -75,7 +75,7 @@ export default function User() {
 						<Label for="namefield">Name</Label>
 						<InputGroup>
 							<Input valid={nameCopied} disabled value={details.name} />
-							<Button color="primary" style={fixBorder} onClick={() => copy(details.name, setNameCopied)}>
+							<Button color="primary" disabled={() => details.name.trim()} style={fixBorder} onClick={() => copy(details.name, setNameCopied)}>
 								<FontAwesomeIcon icon={faCopy} />
 							</Button>
 							<FormFeedback valid>Copied to clipboard</FormFeedback>
@@ -97,7 +97,7 @@ export default function User() {
 							<FormGroup>
 								<InputGroup>
 									<Input valid={bsbCopied} disabled value={details.bsb} />
-									<Button color="primary" style={fixBorder} onClick={() => copy(details.bsb, setBSBCopied)}>
+									<Button color="primary" disabled={() => details.bsb.trim()} style={fixBorder} onClick={() => copy(details.bsb, setBSBCopied)}>
 										<FontAwesomeIcon icon={faCopy} />
 									</Button>
 									<FormFeedback valid>Copied to clipboard</FormFeedback>
@@ -111,7 +111,7 @@ export default function User() {
 							<FormGroup>
 								<InputGroup>
 									<Input valid={accCopied} disabled value={details.acc} />
-									<Button color="primary" style={fixBorder} onClick={() => copy(details.acc, setACCCopied)}>
+									<Button color="primary" disabled={() => details.acc.trim()} style={fixBorder} onClick={() => copy(details.acc, setACCCopied)}>
 										<FontAwesomeIcon icon={faCopy} />
 									</Button>
 									<FormFeedback valid>Copied to clipboard</FormFeedback>
