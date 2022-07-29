@@ -105,7 +105,9 @@ body {
 	border-color: var(--accent-hover);
 }
 
-.btn-primary:disabled {
+.btn-primary:disabled,
+.btn-primary.disabled {
+	cursor: default;
 	background-color: var(--accent-disabled);
 	border-color: var(--accent-disabled);
 }
@@ -278,7 +280,8 @@ a:hover {
 	border-color: var(--border);
 }
 
-.border-bottom, .border-top {
+.border-bottom,
+.border-top {
 	border-color: var(--border) !important;
 }
 
@@ -295,6 +298,15 @@ a:hover {
 hr {
 	border-color: var(--border);
 }
+
+.dark-theme input[type="time"]::-webkit-calendar-picker-indicator {
+	filter: invert(100%)
+}
+
+.dark-theme [type="date"]::-webkit-calendar-picker-indicator {
+	filter: invert(100%)
+}
+
 /* End Color Scheme Stuff */
 
 
@@ -345,7 +357,7 @@ input[type=number] {
 }
 
 .close {
-	color:red;
+	color: red;
 	text-shadow: none;
 }
 
