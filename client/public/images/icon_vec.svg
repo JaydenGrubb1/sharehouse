@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46666"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="icon_512.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     width="512mm"
+     units="px"
+     inkscape:zoom="1.6277344"
+     inkscape:cx="457.3842"
+     inkscape:cy="257.10583"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#0000ff;fill-rule:evenodd;stroke-width:0.279442"
+       id="rect894"
+       width="135.46666"
+       height="67.73333"
+       x="0"
+       y="0" />
+    <rect
+       style="fill:#ff0000;fill-rule:evenodd;stroke-width:0.279442"
+       id="rect894-9"
+       width="135.46666"
+       height="67.73333"
+       x="7.1054274e-15"
+       y="67.73333" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:69.7315px;line-height:1.25;font-family:sans-serif;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:1.74329"
+       x="-4.66465"
+       y="78.158516"
+       id="text3564"
+       transform="scale(0.77966558,1.2826012)"><tspan
+         sodipodi:role="line"
+         id="tspan3562"
+         style="fill:#00ff00;stroke-width:1.74329"
+         x="-4.66465"
+         y="78.158516">ICON</tspan></text>
+  </g>
+</svg>

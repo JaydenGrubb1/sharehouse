@@ -10,14 +10,3 @@ ReactDOM.render(
 	</React.StrictMode>,
 	rootElement
 );
-
-// FIXME Probably fails on mobile due to https/locahost restriction
-// try-catch ???
-try {
-	navigator.serviceWorker.register('/worker.js').then(rego => {
-		// console.log(rego);
-		// DO MORE, IDK
-	});
-} catch (error) {
-	console.log(error);
-}

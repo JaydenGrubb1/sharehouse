@@ -35,6 +35,7 @@ Note. This document is still a work in progress and may be missing sections or s
 ### Comming Soon
 - Spending statistics
 - Setup script
+- Progressive Web App support
 
 ## Screenshots
 *coming soon*

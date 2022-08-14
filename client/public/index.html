@@ -5,10 +5,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="theme-color" content="#343A40">
+	<meta name="author" content="Jayden Grubb">
+	<meta name="description" content="Create and manage receipts and payments in a sharehouse." />
 	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="en_AU" />
 	<meta property="og:url" content="%PUBLIC_URL%" />
 	<meta property="og:title" content="Sharehouse Database" />
 	<meta property="og:description" content="Create and manage receipts and payments in a sharehouse." />
+	<link rel="canonical" href="%PUBLIC_URL%" />
+	<link rel="apple-touch-icon" href="%PUBLIC_URL%/images/icon_192.png" />
+	<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 </head>
 
 <body style="margin-bottom: 60px;">
@@ -20,6 +26,17 @@
 		} else {
 			document.body.classList.add("light-theme");
 			localStorage.setItem("color-theme", "light-theme");
+		}
+
+		// FIXME Probably fails on mobile due to https/locahost restriction
+		// try-catch ???
+		try {
+			navigator.serviceWorker.register('/worker.js').then(rego => {
+				// console.log(rego);
+				// DO MORE, IDK
+			});
+		} catch (error) {
+			console.log(error);
 		}
 	</script>
 	<noscript>
