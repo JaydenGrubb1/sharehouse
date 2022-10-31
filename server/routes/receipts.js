@@ -131,6 +131,7 @@ router.get('/', auth, function (req, res, next) {
 	// }
 });
 
+// DOC
 router.post('/upload/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
@@ -326,21 +327,22 @@ async function sendNotification(req, recipients, details, user, amount) {
 
 			amount = parseFloat(amount);
 
-			if (useEmail) {
-				email = {
-					from: process.env.MAIL_USER,
-					to: recipient.user,
-					subject: "Sharehouse Receipt Added",
-					text: "User " + user + " has added a receipt of $" + amount.toFixed(2) + ".\n" +
-						"To view details about this receipt head to https://sharehouse.jaydengrubb.com/payments .\n\n" +
-						"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
-						"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
-				};
-				req.mail.sendMail(email).catch(error => {
-					// TODO Error message
-					console.log(error);
-				});
-			}
+			// FIXME Gmail credentials error
+			// if (useEmail) {
+			// 	email = {
+			// 		from: process.env.MAIL_USER,
+			// 		to: recipient.user,
+			// 		subject: "Sharehouse Receipt Added",
+			// 		text: "User " + user + " has added a receipt of $" + amount.toFixed(2) + ".\n" +
+			// 			"To view details about this receipt head to https://sharehouse.jaydengrubb.com/payments .\n\n" +
+			// 			"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
+			// 			"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
+			// 	};
+			// 	req.mail.sendMail(email).catch(error => {
+			// 		// TODO Error message
+			// 		console.log(error);
+			// 	});
+			// }
 
 			if (usePush) {
 				req.knex.from('subscriptions').select('id', 'endpoint').where('user', '=', recipient.user).then(rows => {
