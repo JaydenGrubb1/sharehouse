@@ -76,7 +76,7 @@ function doFetch(url, method, content, cache = "default", upload = undefined, th
 			return res.json();
 		else {
 			let type = res.headers.get("Content-Type");
-			if (type === "text/html") {
+			if (type.includes("text/html")) {
 				return {
 					error: true,
 					message: "Unhandled Error: (" + res.status + ") " + res.statusText
@@ -153,7 +153,7 @@ export function isLoggedIn() {
 export function doLogin(email, password) {
 	const url = new URL(SERVER + "/users/login");
 
-	return doFetch(url, "POST", { email, password }, "no-store", (data) => {
+	return doFetch(url, "POST", { email, password }, "no-store", undefined, (data) => {
 		if (!data.error)
 			setCookie("token", data.token, data.expires_in);
 		return data;
@@ -222,7 +222,7 @@ export function setPassword(password) {
 export function setDetails(details) {
 	const url = new URL(SERVER + "/users/" + encodeURIComponent(getEmail()));
 
-	return doFetch(url, "PUT", details, "no-store", (data) => {
+	return doFetch(url, "PUT", details, "no-store", undefined, (data) => {
 		if (!data.error && data.new_token)
 			setCookie("token", data.new_token.token, data.new_token.expires_in);
 		return data;
