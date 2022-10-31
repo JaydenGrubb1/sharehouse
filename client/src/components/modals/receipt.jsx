@@ -1,7 +1,7 @@
 import dateFormat from "dateformat";
-import React, { createRef, useState, useEffect } from "react";
-import { Button, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
-import { createReceipt, getAllUsers } from "../../api";
+import React, { createRef, useState, useEffect, useRef } from "react";
+import { Button, Card, CardDeck, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "reactstrap";
+import { createReceipt, getAllUsers, uploadReceiptImg } from "../../api";
 import ContributionEntry from "../payments/contributions-entry";
 import Predictions from "../predictions";
 
@@ -11,6 +11,8 @@ export default function Receipt(props) {
 	const [error, setError] = useState();
 	const [showDatetime, setShowDatetime] = useState(false);
 	const [showContributions, setShowContributions] = useState(false);
+	const [image, setImage] = useState(undefined);
+	const [imageSrc, setImageSrc] = useState(undefined);
 	const [store, setStore] = useState();
 	const [location, setLocation] = useState();
 	const [description, setDescription] = useState();
@@ -22,6 +24,7 @@ export default function Receipt(props) {
 	const [updateCount, setUC] = useState(0);
 	const [userCount, setUserCount] = useState();
 	const update = () => setUC(updateCount + 1);
+	const inputFile = useRef(null);
 
 	async function onSubmit() {
 		setLoading(true);
@@ -56,8 +59,16 @@ export default function Receipt(props) {
 		if (results.error) {
 			setError(results.message);
 		} else {
-			setError();
-			props.toggle();
+			if (imageSrc) {
+				results = await uploadReceiptImg(image, results.id);
+
+				if (results.error) {
+					setError(results.message);
+				} else {
+					setError();
+					props.toggle();
+				}
+			}
 		}
 
 		setLoading(false);
@@ -100,6 +111,14 @@ export default function Receipt(props) {
 		}
 	}
 
+	function showImagePreview(event) {
+		let file = event.target.files[0];
+		event.stopPropagation();
+		event.preventDefault();
+		setImage(file);
+		setImageSrc(URL.createObjectURL(file));
+	}
+
 	async function getUsers() {
 		let results = await getAllUsers();
 		if (results.error || !results.data) {
@@ -131,6 +150,8 @@ export default function Receipt(props) {
 		setShowContributions(false);
 		setDate(dateFormat(new Date(), "yyyy-mm-dd"));
 		setTime(dateFormat(new Date(), "HH:MM"));
+		setImage(undefined);
+		setImageSrc(undefined);
 	}, [props.open]);
 
 	const fixBorder = { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 };
@@ -214,6 +235,20 @@ export default function Receipt(props) {
 								}
 							</div>
 						</Collapse>
+						<Collapse isOpen={imageSrc}>
+							<img src={imageSrc} className="img-fluid px-3 pb-3 img-rounded" />
+						</Collapse>
+						<div className="px-3">
+							<input type="file" id="file" ref={inputFile} style={{ display: "none" }} onChange={showImagePreview} accept="image/png, image/jpg, image/jpeg" />
+							<CardDeck className="mb-3">
+								<Card>
+									<Button color="primary" onClick={() => inputFile.current.click()} disabled={loading} outline>Upload Image</Button>
+								</Card>
+								<Card>
+									<Button color="primary" onClick={onSubmit} disabled outline>Take Photo</Button>
+								</Card>
+							</CardDeck>
+						</div>
 					</Form>
 					{error &&
 						<p className="text-danger text-center mt-3">{error}</p>

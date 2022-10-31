@@ -81,6 +81,46 @@ function doFetch(url, method, body, cache = "default", then) {
 	});
 }
 
+// DOC
+// TODO Merge with doFetch()????
+function doUpload(url, name, file, then) {
+	let auth = undefined;
+	if (isLoggedIn()) {
+		auth = "Bearer " + getCookie("token");
+	}
+
+	let form = new FormData();
+	form.append('image', file, file.name);
+
+	return fetch(url, {
+		method: "POST",
+		headers: {
+			// FIXME Surely boundary can be set manually
+			// "Content-Type": "multipart/form-data; boundary=???",
+			"Authorization": auth
+		},
+		body: form
+	}).then(res => res.json()).then(data => {
+		if (data) {
+			if (then)
+				return then(data);
+			else
+				return data;
+		} else {
+			if (then)
+				return then();
+			else
+				return null;
+		}
+	}).catch(e => {
+		console.log(e);
+		return JSON.stringify({
+			error: true,
+			message: "Connection timed out"
+		});
+	});
+}
+
 /**
  * Gets the current user's email
  * @returns The current user's email
@@ -336,6 +376,13 @@ export function createReceipt(details) {
 	const url = new URL(SERVER + "/receipts");
 
 	return doFetch(url, "POST", details, "no-store");
+}
+
+// DOC
+export function uploadReceiptImg(image, id) {
+	const url = new URL(SERVER + "/receipts/upload/" + id);
+
+	return doUpload(url, 'image', image);
 }
 
 /**

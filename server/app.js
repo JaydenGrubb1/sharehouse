@@ -9,6 +9,7 @@ const knex = require('knex')(options);
 const helmet = require('helmet');
 const mailer = require('nodemailer');
 const push = require('web-push');
+const upload = require('express-fileupload');
 const cors = require('cors');
 
 const notificationRouter = require('./routes/notification');
@@ -33,11 +34,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(upload({
+	createParentPath: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	req.knex = knex;
 	req.mail = transporter;
 	req.webpush = push;
+	req.pathfunc = path;
 	next();
 });
 
@@ -60,5 +65,7 @@ app.use(function (req, res, next) {
 		url: req.protocol + '://' + req.get('host') + req.originalUrl
 	});
 });
+
+// TODO Periodically delete temp uploads folder
 
 module.exports = app;

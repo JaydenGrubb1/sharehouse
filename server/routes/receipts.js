@@ -26,6 +26,12 @@ const DEFAULT_SORTING_ORDERS = {
 	amount: false
 }
 
+const ALLOWED_FILE_EXTENSIONS = [
+	'.png',
+	'.jpg',
+	'.jpeg'
+];
+
 const CONTRIBUTION_ERROR_THRESHOLD = 0.00000001;
 
 /**
@@ -123,6 +129,60 @@ router.get('/', auth, function (req, res, next) {
 	// 		console.log(error);
 	// 	});
 	// }
+});
+
+// DOC
+router.post('/upload/:id', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	if (!req.files || !req.files.image) {
+		res.status(400).json({
+			error: true,
+			message: "No file was uploaded"
+		});
+		return;
+	}
+
+	const file = req.files.image;
+	const id = req.params.id;
+	const ext = req.pathfunc.extname(file.name);
+	const temp = id === "none";
+
+	if (!ALLOWED_FILE_EXTENSIONS.includes(ext)) {
+		res.status(415).json({
+			error: true,
+			message: "The format of the uploaded file is not supported"
+		});
+		return;
+	}
+
+	let path = process.cwd() + "/uploads/";
+
+	if (temp) {
+		path += "temp/" + Date.now() + ext;
+	} else {
+		// TODO Check if ID is valid
+		path += id + ext;
+	}
+
+	file.mv(path).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+
+	// TODO Start image processing
+	// if(temp)
+	// 	startImageProcessing(path);
+
+	// TODO Change to 202 response once image processing is added
+	res.status(201).json({
+		error: false,
+		message: "File uploaded succsefully"
+	});
 });
 
 /**
@@ -267,21 +327,22 @@ async function sendNotification(req, recipients, details, user, amount) {
 
 			amount = parseFloat(amount);
 
-			if (useEmail) {
-				email = {
-					from: process.env.MAIL_USER,
-					to: recipient.user,
-					subject: "Sharehouse Receipt Added",
-					text: "User " + user + " has added a receipt of $" + amount.toFixed(2) + ".\n" +
-						"To view details about this receipt head to https://sharehouse.jaydengrubb.com/payments .\n\n" +
-						"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
-						"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
-				};
-				req.mail.sendMail(email).catch(error => {
-					// TODO Error message
-					console.log(error);
-				});
-			}
+			// FIXME Gmail credentials error
+			// if (useEmail) {
+			// 	email = {
+			// 		from: process.env.MAIL_USER,
+			// 		to: recipient.user,
+			// 		subject: "Sharehouse Receipt Added",
+			// 		text: "User " + user + " has added a receipt of $" + amount.toFixed(2) + ".\n" +
+			// 			"To view details about this receipt head to https://sharehouse.jaydengrubb.com/payments .\n\n" +
+			// 			"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
+			// 			"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
+			// 	};
+			// 	req.mail.sendMail(email).catch(error => {
+			// 		// TODO Error message
+			// 		console.log(error);
+			// 	});
+			// }
 
 			if (usePush) {
 				req.knex.from('subscriptions').select('id', 'endpoint').where('user', '=', recipient.user).then(rows => {
