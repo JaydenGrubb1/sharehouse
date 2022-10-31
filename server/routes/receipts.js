@@ -26,6 +26,12 @@ const DEFAULT_SORTING_ORDERS = {
 	amount: false
 }
 
+const ALLOWED_FILE_EXTENSIONS = [
+	'.png',
+	'.jpg',
+	'.jpeg'
+];
+
 const CONTRIBUTION_ERROR_THRESHOLD = 0.00000001;
 
 /**
@@ -123,6 +129,45 @@ router.get('/', auth, function (req, res, next) {
 	// 		console.log(error);
 	// 	});
 	// }
+});
+
+router.post('/upload', auth, function (req, res, next) {
+	if (!req.email)
+		return;
+
+	if (!req.files || !req.files.file) {
+		res.status(400).json({
+			error: true,
+			message: "No file was uploaded"
+		});
+		return;
+	}
+
+	const file = req.files.file;
+
+	if (!ALLOWED_FILE_EXTENSIONS.includes(req.pathfunc.extname(file.name))) {
+		res.status(415).json({
+			error: true,
+			message: "The format of the uploaded file is not supported"
+		});
+		return;
+	}
+
+	const path = process.cwd() + "/uploads/" + file.name;
+
+	file.mv(path).catch(error => {
+		res.status(500).json({
+			error: true,
+			message: "Internal server error"
+		});
+		console.log(error);
+	});
+
+	// TODO change to 202 response once image processing is added
+	res.status(201).json({
+		error: false,
+		message: "File uploaded succsefully"
+	});
 });
 
 /**

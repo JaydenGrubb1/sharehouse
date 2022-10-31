@@ -211,6 +211,9 @@ dist
 # Build directory
 /build
 
+# File upload directory
+/server/uploads
+
 # VScode settings
 /.vscode
 /local
