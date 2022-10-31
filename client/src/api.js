@@ -41,66 +41,51 @@ function setCookie(name, value, expiry) {
  * Performs a fetch request with a set of arguements
  * @param {URL} url The URL of the endpoint to access
  * @param {string} method The request method, i.e. GET, POST, PUT, etc
- * @param {object} body The body of the request (will be passed through JSON.Stringify())
+ * @param {object} content The content of the request, either an object to converted to JSON or a file to upload
  * @param {string} cache The cacheing protocol
+ * @param {string} upload The name of the resource being uploaded, undefined if not uploading
  * @param {function} then A function to execute after fetch
  * @returns The error status and/or results of the fetch request
  */
-function doFetch(url, method, body, cache = "default", then) {
+function doFetch(url, method, content, cache = "default", upload = undefined, then) {
 	let auth = undefined;
 	if (isLoggedIn()) {
 		auth = "Bearer " + getCookie("token");
+	}
+
+	let body = undefined;
+	let headers = {
+		"Authorization": auth
+	};
+
+	if (upload) {
+		body = new FormData();
+		body.append(upload, content);
+	} else {
+		body = JSON.stringify(content);
+		headers["Content-Type"] = "application/json";
 	}
 
 	return fetch(url, {
 		method: method.toUpperCase(),
 		cache: cache,
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": auth
-		},
-		body: JSON.stringify(body)
-	}).then(res => res.json()).then(data => {
-		if (data) {
-			if (then)
-				return then(data);
-			else
-				return data;
-		} else {
-			if (then)
-				return then();
-			else
-				return null;
+		headers,
+		body
+	}).then(res => {
+		if (res.ok)
+			return res.json();
+		else {
+			let type = res.headers.get("Content-Type");
+			if (type === "text/html") {
+				return {
+					error: true,
+					message: "Unhandled Error: (" + res.status + ") " + res.statusText
+				};
+			} else {
+				return res.json();
+			}
 		}
-	}).catch(e => {
-		console.log(e);
-		return JSON.stringify({
-			error: true,
-			message: "Connection timed out"
-		});
-	});
-}
-
-// DOC
-// TODO Merge with doFetch()????
-function doUpload(url, name, file, then) {
-	let auth = undefined;
-	if (isLoggedIn()) {
-		auth = "Bearer " + getCookie("token");
-	}
-
-	let form = new FormData();
-	form.append('image', file, file.name);
-
-	return fetch(url, {
-		method: "POST",
-		headers: {
-			// FIXME Surely boundary can be set manually
-			// "Content-Type": "multipart/form-data; boundary=???",
-			"Authorization": auth
-		},
-		body: form
-	}).then(res => res.json()).then(data => {
+	}).then(data => {
 		if (data) {
 			if (then)
 				return then(data);
@@ -378,11 +363,16 @@ export function createReceipt(details) {
 	return doFetch(url, "POST", details, "no-store");
 }
 
-// DOC
+/**
+ * Uploads an image and associates it with a receipt
+ * @param {file} image The image file to upload
+ * @param {integer} id The ID of the receipt to associate with
+ * @returns The error status of the operation
+ */
 export function uploadReceiptImg(image, id) {
 	const url = new URL(SERVER + "/receipts/upload/" + id);
 
-	return doUpload(url, 'image', image);
+	return doFetch(url, "POST", image, "no-store", "image");
 }
 
 /**
