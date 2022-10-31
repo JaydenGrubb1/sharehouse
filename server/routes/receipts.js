@@ -219,6 +219,43 @@ router.get('/:id', auth, function (req, res, next) {
 });
 
 /**
+ * Gets a receipt image with a specific ID
+ */
+router.get('/:id/image', function (req, res, next) {
+	// TODO Re-enable authorized user requirements
+	// if (!req.email)
+	// 	return;
+
+	const id = req.params.id;
+
+	if (!id) {
+		res.status(400).json({
+			error: true,
+			message: "A receipt ID must be specified"
+		});
+	}
+
+	let path = process.cwd() + "/uploads/" + id;
+	let ext = undefined;
+
+	ALLOWED_FILE_EXTENSIONS.forEach(x => {
+		if (req.fs.existsSync(path + x)) {
+			ext = x;
+		}
+	});
+
+	if (!ext) {
+		res.status(404).json({
+			error: true,
+			message: "Receipt image with requested ID could not be found"
+		});
+		return;
+	}
+
+	res.status(200).sendFile(path + ext);
+});
+
+/**
  * Creates a receipt
  */
 router.post('/', auth, function (req, res, next) {

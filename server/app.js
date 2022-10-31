@@ -9,6 +9,7 @@ const knex = require('knex')(options);
 const helmet = require('helmet');
 const mailer = require('nodemailer');
 const push = require('web-push');
+const fs = require('fs');
 const upload = require('express-fileupload');
 const cors = require('cors');
 
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 	req.mail = transporter;
 	req.webpush = push;
 	req.pathfunc = path;
+	req.fs = fs;
 	next();
 });
 
