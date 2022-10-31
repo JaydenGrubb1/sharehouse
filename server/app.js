@@ -66,4 +66,6 @@ app.use(function (req, res, next) {
 	});
 });
 
+// TODO Periodically delete temp uploads folder
+
 module.exports = app;

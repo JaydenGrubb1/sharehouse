@@ -131,11 +131,11 @@ router.get('/', auth, function (req, res, next) {
 	// }
 });
 
-router.post('/upload', auth, function (req, res, next) {
+router.post('/upload/:id', auth, function (req, res, next) {
 	if (!req.email)
 		return;
 
-	if (!req.files || !req.files.file) {
+	if (!req.files || !req.files.image) {
 		res.status(400).json({
 			error: true,
 			message: "No file was uploaded"
@@ -143,9 +143,12 @@ router.post('/upload', auth, function (req, res, next) {
 		return;
 	}
 
-	const file = req.files.file;
+	const file = req.files.image;
+	const id = req.params.id;
+	const ext = req.pathfunc.extname(file.name);
+	const temp = id === "none";
 
-	if (!ALLOWED_FILE_EXTENSIONS.includes(req.pathfunc.extname(file.name))) {
+	if (!ALLOWED_FILE_EXTENSIONS.includes(ext)) {
 		res.status(415).json({
 			error: true,
 			message: "The format of the uploaded file is not supported"
@@ -153,7 +156,14 @@ router.post('/upload', auth, function (req, res, next) {
 		return;
 	}
 
-	const path = process.cwd() + "/uploads/" + file.name;
+	let path = process.cwd() + "/uploads/";
+
+	if (temp) {
+		path += "temp/" + Date.now() + ext;
+	} else {
+		// TODO Check if ID is valid
+		path += id + ext;
+	}
 
 	file.mv(path).catch(error => {
 		res.status(500).json({
@@ -163,7 +173,11 @@ router.post('/upload', auth, function (req, res, next) {
 		console.log(error);
 	});
 
-	// TODO change to 202 response once image processing is added
+	// TODO Start image processing
+	// if(temp)
+	// 	startImageProcessing(path);
+
+	// TODO Change to 202 response once image processing is added
 	res.status(201).json({
 		error: false,
 		message: "File uploaded succsefully"
