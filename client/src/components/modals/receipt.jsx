@@ -236,17 +236,19 @@ export default function Receipt(props) {
 							</div>
 						</Collapse>
 						<Collapse isOpen={imageSrc}>
-							<img src={imageSrc} className="img-fluid px-3 pb-3 img-rounded" />
+							<img src={imageSrc} style={{borderRadius: "20px"}} className="img-fluid p-3 mt-n3 img-rounded" />
 						</Collapse>
 						<div className="px-3">
 							<input type="file" id="file" ref={inputFile} style={{ display: "none" }} onChange={showImagePreview} accept="image/png, image/jpg, image/jpeg" />
 							<CardDeck className="mb-3">
-								<Card>
-									<Button color="primary" onClick={() => inputFile.current.click()} disabled={loading} outline>Upload Image</Button>
+								<Card className="card-button">
+									<Button color="primary" onClick={() => inputFile.current.click()} disabled={loading}>{imageSrc ? "New Image" : "Upload Image"}</Button>
 								</Card>
-								<Card>
-									<Button color="primary" onClick={onSubmit} disabled outline>Take Photo</Button>
-								</Card>
+								{imageSrc &&
+									<Card className="card-button" >
+										<Button color="primary" onClick={onSubmit} disabled>Scan</Button>
+									</Card>
+								}
 							</CardDeck>
 						</div>
 					</Form>
