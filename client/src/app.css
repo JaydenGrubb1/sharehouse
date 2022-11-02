@@ -216,6 +216,11 @@ a:hover {
 	color: var(--text);
 }
 
+.table thead th {
+	border-bottom-color: var(--border);
+	border-bottom-width: 1px;
+}
+
 .table td,
 .table th {
 	border-top-color: var(--border);
