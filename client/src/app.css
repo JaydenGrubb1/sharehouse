@@ -384,12 +384,30 @@ input[type=number] {
 }
 
 @media screen and (max-width: 768px) {
+	/* TODO Remove this probably */
 	.sm-table-col {
 		display: inline;
 	}
 
 	.lg-table-col {
 		display: none;
+	}
+
+	.show-small {
+		display: initial !important;
+	}
+
+	.hide-small {
+		display: none !important;
+	}
+
+	.small-cond {
+		font-size: 80%;
+		font-weight: 400;
+	}
+
+	.text-muted-cond {
+		color: var(--text-secondary) !important
 	}
 
 	.pager-center {
