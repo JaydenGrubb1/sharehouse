@@ -115,6 +115,20 @@ export function getServerRoot() {
 }
 
 /**
+ * Hashes an integer and outputs a hex string
+ * @param {integer} num The integer to hash
+ * @returns The hash of the integer in hex
+ */
+export function hashInteger(num) {
+	let hash = num;
+	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
+	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
+	hash = (hash >> 16) ^ hash;
+
+	return (hash % 65536).toString(16).padStart(4, '0') + "" + num.toString(16).padStart(4, '0');
+}
+
+/**
  * Gets the current user's email
  * @returns The current user's email
  */

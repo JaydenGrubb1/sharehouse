@@ -1,5 +1,6 @@
 import dateFormat from "dateformat";
 import React, { useState } from "react";
+import { hashInteger } from "../../api";
 
 export default function ReceiptEntry(props) {
 
@@ -10,15 +11,6 @@ export default function ReceiptEntry(props) {
 		verticalAlign: "middle",
 		whiteSpace: "nowrap"
 	};
-
-	function idHash(id) {
-		let idHash = id;
-		idHash = ((idHash >> 16) ^ idHash) * 0x45d9f3b;
-		idHash = ((idHash >> 16) ^ idHash) * 0x45d9f3b;
-		idHash = (idHash >> 16) ^ idHash;
-
-		return (idHash % 65536).toString(16).padStart(4, '0') + id.toString(16).padStart(4, '0');
-	}
 
 	// return (
 	// 	<tr className="my-auto">
@@ -39,7 +31,7 @@ export default function ReceiptEntry(props) {
 		<tr className="my-auto" id={props.data.id}>
 			<td style={tableStyle} className="col-1 text-left">
 				<a href={"/receipt/" + props.data.id}>
-					{idHash(props.data.id)}
+					{hashInteger(props.data.id)}
 				</a>
 			</td>
 			<td style={tableStyle} className="col-3 hide-small">{props.data.store}</td>
