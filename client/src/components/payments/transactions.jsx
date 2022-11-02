@@ -92,6 +92,13 @@ export default function Transactions(props) {
 			{mode
 				? <div>
 					<Table className="my-0" responsive>
+						<thead>
+							<th>ID</th>
+							<th>Store</th>
+							<th className="hide-small">User</th>
+							<th>Price</th>
+							<th className="text-right">Timestamp</th>
+						</thead>
 						<tbody>
 							{receipts &&
 								receipts.map(x => {
@@ -107,6 +114,12 @@ export default function Transactions(props) {
 				:
 				<div>
 					<Table className="my-0" responsive>
+						<thead>
+							<th>Amount</th>
+							<th>Recipient</th>
+							<th>Timestamp</th>
+							<th className="text-right">Status</th>
+						</thead>
 						<tbody>
 							{payments &&
 								payments.map(x => {
