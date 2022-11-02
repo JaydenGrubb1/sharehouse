@@ -107,6 +107,14 @@ function doFetch(url, method, content, cache = "default", upload = undefined, th
 }
 
 /**
+ * Gets the root address of the server
+ * @returns The root address of the server
+ */
+export function getServerRoot() {
+	return SERVER;
+}
+
+/**
  * Gets the current user's email
  * @returns The current user's email
  */

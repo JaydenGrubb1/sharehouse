@@ -11,6 +11,7 @@ import Home from "./pages/home";
 import Payments from "./pages/payments";
 import Statistics from "./pages/statistics";
 import User from "./pages/user";
+import Receipt from "./pages/receipt";
 import Account from "./pages/account";
 import Admin from "./pages/admin";
 
@@ -30,6 +31,7 @@ export default function App() {
 							<Route path="/account" element={<Account />} />
 							<Route path="/admin" element={<Admin />} />
 							<Route path="/users/:user" element={<User />} />
+							<Route path="/receipt/:id" element={<Receipt />} />
 							<Route path="/" element={<Home />} />
 						</Routes>
 					</main>

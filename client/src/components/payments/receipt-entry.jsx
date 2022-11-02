@@ -38,7 +38,7 @@ export default function ReceiptEntry(props) {
 	return (
 		<tr className="my-auto" id={props.data.id}>
 			<td style={tableStyle} className="col-1 text-left">
-				<a href={"#" + props.data.id}>
+				<a href={"/receipt/" + props.data.id}>
 					{idHash(props.data.id)}
 				</a>
 			</td>
