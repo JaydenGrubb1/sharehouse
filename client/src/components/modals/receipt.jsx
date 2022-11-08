@@ -68,6 +68,9 @@ export default function Receipt(props) {
 					setError();
 					props.toggle();
 				}
+			} else {
+				setError();
+				props.toggle();
 			}
 		}
 
@@ -236,7 +239,7 @@ export default function Receipt(props) {
 							</div>
 						</Collapse>
 						<Collapse isOpen={imageSrc}>
-							<img src={imageSrc} style={{borderRadius: "20px"}} className="img-fluid p-3 mt-n3 img-rounded" />
+							<img src={imageSrc} style={{ borderRadius: "20px" }} className="img-fluid p-3 mt-n3 img-rounded" />
 						</Collapse>
 						<div className="px-3">
 							<input type="file" id="file" ref={inputFile} style={{ display: "none" }} onChange={showImagePreview} accept="image/png, image/jpg, image/jpeg" />
