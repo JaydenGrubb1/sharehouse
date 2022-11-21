@@ -363,6 +363,17 @@ export function getReceipts(user, limit = 10, page = 0, order = 'timestamp', rev
 }
 
 /**
+ * Gets details about a receipt
+ * @param {integer} id The id of the receipt
+ * @returns Details about the receipt
+ */
+export function getReceipt(id) {
+	const url = new URL(SERVER + "/receipts/" + id);
+
+	return doFetch(url, "GET");
+}
+
+/**
  * Approves or rejects a payment
  * @param {integer} id The id of the payment
  * @param {boolean} accepted True to approve, false to reject

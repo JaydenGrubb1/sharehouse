@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import { Alert, Card, CardBody, CardDeck, CardHeader, CardImg, CardText, Collapse, UncontrolledAlert } from "reactstrap";
-import { getServerRoot, hashInteger } from "../api";
+import { getReceipt, getServerRoot, hashInteger } from "../api";
 
 export default function User() {
 	const { id } = useParams();
@@ -12,14 +12,22 @@ export default function User() {
 	const idInt = parseInt(id);
 	const hashID = hashInteger(idInt);
 
-	async function getDetails(){
-		// let results = 
+	const [data, setData] = useState();
+
+	async function getDetails() {
+		let results = await getReceipt(idInt);
+
+		if (results.error) {
+			// TODO handle error
+		} else {
+			setData(results.data);
+		}
 	}
 
 	useEffect(() => {
 		getDetails();
 	}, []);
-	
+
 	return (
 		<div className="container p-3">
 			<Helmet>
@@ -36,7 +44,9 @@ export default function User() {
 					</CardHeader>
 					<CardBody>
 						<CardText>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis accusamus sit molestias in perferendis molestiae dignissimos quisquam. Officia cum veritatis, dolore enim ipsa quibusdam consequatur sapiente reiciendis. Ducimus, doloribus praesentium!
+							<samp>
+								{JSON.stringify(data, null, 2)}
+							</samp>
 						</CardText>
 					</CardBody>
 				</Card>
