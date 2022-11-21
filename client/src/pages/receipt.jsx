@@ -44,7 +44,7 @@ export default function User() {
 					</CardHeader>
 					<CardBody>
 						<CardText>
-							<samp>
+							<samp style={{whiteSpace: "pre-wrap"}}>
 								{JSON.stringify(data, null, 2)}
 							</samp>
 						</CardText>
