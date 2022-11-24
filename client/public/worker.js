@@ -30,8 +30,7 @@ self.addEventListener('push', (event) => {
 		tag: 'sharehouse-' + payload.type,
 		renotify: true,
 		data: {
-			dateOfArrival: Date.now(),
-			primaryKey: '2'
+			id: payload.id
 		},
 		actions: [
 			{
@@ -44,6 +43,7 @@ self.addEventListener('push', (event) => {
 			},
 		]
 	};
+
 	event.waitUntil(
 		self.registration.showNotification(title, options)
 	);
@@ -52,21 +52,14 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
 	event.notification.close();
 
-	let id = undefined;
-	try {
-		const payload = JSON.parse(event.data.text());
-		id = payload.id;
-	} catch (error) {
-		// TODO Check error
-		return;
-	}
+	let data = event.notification.data;
 	
 	if (event.action === 'close') {
 		return;
 	}
 
-	if(id)
-		clients.openWindow('https://sharehouse.jaydengrubb.com/receipt/' + id);
+	if(data.id)
+		clients.openWindow('https://sharehouse.jaydengrubb.com/receipt/' + data.id);
 	else
 		clients.openWindow('https://sharehouse.jaydengrubb.com/payments')
 });
