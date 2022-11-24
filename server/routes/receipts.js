@@ -339,7 +339,7 @@ router.post('/', auth, function (req, res, next) {
 				id: receiptID
 			});
 			let recipients = contributions.filter(x => Math.sign(x.amount) !== Math.sign(amount));
-			sendNotification(req, recipients, req.body, user, amount);
+			sendNotification(req, recipients, receiptID, user, amount);
 		}).catch(error => {
 			res.status(500).json({
 				error: true,
@@ -356,7 +356,7 @@ router.post('/', auth, function (req, res, next) {
 	});
 });
 
-async function sendNotification(req, recipients, details, user, amount) {
+async function sendNotification(req, recipients, id, user, amount) {
 	recipients.forEach(recipient => {
 		req.knex.from('users').select('notify_receipt').where('email', '=', recipient.user).then(rows => {
 			let useEmail = rows[0].notify_receipt === 'email' || rows[0].notify_receipt === 'both';
@@ -386,6 +386,7 @@ async function sendNotification(req, recipients, details, user, amount) {
 					rows.forEach(row => {
 						let payload = {
 							type: "receipt",
+							id: id,
 							user: user,
 							amount: amount
 						}

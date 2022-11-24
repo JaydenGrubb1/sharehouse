@@ -35,7 +35,7 @@ self.addEventListener('push', (event) => {
 		},
 		actions: [
 			{
-				action: 'view', title: payload.type === 'receipt' ? 'View Receipts' : 'View Payments',
+				action: 'view', title: payload.type === 'receipt' ? 'View Receipt' : 'View Payments',
 				// icon: 'images/checkmark.png'
 			},
 			{
@@ -51,12 +51,24 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
 	event.notification.close();
+
+	let id = undefined;
+	try {
+		const payload = JSON.parse(event.data.text());
+		id = payload.id;
+	} catch (error) {
+		// TODO Check error
+		return;
+	}
 	
 	if (event.action === 'close') {
 		return;
 	}
 
-	clients.openWindow('https://sharehouse.jaydengrubb.com/payments');
+	if(id)
+		clients.openWindow('https://sharehouse.jaydengrubb.com/receipt/' + id);
+	else
+		clients.openWindow('https://sharehouse.jaydengrubb.com/payments')
 });
 
 importScripts("https://cdnjs.cloudflare.com/ajax/libs/workbox-sw/6.5.4/workbox-sw.js");
