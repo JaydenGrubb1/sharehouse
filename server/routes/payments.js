@@ -269,21 +269,22 @@ async function sendNotification(req, from, to, amount) {
 
 		amount = parseFloat(amount);
 
-		if (useEmail) {
-			email = {
-				from: process.env.MAIL_USER,
-				to: to,
-				subject: "Sharehouse Pending Payment",
-				text: "User " + from + " has made a payment to you of $" + amount.toFixed(2) + ", and is pending approval.\n" +
-					"Please check your bank transactions and then head to https://sharehouse.jaydengrubb.com/payments to approve or reject this payment.\n\n" +
-					"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
-					"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
-			};
-			req.mail.sendMail(email).catch(error => {
-				// TODO Error message
-				console.log(error);
-			});
-		}
+		// FIXME Gmail credentials error
+		// if (useEmail) {
+		// 	email = {
+		// 		from: process.env.MAIL_USER,
+		// 		to: to,
+		// 		subject: "Sharehouse Pending Payment",
+		// 		text: "User " + from + " has made a payment to you of $" + amount.toFixed(2) + ", and is pending approval.\n" +
+		// 			"Please check your bank transactions and then head to https://sharehouse.jaydengrubb.com/payments to approve or reject this payment.\n\n" +
+		// 			"This is an automated email, please do not reply to this email. If you need help with an issue, go outside and ask the gatekeeper.\n" +
+		// 			"To unsubscribe or manage your notification settings, head to https://sharehouse.jaydengrubb.com/account#notifications"
+		// 	};
+		// 	req.mail.sendMail(email).catch(error => {
+		// 		// TODO Error message
+		// 		console.log(error);
+		// 	});
+		// }
 
 		if (usePush) {
 			req.knex.from('subscriptions').select('id', 'endpoint').where('user', '=', to).then(rows => {
