@@ -85,6 +85,8 @@ router.get('/', auth, function (req, res, next) {
 	if (order)
 		query.orderBy(order, (reverse ^ DEFAULT_SORTING_ORDERS[order]) ? 'asc' : 'desc');
 
+	query.orderBy('id', 'desc');
+
 	query.then(rows => {
 		req.knex.raw('select FOUND_ROWS() as count').then(result => {
 			res.status(200).json({
