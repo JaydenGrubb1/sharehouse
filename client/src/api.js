@@ -6,6 +6,7 @@ let SERVER = process.env.REACT_APP_API;
 if (isDev()) {
 	// dev code
 	SERVER = 'http://127.0.0.1:3001';
+	// SERVER = 'https://sharehouse.jaydengrubb.com/api';
 }
 
 /**
@@ -119,14 +120,14 @@ export function getServerRoot() {
  * @param {integer} num The integer to hash
  * @returns The hash of the integer in hex
  */
-export function hashInteger(num) {
-	let hash = num;
-	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
-	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
-	hash = (hash >> 16) ^ hash;
+// export function hashInteger(num) {
+// 	let hash = num;
+// 	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
+// 	hash = ((hash >> 16) ^ hash) * 0x45d9f3b;
+// 	hash = (hash >> 16) ^ hash;
 
-	return (hash % 65536).toString(16).padStart(4, '0') + "" + num.toString(16).padStart(4, '0');
-}
+// 	return (hash % 65536).toString(16).padStart(4, '0') + "" + num.toString(16).padStart(4, '0');
+// }
 
 /**
  * Gets the current user's email

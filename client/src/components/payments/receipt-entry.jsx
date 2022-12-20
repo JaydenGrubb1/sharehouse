@@ -31,7 +31,7 @@ export default function ReceiptEntry(props) {
 		<tr className="my-auto" id={props.data.id}>
 			<td style={tableStyle} className="col-1 text-left">
 				<a href={"/receipt/" + props.data.id}>
-					{hashInteger(props.data.id)}
+					{(props.data.id)}
 				</a>
 			</td>
 			<td style={tableStyle} className="col-3 hide-small">{props.data.store}</td>

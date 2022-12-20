@@ -10,7 +10,7 @@ export default function User() {
 	const [loaded, setLoaded] = useState(true);
 
 	const idInt = parseInt(id);
-	const hashID = hashInteger(idInt);
+	// const hashID = hashInteger(idInt);
 
 	const [data, setData] = useState();
 
@@ -31,12 +31,12 @@ export default function User() {
 	return (
 		<div className="container p-3">
 			<Helmet>
-				<title>Sharehouse - Receipt {hashID}</title>
+				<title>Sharehouse - Receipt {id}</title>
 			</Helmet>
 			{/* <Collapse isOpen={error}>
 				<UncontrolledAlert color="danger">{error}</UncontrolledAlert>
 			</Collapse> */}
-			<h4 className="text-left">Receipt <em>{hashID}</em></h4>
+			<h4 className="text-left">Receipt <em>{id}</em></h4>
 			<CardDeck className="mt-3">
 				<Card>
 					<CardHeader className="d-flex">
