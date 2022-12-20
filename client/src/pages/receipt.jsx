@@ -3,7 +3,7 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-import { Alert, Card, CardBody, CardDeck, CardHeader, CardImg, CardText, Col, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row, UncontrolledAlert } from "reactstrap";
+import { Alert, Button, Card, CardBody, CardDeck, CardFooter, CardHeader, CardImg, CardText, Col, Collapse, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row, UncontrolledAlert } from "reactstrap";
 import { getReceipt, getServerRoot, hashInteger } from "../api";
 
 export default function User() {
@@ -18,14 +18,21 @@ export default function User() {
 			// TODO handle error
 		} else {
 			let cont = results.data.contributions;
-			
+
 			cont.forEach((x) => {
 				x.offset = ((x.amount * cont.length) - results.data.amount) / (-1 + cont.length);
+
+				x.offset = x.offset.toFixed(2);
+				x.amount = x.amount.toFixed(2);
 			})
-			
+
+			setSample(cont[0]);
 			setData(results.data);
 		}
 	}
+
+	// TODO Remove this
+	const [sample, setSample] = useState();
 
 	useEffect(() => {
 		getDetails();
@@ -110,9 +117,27 @@ export default function User() {
 									</Row>
 								</div>
 							}
-							{/* <samp style={{ whiteSpace: "pre-wrap" }}>
-								{JSON.stringify(data.contributions, null, 2)}
-							</samp> */}
+							<FormGroup>
+								<Label>Contributions</Label>
+								<br/>
+								<samp style={{ whiteSpace: "pre-wrap" }}>
+									{JSON.stringify(data.contributions, null, 2)}
+								</samp>
+
+								{/* <br></br>
+								<a href={"/users/" + sample.user}>{sample.user}</a>{' '}
+								<InputGroup>
+									<InputGroupAddon addonType="prepend">
+										<InputGroupText>
+											Offset
+										</InputGroupText>
+										<InputGroupText>
+											$
+										</InputGroupText>
+									</InputGroupAddon>
+									<Input disabled value={sample.amount} />
+								</InputGroup> */}
+							</FormGroup>
 						</Form>
 					}
 				</Card>
