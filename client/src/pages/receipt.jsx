@@ -17,6 +17,12 @@ export default function User() {
 		if (results.error) {
 			// TODO handle error
 		} else {
+			let cont = results.data.contributions;
+			
+			cont.forEach((x) => {
+				x.offset = ((x.amount * cont.length) - results.data.amount) / (-1 + cont.length);
+			})
+			
 			setData(results.data);
 		}
 	}
@@ -87,19 +93,26 @@ export default function User() {
 									</FormGroup>
 								</Col>
 							</Row>
-							<Label for="recordfield">Record Timestamp</Label>
-							<Row id="recordfield" form>
-								<Col>
-									<FormGroup>
-										<Input type="date" disabled required value={dateFormat(data.record_timestamp, "yyyy-mm-dd")} />
-									</FormGroup>
-								</Col>
-								<Col>
-									<FormGroup>
-										<Input type="time" disabled required value={dateFormat(data.record_timestamp, "HH:MM")} />
-									</FormGroup>
-								</Col>
-							</Row>
+							{data.record_timestamp &&
+								<div>
+									<Label for="recordfield">Record Timestamp</Label>
+									<Row id="recordfield" form>
+										<Col>
+											<FormGroup>
+												<Input type="date" disabled required value={dateFormat(data.record_timestamp, "yyyy-mm-dd")} />
+											</FormGroup>
+										</Col>
+										<Col>
+											<FormGroup>
+												<Input type="time" disabled required value={dateFormat(data.record_timestamp, "HH:MM")} />
+											</FormGroup>
+										</Col>
+									</Row>
+								</div>
+							}
+							{/* <samp style={{ whiteSpace: "pre-wrap" }}>
+								{JSON.stringify(data.contributions, null, 2)}
+							</samp> */}
 						</Form>
 					}
 				</Card>
