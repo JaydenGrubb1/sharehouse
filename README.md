@@ -41,7 +41,7 @@ Note. This document is still a work in progress and may be missing sections or s
 - Docker deployment option
 
 ## Screenshots
-[[https://github.com/JaydenGrubb1/sharehouse/blob/master/docs/images/login.png|alt=login]]
+![Login Form](docs/images/login.png "Login Form")
 
 ## Tech
 | Name | Description |
