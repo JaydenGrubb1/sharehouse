@@ -41,7 +41,10 @@ Note. This document is still a work in progress and may be missing sections or s
 - Docker deployment option
 
 ## Screenshots
-![Login Form](docs/images/login.png "Login Form")
+<!-- ![Login Form](docs/images/login.png "Login Form") -->
+![Light and Dark Themes](docs/images/themes.png "Light and Dark Themes")
+![Account Form](docs/images/account.png "Account Form")
+![Create Receipt Form](docs/images/receipt.png "Create Receipt Form")
 
 ## Tech
 | Name | Description |
